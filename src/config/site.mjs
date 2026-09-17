@@ -23,7 +23,7 @@
 export const SITE = {
   // ── Identidad ──────────────────────────────────────────────
   /** Nombre comercial, tal cual se escribe. */
-  name: "MARCA",
+  name: "Black Sun Prods",
   /** Dominio canónico CON www y sin barra final. */
   url: "https://www.dominio.com",
   /** Cómo se muestra el dominio en textos y firmas de email. */
@@ -35,12 +35,12 @@ export const SITE = {
   locale: "es_ES",
 
   // ── SEO por defecto (cada página puede sobreescribirlo) ────
-  defaultTitle: "MARCA · Consultoría Creativa",
+  defaultTitle: "Black Sun Prods · Consultoría Creativa",
   defaultDescription:
-    "Descripción por defecto de MARCA. 150-160 caracteres, con el servicio principal y la zona en la que opera.",
+    "Descripción por defecto de Black Sun Prods. 150-160 caracteres, con el servicio principal y la zona en la que opera.",
   /** Ruta de la imagen para compartir en redes (1200x630). JPG, no WebP. */
   ogImage: "/images/og-marca.jpg",
-  ogImageAlt: "MARCA — consultoría creativa",
+  ogImageAlt: "Black Sun Prods — consultoría creativa",
 
   // ── Contacto ───────────────────────────────────────────────
   email: "hola@dominio.com",
