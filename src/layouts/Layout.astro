@@ -2,8 +2,11 @@
 import Header from "../components/Header.astro";
 import Analytics from "../components/Analytics.astro";
 import CookieConsent from "../components/CookieConsent.astro";
-import { SITE, absUrl } from "../config/site.mjs";
+import { SITE, absUrl, hasWhatsapp } from "../config/site.mjs";
 const GTM_ID = import.meta.env.PUBLIC_GTM_ID;
+// Seguro por defecto: la web NO se indexa salvo que PUBLIC_INDEXABLE=true
+// (activarlo solo en el despliegue final con dominio propio).
+const INDEXABLE = import.meta.env.PUBLIC_INDEXABLE === "true";
 export interface Props {
   title?: string;
   description?: string;
@@ -35,7 +38,7 @@ const {
   <!-- ── SEO básico ── -->
   <title>{title}</title>
   <meta name="description" content={description}/>
-  <meta name="robots" content="index, follow"/>
+  <meta name="robots" content={INDEXABLE ? "index, follow" : "noindex, nofollow"}/>
   <meta name="author" content={SITE.name}/>
   <meta name="theme-color" content={SITE.themeColor}/>
   <link rel="canonical" href={canonical}/>
@@ -83,7 +86,7 @@ const {
     "logo": absUrl(SITE.logo),
     "image": ogImage,
     "email": SITE.email,
-    "telephone": SITE.phone,
+    "telephone": hasWhatsapp() ? SITE.phone : undefined,
     "priceRange": SITE.business.priceRange,
     "address": {
       "@type": "PostalAddress",

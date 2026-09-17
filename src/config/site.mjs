@@ -40,7 +40,7 @@ export const SITE = {
     "Productora de eventos en Jaén: dirigimos, producimos y ejecutamos eventos musicales, fiestas temáticas y programación para ayuntamientos, salas y marcas.",
   /** Ruta de la imagen para compartir en redes (1200x630). JPG, no WebP. */
   ogImage: "/images/og-blacksunprods.jpg",
-  ogImageAlt: "Black Sun Prods — productora de eventos. De la idea al directo.",
+  ogImageAlt: "Black Sun Prods — productora de eventos. Del concepto a la multitud.",
 
   // ── Contacto ───────────────────────────────────────────────
   email: "info@blacksunprods.com",
@@ -85,6 +85,10 @@ export const SITE = {
 };
 
 /** Clave de localStorage del consentimiento de cookies (genérica a propósito). */
+/** Número de WhatsApp de ejemplo: mientras siga este valor, el botón no se muestra. */
+export const WHATSAPP_PLACEHOLDER = "34600000000";
+export const hasWhatsapp = () => Boolean(SITE.whatsapp) && SITE.whatsapp !== WHATSAPP_PLACEHOLDER;
+
 export const CONSENT_KEY = "site_cookie_consent";
 
 /** Une el dominio canónico con una ruta: absUrl("/contacto"). */
