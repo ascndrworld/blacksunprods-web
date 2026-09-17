@@ -52,7 +52,7 @@ export const SITE = {
   ownerName: "Nombre",
 
   // ── Redes ──────────────────────────────────────────────────
-  instagram: "https://www.instagram.com/usuario",
+  instagram: "https://www.instagram.com/blacksunprods",
 
   // ── Marca visual ───────────────────────────────────────────
   /** Logo del header (PNG con transparencia). */
