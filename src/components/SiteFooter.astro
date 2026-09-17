@@ -15,16 +15,22 @@ const year = new Date().getFullYear();
     <span class="sf-sep">·</span>
     <a href={SITE.instagram} target="_blank" rel="noopener">Instagram</a>
   </div>
+  <div class="sf-links sf-legal">
+    <a href="/terminos">Términos</a>
+    <span class="sf-sep">·</span>
+    <a href="/privacidad">Privacidad</a>
+  </div>
   <p class="sf-copy">© {SITE.name} {year}</p>
 </footer>
 
 <style>
-  .sf { background: #000; color: rgba(247,239,219,0.55); padding: 70px 24px 40px; text-align: center; font-family: "Montserrat", sans-serif; border-top: 1px solid rgba(247,239,219,0.08); }
+  .sf { background: #000; color: rgba(243, 243, 240,0.55); padding: 70px 24px 40px; text-align: center; font-family: "Montserrat", sans-serif; border-top: 1px solid rgba(243, 243, 240,0.08); }
   .sf-logo { display: inline-block; margin-bottom: 28px; }
   .sf-logo img { height: 36px; width: auto; display: block; }
   .sf-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px 22px; margin-bottom: 22px; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
-  .sf-links a { color: rgba(247,239,219,0.55); text-decoration: none; transition: color .2s; }
-  .sf-links a:hover { color: #F7EFDB; }
-  .sf-sep { color: rgba(247,239,219,0.2); }
-  .sf-copy { color: rgba(247,239,219,0.3); font-size: 11px; letter-spacing: 0.14em; margin: 14px 0 0; text-transform: uppercase; }
+  .sf-links a { color: rgba(243, 243, 240,0.55); text-decoration: none; transition: color .2s; }
+  .sf-links a:hover { color: #F3F3F0; }
+  .sf-sep { color: rgba(243, 243, 240,0.2); }
+  .sf-legal { font-size: 10px; margin-bottom: 18px; }
+  .sf-copy { color: rgba(243, 243, 240,0.3); font-size: 11px; letter-spacing: 0.14em; margin: 14px 0 0; text-transform: uppercase; }
 </style>

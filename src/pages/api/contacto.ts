@@ -101,7 +101,7 @@ function field(label: string, value: string) {
   </td></tr>`;
 }
 
-const BTN = "display:inline-block;background:#000000;color:#F7EFDB;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;padding:14px 30px;";
+const BTN = "display:inline-block;background:#000000;color:#F3F3F0;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;padding:14px 30px;";
 
 async function sendEmail(payload: Record<string, unknown>) {
   const res = await fetch("https://api.resend.com/emails", {

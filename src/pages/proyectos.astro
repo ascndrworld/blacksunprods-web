@@ -59,23 +59,23 @@ const projects = [
 <style>
   body { background: #000 !important; }
 
-  .pj-head { padding: 160px clamp(20px, 5vw, 88px) clamp(40px, 5vw, 64px); font-family: "Montserrat", sans-serif; color: #F7EFDB; }
-  .pj-eyebrow { font-size: 11px; letter-spacing: .28em; color: rgba(247,239,219,.5); margin: 0 0 18px; font-weight: 500; }
+  .pj-head { padding: 160px clamp(20px, 5vw, 88px) clamp(40px, 5vw, 64px); font-family: "Montserrat", sans-serif; color: #F3F3F0; }
+  .pj-eyebrow { font-size: 11px; letter-spacing: .28em; color: rgba(243, 243, 240,.5); margin: 0 0 18px; font-weight: 500; }
   .pj-title { font-size: clamp(56px, 9vw, 130px); font-weight: 800; letter-spacing: -.04em; line-height: .9; margin: 0 0 24px; }
-  .pj-sub { font-size: clamp(15px, 1.3vw, 18px); line-height: 1.6; color: rgba(247,239,219,.6); max-width: 48ch; margin: 0; }
+  .pj-sub { font-size: clamp(15px, 1.3vw, 18px); line-height: 1.6; color: rgba(243, 243, 240,.6); max-width: 48ch; margin: 0; }
 
   .tp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; background: #000; }
   .tp-item { position: relative; overflow: hidden; display: block; text-decoration: none; color: inherit; aspect-ratio: 1 / 1; }
   .tp-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s cubic-bezier(.25,.46,.45,.94); }
   .tp-item:hover .tp-img { transform: scale(1.05); }
 
-  .tp-concept { display: flex; align-items: center; justify-content: center; background: #0d0d0d; border: 1px solid rgba(247,239,219,.08); box-sizing: border-box; }
-  .tp-concept span { font-family: "Montserrat", sans-serif; font-size: clamp(34px, 4.4vw, 68px); font-weight: 800; font-style: italic; line-height: .92; letter-spacing: -.04em; text-align: center; color: #F7EFDB; }
+  .tp-concept { display: flex; align-items: center; justify-content: center; background: #0d0d0d; border: 1px solid rgba(243, 243, 240,.08); box-sizing: border-box; }
+  .tp-concept span { font-family: "Montserrat", sans-serif; font-size: clamp(34px, 4.4vw, 68px); font-weight: 800; font-style: italic; line-height: .92; letter-spacing: -.04em; text-align: center; color: #F3F3F0; }
 
   .tp-hover { position: absolute; inset: 0; background: rgba(0,0,0,.7); opacity: 0; transition: opacity .3s ease; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; font-family: "Montserrat", sans-serif; }
   .tp-item:hover .tp-hover, .tp-item:focus-visible .tp-hover { opacity: 1; }
-  .tp-hover-cat { font-size: 12px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: rgba(247,239,219,.55); margin-bottom: 12px; }
-  .tp-hover-title { font-size: 32px; font-weight: 700; letter-spacing: -.025em; line-height: .98; color: #F7EFDB; }
+  .tp-hover-cat { font-size: 12px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: rgba(243, 243, 240,.55); margin-bottom: 12px; }
+  .tp-hover-title { font-size: 32px; font-weight: 700; letter-spacing: -.025em; line-height: .98; color: #F3F3F0; }
 
   /* Escritorio: primer proyecto ancho (2 columnas), el resto cuadrado */
   @media (min-width: 769px) {
@@ -84,8 +84,8 @@ const projects = [
 
   .tp-cta { background: #000; padding: 130px 40px 60px; text-align: center; font-family: "Montserrat", sans-serif; border-top: 1px solid rgba(255,255,255,.06); }
   .tp-cta p { font-size: 16px; color: rgba(255,255,255,.5); margin: 0 0 20px; }
-  .tp-cta a { font-size: 13px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: #F7EFDB; text-decoration: none; border: 1.5px solid rgba(255,255,255,.5); padding: 12px 28px; transition: background .2s, color .2s; }
-  .tp-cta a:hover { background: #F7EFDB; color: #000; }
+  .tp-cta a { font-size: 13px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: #F3F3F0; text-decoration: none; border: 1.5px solid rgba(255,255,255,.5); padding: 12px 28px; transition: background .2s, color .2s; }
+  .tp-cta a:hover { background: #F3F3F0; color: #000; }
 
   @media (max-width: 768px) {
     .pj-head { padding-top: 120px; }

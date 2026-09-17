@@ -141,29 +141,29 @@ const ogImage = absUrl("/images/halloween-fest/hw3-07.webp");
 <SiteFooter />
 
 <style>
-  .hf { background: #000; color: #F7EFDB; font-family: "Montserrat", sans-serif; }
+  .hf { background: #000; color: #F3F3F0; font-family: "Montserrat", sans-serif; }
 
   .hf-header { position: relative; min-height: 100vh; min-height: 100dvh; overflow: hidden; }
   .hf-header-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .hf-header-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.15) 40%, rgba(0,0,0,.85) 100%); }
   .hf-titleblock { position: absolute; left: clamp(20px, 5vw, 88px); right: 20px; bottom: clamp(32px, 7vh, 72px); max-width: 760px; }
-  .hf-cat { font-size: 11px; letter-spacing: .32em; text-transform: uppercase; color: rgba(247,239,219,.8); margin: 0 0 18px; }
+  .hf-cat { font-size: 11px; letter-spacing: .32em; text-transform: uppercase; color: rgba(243, 243, 240,.8); margin: 0 0 18px; }
   .hf-title { font-size: clamp(48px, 9vw, 132px); font-weight: 800; letter-spacing: -.04em; line-height: .9; margin: 0 0 24px; }
-  .hf-desc { font-size: clamp(15px, 1.3vw, 18px); line-height: 1.6; color: rgba(247,239,219,.85); max-width: 54ch; margin: 0; }
+  .hf-desc { font-size: clamp(15px, 1.3vw, 18px); line-height: 1.6; color: rgba(243, 243, 240,.85); max-width: 54ch; margin: 0; }
 
-  .hf-facts { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid rgba(247,239,219,.1); }
-  .hf-facts li { display: flex; flex-direction: column; gap: 8px; padding: clamp(28px, 3.5vw, 48px) clamp(20px, 2.5vw, 40px); border-left: 1px solid rgba(247,239,219,.1); }
+  .hf-facts { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid rgba(243, 243, 240,.1); }
+  .hf-facts li { display: flex; flex-direction: column; gap: 8px; padding: clamp(28px, 3.5vw, 48px) clamp(20px, 2.5vw, 40px); border-left: 1px solid rgba(243, 243, 240,.1); }
   .hf-facts li:first-child { border-left: none; padding-left: clamp(20px, 5vw, 88px); }
   .hf-facts-num { font-size: clamp(28px, 3.4vw, 52px); font-weight: 800; letter-spacing: -.03em; line-height: 1; white-space: nowrap; }
-  .hf-facts-label { font-size: 13px; color: rgba(247,239,219,.55); line-height: 1.5; }
+  .hf-facts-label { font-size: 13px; color: rgba(243, 243, 240,.55); line-height: 1.5; }
 
   .hf-study { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 110px); padding: clamp(64px, 8vw, 120px) clamp(20px, 5vw, 88px); }
   .hf-study h2 { font-size: clamp(22px, 2.2vw, 30px); font-weight: 800; letter-spacing: -.02em; margin: 48px 0 16px; }
   .hf-study-col > h2:first-child { margin-top: 0; }
-  .hf-study p { font-size: 16px; line-height: 1.75; color: rgba(247,239,219,.68); margin: 0; }
-  .hf-study strong { color: #F7EFDB; font-weight: 600; }
+  .hf-study p { font-size: 16px; line-height: 1.75; color: rgba(243, 243, 240,.68); margin: 0; }
+  .hf-study strong { color: #F3F3F0; font-weight: 600; }
   .hf-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
-  .hf-tags li { font-size: 14px; padding: 9px 15px; border: 1px solid rgba(247,239,219,.2); border-radius: 999px; }
+  .hf-tags li { font-size: 14px; padding: 9px 15px; border: 1px solid rgba(243, 243, 240,.2); border-radius: 999px; }
 
   .hf-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
   .hf-gallery-img { width: 100%; height: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
@@ -171,29 +171,29 @@ const ogImage = absUrl("/images/halloween-fest/hw3-07.webp");
 
   .hf-identity { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: clamp(32px, 5vw, 88px); align-items: center; padding: clamp(64px, 8vw, 120px) clamp(20px, 5vw, 88px); }
   .hf-identity h2 { font-size: clamp(22px, 2.2vw, 30px); font-weight: 800; letter-spacing: -.02em; margin: 0 0 16px; }
-  .hf-identity p { font-size: 16px; line-height: 1.75; color: rgba(247,239,219,.68); margin: 0; }
+  .hf-identity p { font-size: 16px; line-height: 1.75; color: rgba(243, 243, 240,.68); margin: 0; }
   .hf-identity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .hf-identity-grid img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
 
-  .hf-ig { text-align: center; padding: clamp(48px, 6vw, 80px) 20px; border-top: 1px solid rgba(247,239,219,.1); border-bottom: 1px solid rgba(247,239,219,.1); }
-  .hf-ig p { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: rgba(247,239,219,.5); margin: 0 0 14px; }
-  .hf-ig a { font-size: clamp(26px, 4vw, 52px); font-weight: 800; letter-spacing: -.03em; color: #F7EFDB; text-decoration: none; }
+  .hf-ig { text-align: center; padding: clamp(48px, 6vw, 80px) 20px; border-top: 1px solid rgba(243, 243, 240,.1); border-bottom: 1px solid rgba(243, 243, 240,.1); }
+  .hf-ig p { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: rgba(243, 243, 240,.5); margin: 0 0 14px; }
+  .hf-ig a { font-size: clamp(26px, 4vw, 52px); font-weight: 800; letter-spacing: -.03em; color: #F3F3F0; text-decoration: none; }
   .hf-ig a:hover { opacity: .7; }
 
   .hf-cta { text-align: center; padding: clamp(80px, 11vw, 150px) 20px; }
   .hf-cta h2 { font-size: clamp(40px, 7vw, 88px); font-weight: 800; letter-spacing: -.04em; line-height: .95; margin: 0 0 40px; }
   .hf-cta-links { display: flex; flex-direction: column; align-items: center; gap: 28px; }
-  .hf-btn { font-size: 14px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #000; background: #F7EFDB; border: 2px solid #F7EFDB; padding: 16px 36px; text-decoration: none; transition: background .25s, color .25s; }
-  .hf-btn:hover { background: transparent; color: #F7EFDB; }
-  .hf-back { font-size: 12px; letter-spacing: .28em; text-transform: uppercase; color: rgba(247,239,219,.7); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
+  .hf-btn { font-size: 14px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #000; background: #F3F3F0; border: 2px solid #F3F3F0; padding: 16px 36px; text-decoration: none; transition: background .25s, color .25s; }
+  .hf-btn:hover { background: transparent; color: #F3F3F0; }
+  .hf-back { font-size: 12px; letter-spacing: .28em; text-transform: uppercase; color: rgba(243, 243, 240,.7); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
 
   @media (max-width: 900px) {
     .hf-study, .hf-identity { grid-template-columns: 1fr; }
     .hf-facts { grid-template-columns: 1fr 1fr; }
-    .hf-facts li { border-left: none; border-top: 1px solid rgba(247,239,219,.1); padding: 24px 16px; }
+    .hf-facts li { border-left: none; border-top: 1px solid rgba(243, 243, 240,.1); padding: 24px 16px; }
     .hf-facts li:first-child { padding-left: 16px; }
     .hf-facts li:nth-child(-n+2) { border-top: none; }
-    .hf-facts li:nth-child(even) { border-left: 1px solid rgba(247,239,219,.1); }
+    .hf-facts li:nth-child(even) { border-left: 1px solid rgba(243, 243, 240,.1); }
   }
   @media (max-width: 600px) {
     .hf-gallery { grid-template-columns: 1fr; }

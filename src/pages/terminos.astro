@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import SiteFooter from "../components/SiteFooter.astro";
 ---
 <Layout
   title="Términos y Condiciones | Black Sun Prods"
@@ -7,23 +8,41 @@ import Layout from "../layouts/Layout.astro";
   canonical="https://www.blacksunprods.com/terminos"
 >
 
-<div id="terms" class="page active">
-  <h1 class="page-title">Términos y Condiciones</h1>
-  <h2 class="section-title">1. Información General</h2>
-  <p class="body-text">El presente sitio web es titularidad de Black Sun Prods. El acceso y uso de este sitio implica la aceptación de los presentes términos en su totalidad.</p>
-  <hr class="divider"/>
-  <h2 class="section-title">2. Servicios</h2>
-  <p class="body-text">Black Sun Prods ofrece servicios de producción, organización y gestión integral de eventos. Los detalles y condiciones económicas se establecerán en el correspondiente contrato aceptado por ambas partes.</p>
-  <hr class="divider"/>
-  <h2 class="section-title">3. Propiedad Intelectual</h2>
-  <p class="body-text">Todos los contenidos de este sitio son propiedad de Black Sun Prods y están protegidos por la legislación española e internacional de propiedad intelectual. Queda prohibida su reproducción sin autorización expresa.</p>
-  <hr class="divider"/>
-  <h2 class="section-title">4. Responsabilidad</h2>
-  <p class="body-text">Black Sun Prods no será responsable de los daños derivados del uso incorrecto del sitio web o de la imposibilidad de acceso por causas ajenas a nuestra voluntad.</p>
-  <hr class="divider"/>
-  <h2 class="section-title">5. Legislación Aplicable</h2>
-  <p class="body-text">Los presentes términos se rigen por la legislación española. Para cualquier controversia las partes se someten a los Juzgados y Tribunales del domicilio del usuario.</p>
-  <p class="meta">Última actualización: mayo 2026</p>
-</div>
+<main class="legal">
+  <div class="legal-wrap">
+    <header>
+      <span class="legal-kicker">Legal</span>
+      <h1 class="legal-title">Términos y condiciones</h1>
+      <p class="legal-updated">Última actualización: mayo 2026</p>
+    </header>
+
+    <section class="legal-section">
+      <h2>1. Información general</h2>
+      <p>El presente sitio web es titularidad de Black Sun Prods. El acceso y uso de este sitio implica la aceptación de los presentes términos en su totalidad.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>2. Servicios</h2>
+      <p>Black Sun Prods ofrece servicios de producción, organización y gestión integral de eventos. Los detalles y condiciones económicas se establecerán en el correspondiente contrato aceptado por ambas partes.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>3. Propiedad intelectual</h2>
+      <p>Todos los contenidos de este sitio son propiedad de Black Sun Prods y están protegidos por la legislación española e internacional de propiedad intelectual. Queda prohibida su reproducción sin autorización expresa.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>4. Responsabilidad</h2>
+      <p>Black Sun Prods no será responsable de los daños derivados del uso incorrecto del sitio web o de la imposibilidad de acceso por causas ajenas a nuestra voluntad.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>5. Legislación aplicable</h2>
+      <p>Los presentes términos se rigen por la legislación española. Para cualquier controversia las partes se someten a los Juzgados y Tribunales del domicilio del usuario.</p>
+    </section>
+  </div>
+</main>
+
+<SiteFooter />
 
 </Layout>
