@@ -1,9 +1,10 @@
 import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
+import { SITE } from './src/config/site.mjs';
 
 export default defineConfig({
-  site: 'https://www.ascndrworld.com',
+  site: SITE.url,
   output: 'static',
   trailingSlash: 'never',
   build: {

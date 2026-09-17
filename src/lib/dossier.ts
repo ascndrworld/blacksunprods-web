@@ -5,6 +5,12 @@
 //   3) "Redactar respuesta" → runReply(): Claude redacta el borrador de email.
 // El gasto de API solo ocurre cuando el dueño pulsa un botón (control de coste).
 
+import { SITE } from "../config/site.mjs";
+
+// Contexto de marca para los prompts (sale de src/config/site.mjs).
+const SERVICES = SITE.business.serviceType.join(", ");
+const WHO = `${SITE.name}, ${SITE.tagline.toLowerCase()} de ${SITE.business.city} (${SITE.business.region})`;
+
 export interface Lead {
   name: string;
   email: string;
@@ -104,9 +110,9 @@ async function callClaude(key: string, prompt: string, useWebSearch: boolean): P
 
 function dossierPrompt(lead: Lead): string {
   return [
-    "Eres el asistente de Ascndr, una consultoría creativa de Jaén (España): branding,",
-    "diseño, dirección creativa y gestión de redes. Acaba de entrar este lead por el",
-    "formulario de la web y Frank va a responderle. Prepárale un dossier para contextualizar.",
+    `Eres el asistente de ${WHO}: ${SERVICES}.`,
+    "Acaba de entrar este lead por el formulario de la web y",
+    `${SITE.ownerName} va a responderle. Prepárale un dossier para contextualizar.`,
     "",
     `- Nombre: ${lead.name}`,
     `- Email: ${lead.email}`,
@@ -132,8 +138,8 @@ function dossierPrompt(lead: Lead): string {
 
 function replyPrompt(name: string, dossier: string): string {
   return [
-    "Eres Frank, de Ascndr (consultoría creativa de Jaén: branding, diseño, dirección",
-    "creativa y gestión de redes). Vas a responder por email a un lead que escribió por el",
+    `Eres ${SITE.ownerName}, de ${WHO} (${SERVICES}).`,
+    "Vas a responder por email a un lead que escribió por el",
     "formulario de la web. Tienes este dossier de investigación previa:",
     "",
     "----- DOSSIER -----",
@@ -146,8 +152,8 @@ function replyPrompt(name: string, dossier: string): string {
     "- Muestra natural de que entendéis su negocio/contexto (sin parecer que le has espiado).",
     "- 3 a 5 PUNTOS DE MEJORA concretos y detallados para su marca / identidad / presencia",
     "  online, basados en el estudio. Cada punto: qué mejorar y por qué le aporta.",
-    "- Cómo lo abordaría Ascndr y propuesta de siguiente paso (una llamada breve).",
-    "- Cierre y firma SOLO como 'Frank' (o 'Frank · Ascndr'). NO inventes email,",
+    `- Cómo lo abordaría ${SITE.name} y propuesta de siguiente paso (una llamada breve).`,
+    `- Cierre y firma SOLO como '${SITE.ownerName}' (o '${SITE.ownerName} · ${SITE.name}'). NO inventes email,`,
     "  teléfono, web ni ningún dato de contacto.",
     "No prometas datos inventados. Tono humano, nada robótico. Máximo unas 280 palabras.",
   ].join("\n");
