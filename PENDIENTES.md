@@ -6,10 +6,10 @@ Lista viva de lo que falta. Tacha (o borra) cada punto al resolverlo.
 
 - [ ] **Teléfono / WhatsApp de empresa** → `src/config/site.mjs` (`phone`, `whatsapp`). Mientras siga el número de ejemplo `34600000000`, el botón de WhatsApp y el teléfono de Schema.org **no se muestran** (se activan solos al poner el número real).
 - [ ] **Testimonios reales** de ayuntamientos y promotores → `src/pages/index.astro`, sección `#testimonios`. **Oculta** (`SHOW_TESTIMONIALS = false`): sustituir los 3 huecos "Pendiente" y poner `true`.
-- [ ] **Indexación**: la web NO se indexa por defecto (noindex + robots Disallow). En el despliegue final con dominio, poner `PUBLIC_INDEXABLE=true` en Vercel.
+- [x] **Indexación**: la web NO se indexa por defecto (noindex + robots Disallow). En el despliegue final con dominio, poner `PUBLIC_INDEXABLE=true` en Vercel.
 - [ ] **Datos legales del titular** (nombre/razón social, NIF, domicilio) en `src/pages/terminos.astro` y `src/pages/privacidad.astro`. Solo se ha cambiado el nombre de marca.
 - [ ] **Resend**: verificar el dominio `blacksunprods.com` y poner `RESEND_API_KEY` (el formulario no envía sin esto).
-- [ ] **Proyecto nuevo en Vercel** + dominios `blacksunprods.com` y `www.blacksunprods.com` + DNS. No enlazar al proyecto de Ascndr.
+- [x] **Proyecto nuevo en Vercel** + dominios `blacksunprods.com` y `www.blacksunprods.com` + DNS. No enlazar al proyecto de Ascndr.
 
 ## Contenido
 
