@@ -1756,6 +1756,15 @@
   pointer-events: none;
   background-color: transparent;
 }
+/* Oculta el botón nativo de play (iOS/Safari lo muestra si bloquea el autoplay) */
+.home-video-bg::-webkit-media-controls,
+.home-video-bg::-webkit-media-controls-panel,
+.home-video-bg::-webkit-media-controls-overlay-play-button,
+.home-video-bg::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+  opacity: 0 !important;
+}
 .home-video-overlay {
   position: absolute;
   inset: 0;

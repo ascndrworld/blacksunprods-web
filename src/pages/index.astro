@@ -44,8 +44,9 @@ const SHOW_TESTIMONIALS = false;
     loop
     playsinline
     webkit-playsinline="true"
-    preload="metadata"
+    preload="auto"
     disablepictureinpicture
+    disableremoteplayback
     aria-hidden="true"
     poster="/video/hero-poster.webp"
     src="/video/hero.mp4"></video>
@@ -60,23 +61,30 @@ const SHOW_TESTIMONIALS = false;
       v.setAttribute('muted', '');
       v.setAttribute('playsinline', '');
       function tryPlay() {
+        if (!v.paused) return;
         try {
           var p = v.play();
-          if (p && p.catch) p.catch(function() { /* reintentaremos en gesto */ });
+          if (p && p.catch) p.catch(function() { /* bloqueado: reintentamos en el siguiente gesto */ });
         } catch (e) {}
       }
       if (v.readyState >= 2) tryPlay();
       v.addEventListener('loadedmetadata', tryPlay);
       v.addEventListener('loadeddata', tryPlay);
       v.addEventListener('canplay', tryPlay);
-      // Reintenta al primer gesto si el navegador bloqueó autoplay
-      function resume() {
-        tryPlay();
-        ['touchstart','click','scroll','keydown'].forEach(function(e){ window.removeEventListener(e, resume); });
-      }
-      ['touchstart','click','scroll','keydown'].forEach(function(e){
-        window.addEventListener(e, resume, { passive: true });
+      // Si el navegador bloqueó el autoplay (p. ej. iPhone en modo ahorro), cualquier
+      // gesto lo reintenta. Los listeners solo se quitan cuando el vídeo YA reproduce:
+      // en iOS un scroll no cuenta como gesto y el play puede volver a fallar.
+      var GESTURES = ['touchend', 'click', 'keydown', 'scroll', 'wheel'];
+      function resume() { tryPlay(); }
+      GESTURES.forEach(function(e){ window.addEventListener(e, resume, { passive: true }); });
+      v.addEventListener('playing', function() {
+        GESTURES.forEach(function(e){ window.removeEventListener(e, resume); });
       });
+      // Al volver a la pestaña o a la app, el navegador puede haberlo pausado.
+      document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) tryPlay();
+      });
+      window.addEventListener('pageshow', tryPlay);
     })();
   </script>
 
