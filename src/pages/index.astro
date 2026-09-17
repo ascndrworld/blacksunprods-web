@@ -1,0 +1,1088 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// Marcas que han confiado — logos reales, en su color original, integrados
+// en el hero debajo del CTA, en movimiento (marquee). Se repite el set y luego
+// se duplica el grupo entero para que el bucle no tenga saltos.
+// scale = ajuste óptico por logo para que se vean a la misma altura real
+// (cada PNG rellena su caja distinto: Halloween lleva subtítulo y letras altas).
+const logos = [
+  { name: "Halloween Fest", src: "/images/marcas/halloween-fest.png", scale: 1.34 },
+  { name: "Cónclave", src: "/images/marcas/conclave.png", scale: 1.13 },
+  { name: "Eventsy", src: "/images/marcas/eventsy.png", scale: 0.98 },
+];
+const group = Array.from({ length: 4 }, () => logos).flat();
+---
+
+<Layout
+  title="Ascndr | Consultoría Creativa - Branding, Lanzamientos y RRSS"
+  description="Branding, dirección creativa de eventos, fotografía y gestión de redes sociales. Desde Jaén, para marcas de toda España. Eleva tu marca con visión estratégica."
+  canonical="https://www.ascndrworld.com"
+  ogImage="https://www.ascndrworld.com/images/og-ascndr.jpg"
+>
+
+
+<!-- ════ HOME ════ -->
+<div id="home" class="page active">
+
+  <!-- VÍDEO DE FONDO — muted al inicio para garantizar autoplay -->
+  <video
+    class="home-video-bg"
+    id="homeVideoBg"
+    muted
+    autoplay
+    loop
+    playsinline
+    webkit-playsinline="true"
+    preload="metadata"
+    disablepictureinpicture
+    aria-hidden="true"
+    poster="/video/hero-poster.webp"
+    src="/video/hero.mp4"></video>
+  <div class="home-video-overlay" aria-hidden="true"></div>
+  <script is:inline>
+    (function() {
+      var v = document.getElementById('homeVideoBg');
+      if (!v) return;
+      v.muted = true;
+      v.defaultMuted = true;
+      v.playsInline = true;
+      v.setAttribute('muted', '');
+      v.setAttribute('playsinline', '');
+      function tryPlay() {
+        try {
+          var p = v.play();
+          if (p && p.catch) p.catch(function() { /* reintentaremos en gesto */ });
+        } catch (e) {}
+      }
+      if (v.readyState >= 2) tryPlay();
+      v.addEventListener('loadedmetadata', tryPlay);
+      v.addEventListener('loadeddata', tryPlay);
+      v.addEventListener('canplay', tryPlay);
+      // Reintenta al primer gesto si el navegador bloqueó autoplay
+      function resume() {
+        tryPlay();
+        ['touchstart','click','scroll','keydown'].forEach(function(e){ window.removeEventListener(e, resume); });
+      }
+      ['touchstart','click','scroll','keydown'].forEach(function(e){
+        window.addEventListener(e, resume, { passive: true });
+      });
+    })();
+  </script>
+
+  <!-- HERO: texto izquierda, pegado arriba tras el header -->
+  <div class="home-hero-content">
+    <h1 class="home-hero-title">eleva<br/>tu marca<br/>o quédate<br/>donde estás.</h1>
+    <a class="home-hero-btn" href="/proyectos">VER PROYECTOS</a>
+  </div>
+
+  </div><!-- /#home -->
+
+  <!-- ════ MARCAS QUE HAN CONFIADO (strip en movimiento, bajo el header) ════ -->
+  <section class="brandstrip" aria-label="Marcas que han confiado en Ascndr">
+    <p class="brandstrip-eyebrow">Han confiado en nosotros</p>
+    <!-- PC: 3 logos fijos y centrados (de momento; con más marcas → movimiento) -->
+    <div class="brandstrip-static">
+      {logos.map((b) => (
+        <img class="brandstrip-logo" src={b.src} alt={b.name} loading="lazy" style={`--brand-scale:${b.scale}`} />
+      ))}
+    </div>
+    <!-- Móvil: en movimiento (marquee) -->
+    <div class="brandstrip-marquee" aria-hidden="true">
+      <div class="brandstrip-track">
+        {[...group, ...group].map((b) => (
+          <img class="brandstrip-logo" src={b.src} alt="" aria-hidden="true" loading="eager" decoding="async" draggable="false" style={`--brand-scale:${b.scale}`} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ SECCIÓN SERVICIOS — igual que "branding" en Somos ════ -->
+  <section class="hs-services">
+    <h2 class="hs-services-title" data-reveal>consultoría<br/>creativa</h2>
+    <p class="hs-services-text" data-reveal>La identidad visual es la primera impresión que se lleva un cliente de tu marca. Trabajamos para que sea la correcta.</p>
+    <p class="hs-services-text" data-reveal>Branding, dirección creativa, web, redes sociales. Todo bajo una misma visión estratégica.</p>
+    <a class="hs-services-btn" href="/contacto" data-reveal>HABLEMOS DE TU MARCA</a>
+  </section>
+
+  <!-- ════ SECCIÓN SERVICIOS DESGLOSADOS ════ -->
+  <section class="svc" id="servicios">
+    <div class="svc-head">
+      <span class="svc-eyebrow">QUÉ HACEMOS</span>
+      <h2 class="svc-title">servicios</h2>
+    </div>
+    <ul class="svc-rows">
+      <li class="svc-row">
+        <div class="svc-row-main">
+          <span class="svc-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 21a1 1 0 0 1 0-19 9.5 8.5 0 0 1 9.5 8.5 4.5 4.5 0 0 1-4.5 4.5h-2a1.6 1.6 0 0 0-1.28 2.56l.27.36A1.6 1.6 0 0 1 11 21z"/>
+              <circle cx="6.2" cy="11.5" r=".95" fill="currentColor" stroke="none"/>
+              <circle cx="8.2" cy="6.8" r=".95" fill="currentColor" stroke="none"/>
+              <circle cx="12.6" cy="5.8" r=".95" fill="currentColor" stroke="none"/>
+              <path d="M22 2 17 7"/>
+              <path d="m15.6 8.4 2 2 1.4-1.4-2-2z"/>
+              <path d="M15.6 8.4 13 11l2.6-.6z" fill="currentColor" stroke="none"/>
+            </svg>
+          </span>
+          <h3 class="svc-name">Branding</h3>        </div>
+        <div class="svc-reveal"><div class="svc-reveal-inner">
+          <p class="svc-desc">Naming, logo, tipografías, color y el sistema visual completo que hace que tu marca se reconozca y se recuerde.</p>
+        </div></div>
+      </li>
+      <li class="svc-row">
+        <div class="svc-row-main">
+          <span class="svc-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+            </svg>
+          </span>
+          <h3 class="svc-name">Dirección Creativa</h3>        </div>
+        <div class="svc-reveal"><div class="svc-reveal-inner">
+          <p class="svc-desc">La idea que lo unifica todo. Eventos, lanzamientos y campañas donde cada pieza cuenta la misma historia.</p>
+        </div></div>
+      </li>
+      <li class="svc-row">
+        <div class="svc-row-main">
+          <span class="svc-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"/>
+              <polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </span>
+          <h3 class="svc-name">Web</h3>        </div>
+        <div class="svc-reveal"><div class="svc-reveal-inner">
+          <p class="svc-desc">Diseño y desarrollo de webs y productos digitales a medida: UX/UI y código, pensados para reflejar tu marca y funcionar de verdad.</p>
+        </div></div>
+      </li>
+      <li class="svc-row">
+        <div class="svc-row-main">
+          <span class="svc-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+            </svg>
+          </span>
+          <h3 class="svc-name">Redes Sociales</h3>        </div>
+        <div class="svc-reveal"><div class="svc-reveal-inner">
+          <p class="svc-desc">Estrategia y contenido con intención: un feed reconocible que atrae, genera confianza y convierte.</p>
+        </div></div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ════ SECCIÓN PROYECTOS DESTACADOS ════ -->
+  <div class="works-head" data-reveal>
+    <span class="svc-eyebrow">NUESTRA EXPERIENCIA</span>
+    <h2 class="svc-title">proyectos</h2>
+  </div>
+  <section class="hs-works">
+    <a class="hs-work-item" href="/proyectos/direccion-creativa/conclave" data-reveal>
+      <img class="hs-work-img" src="/images/conclave/portada-conclave2.jpg" alt="Cónclave — Rebranding y dirección creativa de pub en Jaén por Ascndr" loading="lazy" style="object-position:center 37%;"/>
+      <div class="hs-work-overlay">
+        <span class="hs-work-cat">Dirección Creativa</span>
+        <h3 class="hs-work-name">Cónclave</h3>
+      </div>
+    </a>
+    <a class="hs-work-item" href="/proyectos/branding/halloweenfest" data-reveal>
+      <img class="hs-work-img" src="/images/halloween-fest/pulsera-portada.webp" alt="Halloween Fest — Branding e identidad visual de evento en Los Villares, Jaén" loading="lazy"/>
+      <div class="hs-work-overlay">
+        <span class="hs-work-cat">Branding</span>
+        <h3 class="hs-work-name">Halloween Fest</h3>
+      </div>
+    </a>
+    <a class="hs-work-item" href="/proyectos/web/eventsy" data-reveal>
+      <img class="hs-work-img" src="/images/eventsy/portada-carrusel.webp" alt="Eventsy — Diseño de plataforma web y app de gestión de eventos por Ascndr" loading="lazy"/>
+      <div class="hs-work-overlay">
+        <span class="hs-work-cat">Web</span>
+        <h3 class="hs-work-name">Eventsy</h3>
+      </div>
+    </a>
+    <a class="hs-work-item" href="/proyectos/redes-sociales/briefing" data-reveal>
+      <img class="hs-work-img" src="/images/conclave/rrss-02.jpg" alt="Briefing — Gestión de redes sociales y contenido para Cónclave en Jaén" loading="lazy"/>
+      <div class="hs-work-overlay">
+        <span class="hs-work-cat">Redes Sociales</span>
+        <h3 class="hs-work-name">Briefing</h3>
+      </div>
+    </a>
+  </section>
+
+  <!-- ════ CÓMO TRABAJAMOS — proceso (scroll horizontal fijado) ════ -->
+  <section class="proc proc-h" id="proceso">
+    <div class="proc-pin">
+      <div class="proc-sticky">
+        <div class="proc-head">
+          <span class="proc-eyebrow">CÓMO TRABAJAMOS</span>
+          <h2 class="proc-title">el proceso</h2>
+        </div>
+        <div class="proc-viewport">
+          <ol class="proc-track">
+        <li class="proc-panel">
+          <span class="proc-num">01</span>
+          <div class="proc-text">
+            <h3 class="proc-name">Hablamos</h3>
+            <p class="proc-desc">Nos cuentas tu proyecto y entendemos tu negocio, tu público y a dónde quieres llegar.</p>
+          </div>
+        </li>
+        <li class="proc-panel">
+          <span class="proc-num">02</span>
+          <div class="proc-text">
+            <h3 class="proc-name">Estrategia</h3>
+            <p class="proc-desc">Definimos el rumbo: posicionamiento, concepto y qué necesita tu marca para destacar.</p>
+          </div>
+        </li>
+        <li class="proc-panel">
+          <span class="proc-num">03</span>
+          <div class="proc-text">
+            <h3 class="proc-name">Creamos</h3>
+            <p class="proc-desc">Diseñamos la identidad, las piezas y el contenido, todo bajo una misma visión.</p>
+          </div>
+        </li>
+        <li class="proc-panel">
+          <span class="proc-num">04</span>
+          <div class="proc-text">
+            <h3 class="proc-name">Lanzamos</h3>
+            <p class="proc-desc">Ponemos tu marca en el mundo y te dejamos las herramientas para mantenerla.</p>
+          </div>
+        </li>
+          </ol>
+        </div>
+        <div class="proc-controls">
+          <button class="proc-arrow" type="button" data-dir="-1" aria-label="Paso anterior">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4.5 7.5 12 15 19.5"/></svg>
+          </button>
+          <div class="proc-dots" role="tablist" aria-label="Navegación del proceso"></div>
+          <button class="proc-arrow" type="button" data-dir="1" aria-label="Paso siguiente">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4.5 16.5 12 9 19.5"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ TESTIMONIOS ════ -->
+  <section class="tst" id="testimonios">
+    <div class="tst-head" data-reveal>
+      <span class="svc-eyebrow">lo que dicen</span>
+      <h2 class="svc-title">testimonios</h2>
+    </div>
+    <div class="tst-grid">
+      <figure class="tst-item">
+        <blockquote class="tst-quote">Llevo muchos años trabajando en la noche y pensaba que un cambio tan drástico no iba a funcionar, pero han rejuvenecido mi negocio. Tomé la decisión correcta: ahora mi local vuelve a ser el punto de encuentro en el pueblo.</blockquote>
+        <figcaption class="tst-author">
+          <span class="tst-name">Lorenzo Hidalgo</span>
+          <span class="tst-role">Dueño de Pub Milenio · +26 años en el sector</span>
+        </figcaption>
+      </figure>
+      <figure class="tst-item">
+        <blockquote class="tst-quote">En las dos primeras ediciones se nos veía como un evento poco profesional. Hace 2 años que trabajamos juntos y nuestro evento ahora crea comunidad y llega a más gente en cada edición.</blockquote>
+        <figcaption class="tst-author">
+          <span class="tst-name">Luis Ramírez</span>
+          <span class="tst-role">Founder de Halloween Fest · 4 ediciones consecutivas</span>
+        </figcaption>
+      </figure>
+      <figure class="tst-item">
+        <blockquote class="tst-quote">Quería crear una aplicación web seria desde el primer día. Nos orientaron sobre variables y herramientas que desconocíamos. Nuestra marca está presente entre promotores de eventos.</blockquote>
+        <figcaption class="tst-author">
+          <span class="tst-name">Juan Delgado</span>
+          <span class="tst-role">CEO y Co-Founder de Eventsy</span>
+        </figcaption>
+      </figure>
+    </div>
+    <div class="tst-dots" role="tablist" aria-label="Navegación de testimonios"></div>
+  </section>
+
+  <!-- ════ CTA DE CIERRE ════ -->
+  <section class="cta" id="empecemos">
+    <h2 class="cta-title" data-reveal>¿elevamos<br/>tu marca?</h2>
+    <p class="cta-text" data-reveal>Cuéntanos qué tienes en mente. Te respondemos en menos de 24h.</p>
+    <a class="cta-btn" href="/contacto" data-reveal>INICIAR PROYECTO</a>
+  </section>
+
+  <!-- ════ FOOTER GLOBAL ════ -->
+  <footer class="hs-footer">
+    <div class="hs-footer-line"></div>
+    <div class="hs-footer-middle">
+      <div class="hs-footer-social">
+        <a href="https://www.instagram.com/ascndr.world" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          <span class="hs-footer-ig-label">instagram</span>
+        </a>
+      </div>
+      <div class="hs-footer-contact">
+        <a href="/contacto" class="hs-footer-contact-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          <span>Escríbenos</span>
+        </a>
+        <a href="https://wa.me/34667241262" target="_blank" rel="noopener" class="hs-footer-contact-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+          <span>WhatsApp</span>
+        </a>
+      </div>
+    </div>
+    <div class="hs-footer-line"></div>
+    <nav class="hs-footer-nav">
+      <a href="/proyectos">Proyectos</a>
+      <span>·</span>
+      <a href="/blog">Blog</a>
+      <span>·</span>
+      <a href="/terminos">Términos</a>
+      <span>·</span>
+      <a href="/privacidad">Privacidad</a>
+      <span>·</span>
+      <a href="/contacto">Contacto</a>
+    </nav>
+    <p class="hs-footer-copy">© Ascndr 2026 · Marca Registrada</p>
+  </footer>
+
+
+</div><!-- cierre #home -->
+
+
+<style>
+/* ════ PROTECCIÓN CONTENIDO ════ */
+img, video {
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  pointer-events: none;
+}
+/* Restaurar pointer-events solo donde se necesita click (lightbox, galerías) */
+.gallery-item img,
+.hw3-item img,
+.ds-item img,
+.gallery-cv-item img,
+.lightbox-img {
+  pointer-events: auto;
+}
+
+/* ════ MARCAS EN EL HERO (logos en color original, bajo el CTA) ════ */
+.brandstrip {
+  position: relative;
+  background: #000;
+  overflow: hidden;
+  padding: clamp(30px, 4vw, 50px) 0;
+  border-top: 1px solid rgba(247, 239, 219, 0.08);
+  border-bottom: 1px solid rgba(247, 239, 219, 0.08);
+}
+.brandstrip-eyebrow {
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(247, 239, 219, 0.5);
+  margin: 0 0 clamp(22px, 3vw, 34px);
+  padding: 0 24px;
+}
+/* PC: los 3 logos fijos y centrados */
+.brandstrip-static {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: clamp(40px, 7vw, 100px);
+  padding: 0 24px;
+}
+/* Móvil: marquee (oculto en PC) */
+.brandstrip-marquee { display: none; position: relative; }
+/* Desvanecido en los bordes con degradados estáticos ENCIMA (no con mask sobre
+   el contenido animado): en iOS la máscara sobre un track en movimiento recompone
+   la capa cada frame y provoca tirones/parones. Estos overlays no se animan. */
+.brandstrip-marquee::before,
+.brandstrip-marquee::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 16%;
+  z-index: 2; pointer-events: none;
+}
+.brandstrip-marquee::before { left: 0;  background: linear-gradient(to right, #000 0, transparent 100%); }
+.brandstrip-marquee::after  { right: 0; background: linear-gradient(to left,  #000 0, transparent 100%); }
+.brandstrip-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  will-change: transform;
+  backface-visibility: hidden;
+  animation: brandstrip-scroll 28s linear infinite;
+}
+.brandstrip-logo {
+  height: calc(clamp(32px, 4.4vw, 50px) * var(--brand-scale, 1));
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+  opacity: 0.85;
+  transition: opacity .3s ease;
+}
+.brandstrip-static:hover .brandstrip-logo { opacity: 1; }
+.brandstrip-track .brandstrip-logo { margin: 0 clamp(28px, 6vw, 44px); }
+@keyframes brandstrip-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brandstrip-track { animation: none; }
+}
+
+/* En móvil/tablet: ocultar fijos, mostrar marquee con fade en los bordes */
+@media (max-width: 768px) {
+  .brandstrip-static { display: none; }
+  .brandstrip-marquee {
+    display: block;
+    overflow: hidden;
+    /* El desvanecido lo dan ahora los overlays ::before/::after (ver arriba) */
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   SECCIONES LANDING — Servicios, Antes/Después, Proceso, CTA
+   ════════════════════════════════════════════════════════ */
+.svc, .proc, .cta, .works-head {
+  background: #000;
+  color: #F7EFDB;
+  font-family: "Montserrat", sans-serif;
+}
+/* Menos espacio arriba: pegadas a la sección anterior */
+.svc  { padding: clamp(24px, 3vw, 44px) 0 clamp(44px, 5vw, 72px); }
+.proc { padding: clamp(72px, 9vw, 120px) 10px clamp(72px, 9vw, 116px); }
+.works-head { padding: clamp(48px, 6vw, 88px) 10px clamp(44px, 5vw, 64px); text-align: left; }
+/* La intro "consultoría creativa" deja menos hueco abajo para juntarse con servicios */
+.hs-services { padding-bottom: clamp(40px, 5vw, 64px); }
+
+/* Cabeceras de sección compartidas */
+.svc-eyebrow, .proc-eyebrow {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(247, 239, 219, 0.5);
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+/* Título de sección a tamaño "etiqueta": contenido grande (filas/mosaico) como
+   protagonista; el encabezado enmarca sin competir (registro Locomotive/Obys). */
+.svc-title, .proc-title {
+  font-size: clamp(28px, 3.4vw, 40px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: lowercase;
+  margin: 0;
+}
+
+/* ── SERVICIOS — filas XL con hover-reveal ──
+   Cada servicio es una fila a todo el ancho: icono + nombre en tipografía
+   grande + flecha. Al pasar el ratón la fila se ilumina, el contenido se
+   desplaza y se despliega la descripción. Cascada de entrada al entrar en
+   pantalla (reusa #servicios → .svc-anim/.is-in). */
+.svc-head { padding: 0 10px; margin: 0 0 clamp(20px, 2.6vw, 36px); }
+
+.svc-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgba(247, 239, 219, 0.14);
+}
+.svc-row {
+  position: relative;
+  padding: clamp(22px, 3vw, 36px) 10px;
+  transition: padding-left 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* separador inferior como pseudo-elemento (animable: pulso de brillo al entrar) */
+.svc-row::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: rgba(247, 239, 219, 0.14);
+}
+/* barra de acento a la izquierda — crece al pasar el ratón (sin fondo de relleno) */
+.svc-row::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: #F7EFDB;
+  opacity: 0; transform: scaleY(0); transform-origin: center;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+}
+.svc-row-main {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2.2vw, 28px);
+}
+.svc-icon {
+  flex-shrink: 0;
+  width: clamp(30px, 3.4vw, 42px);
+  height: clamp(30px, 3.4vw, 42px);
+  color: #F7EFDB;
+  opacity: 0.65;
+  transition: opacity 0.4s ease;
+}
+.svc-icon svg { width: 100%; height: 100%; display: block; }
+.svc-name {
+  flex: 1 1 auto;
+  font-size: clamp(30px, 5.4vw, 64px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: rgba(247, 239, 219, 0.9);
+  /* el nombre NO se mueve al hover; solo aclara el color */
+  transition: color 0.35s ease;
+}
+/* descripción que se despliega (truco grid-template-rows 0fr → 1fr, animable) */
+.svc-reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+}
+.svc-reveal-inner { overflow: hidden; min-height: 0; }
+.svc-desc {
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(247, 239, 219, 0.6);
+  max-width: 62ch;
+  /* alinea el texto con el nombre, dejando el hueco del icono a la izquierda */
+  margin: 14px 0 0 calc(clamp(30px, 3.4vw, 42px) + clamp(16px, 2.2vw, 28px));
+}
+
+/* ── HOVER (solo dispositivos con puntero) ──
+   La fila se desplaza un poco, el nombre aclara color, aparece la barra de
+   acento a la izquierda y se abre la descripción. */
+@media (hover: hover) {
+  /* la fila se desplaza un poco a la derecha y aparece la barra de acento a la izquierda */
+  .svc-row:hover { padding-left: 28px; }
+  .svc-row:hover::before { opacity: 1; transform: scaleY(1); }
+  .svc-row:hover .svc-icon { opacity: 1; }
+  .svc-row:hover .svc-name { color: #F7EFDB; }
+  .svc-row:hover .svc-reveal { grid-template-rows: 1fr; opacity: 1; }
+}
+/* En táctil no hay hover: descripción siempre visible */
+@media (hover: none) {
+  .svc-reveal { grid-template-rows: 1fr; opacity: 1; }
+  .svc-name { color: #F7EFDB; }
+}
+
+/* ── ENTRADA al entrar en pantalla ──
+   Los títulos NO se mueven (sin cascada): aparecen estáticos. Lo único que entra
+   es el pulso de brillo suave en los separadores, fila a fila. */
+.svc.svc-anim.is-in .svc-row:nth-child(1)::after { animation: svcLineGlow 1.2s ease-out 0.05s; }
+.svc.svc-anim.is-in .svc-row:nth-child(2)::after { animation: svcLineGlow 1.2s ease-out 0.18s; }
+.svc.svc-anim.is-in .svc-row:nth-child(3)::after { animation: svcLineGlow 1.2s ease-out 0.31s; }
+.svc.svc-anim.is-in .svc-row:nth-child(4)::after { animation: svcLineGlow 1.2s ease-out 0.44s; }
+
+/* El separador aparece con un pulso de luz suave que sube y se asienta */
+@keyframes svcLineGlow {
+  0%   { box-shadow: 0 0 0 0 rgba(247, 239, 219, 0); }
+  45%  { box-shadow: 0 0 9px 1px rgba(247, 239, 219, 0.45); }
+  100% { box-shadow: 0 0 0 0 rgba(247, 239, 219, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .svc.svc-anim.is-in .svc-row::after { animation: none; }
+}
+
+/* ── EL PROCESO — SCROLL HORIZONTAL FIJADO (Active Theory) ──
+   La sección se 'fija' (sticky) y los pasos avanzan en horizontal según el scroll
+   vertical (lo mueve el JS). Barra de progreso abajo. Móvil: swipe horizontal. */
+.proc-h { padding: 0; }
+.proc-head { margin: 0; text-align: left; }
+.proc-num {
+  display: block;
+  font-size: clamp(80px, 11vw, 190px);
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+  color: rgba(247, 239, 219, 0.14);
+  margin: 0 0 clamp(8px, 1.4vw, 18px);
+}
+.proc-name {
+  font-size: clamp(30px, 4.4vw, 60px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 16px;
+  color: #F7EFDB;
+}
+.proc-desc {
+  font-size: clamp(15px, 1.2vw, 17px);
+  line-height: 1.7;
+  color: rgba(247, 239, 219, 0.6);
+  max-width: 42ch;
+  margin: 0;
+}
+.tst-dots { display: none; }
+.proc-dots { display: flex; justify-content: center; align-items: center; gap: 13px; }
+.proc-controls { display: flex; align-items: center; justify-content: center; }
+.proc-arrow { display: none; }  /* flechas solo en PC */
+
+/* PC: carrusel (slide como en móvil) — una tarjeta por pantalla con número gigante
+   + texto; autoplay + flechas + puntos + swipe/scroll horizontal. Sin scroll fijado. */
+@media (min-width: 769px) {
+  .proc-h { padding: clamp(96px, 12vh, 168px) clamp(24px, 5vw, 88px); }
+  .proc-pin { position: static; height: auto; }
+  .proc-sticky { position: static; height: auto; display: block; overflow: visible; padding: 0; }
+  .proc-sticky .proc-head { position: static; margin: 0 0 clamp(40px, 5vw, 72px); }
+
+  .proc-viewport {
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .proc-viewport::-webkit-scrollbar { display: none; }
+  .proc-track { display: flex; list-style: none; margin: 0; padding: 0; width: 100%; }
+  .proc-panel {
+    flex: 0 0 100%; scroll-snap-align: center; box-sizing: border-box;
+    display: flex; align-items: center; gap: clamp(36px, 5vw, 96px);
+    min-height: clamp(320px, 44vh, 460px);
+  }
+  .proc-num {
+    flex: 0 0 auto; margin: 0;
+    font-size: clamp(140px, 22vw, 340px); line-height: 0.8;
+    color: rgba(247, 239, 219, 0.92);
+  }
+  .proc-text { max-width: 46ch; }
+  .proc-name { font-size: clamp(34px, 4vw, 64px); margin: 0 0 18px; }
+  .proc-desc { font-size: clamp(15px, 1.15vw, 18px); max-width: 42ch; }
+
+  /* flechas + puntos centrados debajo */
+  .proc-controls { gap: clamp(24px, 2.5vw, 40px); margin-top: clamp(28px, 3.5vw, 52px); }
+  .proc-arrow {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 56px; height: 56px; border-radius: 50%; padding: 0;
+    border: 1px solid rgba(247, 239, 219, 0.18); background: transparent;
+    color: #F7EFDB; cursor: pointer;
+    transition: border-color 0.4s ease, background 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .proc-arrow svg {
+    width: 19px; height: 19px; display: block;
+    fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .proc-arrow:hover { border-color: rgba(247, 239, 219, 0.85); background: rgba(247, 239, 219, 0.05); }
+  .proc-arrow[data-dir="1"]:hover svg  { transform: translateX(3px); }
+  .proc-arrow[data-dir="-1"]:hover svg { transform: translateX(-3px); }
+  .proc-arrow:active { transform: scale(0.93); }
+  .proc-arrow:focus-visible { outline: none; border-color: #F7EFDB; box-shadow: 0 0 0 4px rgba(247, 239, 219, 0.14); }
+}
+
+/* PC: el resto de secciones (servicios, proyectos, testimonios) comparten el
+   MISMO inset lateral que "el proceso" → clamp(24px, 5vw, 88px). Así todos los
+   títulos quedan a la misma distancia de cada borde, con su contenido alineado. */
+@media (min-width: 769px) {
+  /* Servicios: la sección lleva el inset; cabecera y filas quedan a 0 para
+     alinear con él. El deslizamiento del hover se reajusta a +18px. */
+  .svc { padding-inline: clamp(24px, 5vw, 88px); }
+  .svc-head { padding-inline: 0; }
+  .svc-row { padding-inline: 0; }
+  .svc-row:hover { padding-left: 18px; }
+
+  /* Proyectos: el título mantiene el inset; el mosaico va a sangre (todo el
+     ancho de página), de borde a borde. */
+  .works-head { padding-left: clamp(24px, 5vw, 88px); padding-right: clamp(24px, 5vw, 88px); }
+  .hs-works { padding-inline: 0; }
+  /* (Testimonios se ajusta más abajo, tras su definición base, para que el
+     padding-inline gane al shorthand `padding` de `.tst`.) */
+}
+
+/* Móvil/tablet ≤768: sin pin — swipe horizontal nativo */
+@media (max-width: 768px) {
+  .proc-h { padding: clamp(72px, 9vw, 120px) 0; }
+  .proc-pin { height: auto; }
+  .proc-sticky { position: static; height: auto; display: block; }
+  .proc-sticky .proc-head { position: static; padding: 0 10px; margin: 0 0 clamp(20px, 4vw, 36px); }
+  .proc-viewport {
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .proc-viewport::-webkit-scrollbar { display: none; }
+  .proc-track { display: flex; list-style: none; margin: 0; padding: 0; width: max-content; }
+  /* una tarjeta por pantalla (slide), igual que el carrusel que teníamos antes */
+  .proc-panel {
+    flex: 0 0 100vw; scroll-snap-align: center; box-sizing: border-box; padding: 0 16px;
+  }
+  .proc-num { font-size: clamp(64px, 22vw, 120px); }
+  .proc-name { font-size: clamp(26px, 8.5vw, 38px); }  /* igual que "Branding" en servicios */
+  .proc-progress { display: none; }
+}
+
+/* ── CTA DE CIERRE ── */
+.cta {
+  text-align: center;
+  padding-top: clamp(96px, 12vw, 160px);
+  padding-bottom: clamp(96px, 12vw, 160px);
+  border-top: 1px solid rgba(247, 239, 219, 0.08);
+}
+.cta-title {
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -3px;
+  text-transform: lowercase;
+  margin: 0 0 24px;
+}
+.cta-text {
+  font-size: 17px;
+  line-height: 1.5;
+  color: rgba(247, 239, 219, 0.6);
+  margin: 0 auto 40px;
+  max-width: 440px;
+}
+.cta-btn {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #000;
+  background: #F7EFDB;
+  text-decoration: none;
+  padding: 16px 40px;
+  border: 2px solid #F7EFDB;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.cta-btn:hover { background: transparent; color: #F7EFDB; }
+
+/* ── TESTIMONIOS ── */
+.tst {
+  background: #000;
+  color: #F7EFDB;
+  font-family: "Montserrat", sans-serif;
+  padding: clamp(72px, 9vw, 120px) 10px;
+}
+.tst-head { margin: 0 0 clamp(40px, 5vw, 64px); text-align: left; }
+.tst-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.tst-item {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 clamp(24px, 2.5vw, 40px);
+  border-left: 1px solid rgba(247, 239, 219, 0.18);
+}
+.tst-item:first-child { border-left: none; padding-left: 10px; }
+.tst-quote {
+  font-size: clamp(16px, 1.3vw, 18px);
+  line-height: 1.6;
+  color: rgba(247, 239, 219, 0.9);
+  font-weight: 400;
+  margin: 0 0 28px;
+}
+.tst-quote::before {
+  content: "\201C";
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 58px;
+  line-height: 1;
+  height: 0.62em;
+  color: rgba(247, 239, 219, 0.3);
+  margin-bottom: 10px;
+}
+.tst-author {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: auto;
+}
+.tst-name { font-size: 15px; font-weight: 700; color: var(--ink); }
+.tst-role { font-size: 12px; letter-spacing: 0.03em; color: rgba(247, 239, 219, 0.5); }
+
+/* PC: testimonios al mismo inset lateral que "el proceso". Va aquí (tras la
+   base) para que `padding-inline` gane al shorthand `padding` de `.tst`. */
+@media (min-width: 769px) {
+  .tst { padding-inline: clamp(24px, 5vw, 88px); }
+  .tst-item:first-child { padding-left: 0; }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .tst-grid { grid-template-columns: 1fr; }
+  .tst-item { border-left: none; border-top: 1px solid rgba(247, 239, 219, 0.14); padding: 28px 0 0; }
+  .tst-item:first-child { border-top: none; padding: 0; }
+  .tst-head { text-align: left; }
+}
+@media (max-width: 600px) {
+  /* Servicios: filas más compactas; nombre e icono centrados verticalmente */
+  .svc-row { padding: 22px 10px; }
+  .svc-name { font-size: clamp(26px, 8.5vw, 38px); }
+  .svc-icon { width: 28px; height: 28px; }
+  .svc-desc { margin-left: calc(28px + 16px); font-size: 14px; }
+  .works-head { text-align: left; }
+
+  /* El proceso en móvil: slide/carrusel de una tarjeta (autoplay + swipe + puntos) */
+  .proc-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 13px;
+    margin-top: 30px;
+  }
+
+  /* Testimonios → carrusel de una cita (autoplay + swipe) */
+  .tst-grid {
+    display: flex;
+    grid-template-columns: none;
+    gap: 0;
+    margin: 0 -10px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tst-grid::-webkit-scrollbar { display: none; }
+  .tst-item, .tst-item:first-child {
+    flex: 0 0 100%;
+    box-sizing: border-box;
+    scroll-snap-align: center;
+    border-top: none;
+    padding: 0 10px;
+  }
+  /* Comillas más grandes en móvil */
+  .tst-quote::before { font-size: 92px; height: 0.52em; margin-bottom: 2px; }
+  .tst-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 13px;
+    margin-top: 38px;
+  }
+}
+
+</style>
+
+<!-- ── Estilos de los marcadores (botones creados por JS → fuera del scope de Astro) ── -->
+<style is:global>
+  /* Proceso → barras "palito" con relleno de progreso (premium) */
+  .proc-dot {
+    width: 20px;
+    height: 3px;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: rgba(247, 239, 219, 0.2);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+  }
+  .proc-dot[aria-selected="true"] {
+    width: 48px;
+    background: rgba(247, 239, 219, 0.22);
+  }
+  /* Relleno que acompaña al autoplay (5s, sincronizado con el temporizador JS) */
+  .proc-dot[aria-selected="true"]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: #F7EFDB;
+    transform: scaleX(0);
+    transform-origin: left center;
+    animation: procFill 5s linear forwards;
+  }
+  @keyframes procFill { to { transform: scaleX(1); } }
+  /* En pausa (tras tocar): la barra activa queda fija y llena, sin animación */
+  .proc-dots.is-paused .proc-dot[aria-selected="true"] { background: #F7EFDB; }
+  .proc-dots.is-paused .proc-dot[aria-selected="true"]::after { display: none; }
+
+  /* Testimonios → puntos con halo (premium) */
+  .tst-dot {
+    width: 7px;
+    height: 7px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(247, 239, 219, 0.25);
+    cursor: pointer;
+    transition: background 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+  }
+  .tst-dot[aria-selected="true"] {
+    background: #F7EFDB;
+    transform: scale(1.15);
+    box-shadow: 0 0 0 4px rgba(247, 239, 219, 0.14);
+  }
+</style>
+
+
+<!-- ── Schema.org: portfolio de proyectos ── -->
+<script type="application/ld+json" is:inline set:html={JSON.stringify([
+  {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": "Halloween Fest — Branding e Identidad Visual",
+    "description": "Diseño de identidad visual completa para Halloween Fest Jaén: logo, carteles, pulseras, acreditaciones y dirección creativa del evento.",
+    "creator": { "@type": "Organization", "name": "Ascndr", "url": "https://www.ascndrworld.com" },
+    "keywords": ["branding", "identidad visual", "evento", "Halloween", "Jaén"],
+    "image": "https://www.ascndrworld.com/images/halloween-fest/pulsera-portada.webp"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": "Cónclave — Dirección Creativa y Rebranding",
+    "description": "Transformación completa del pub Milenio 2.0 en Cónclave: naming, identidad visual, señalética y gestión de redes sociales en Jaén.",
+    "creator": { "@type": "Organization", "name": "Ascndr", "url": "https://www.ascndrworld.com" },
+    "keywords": ["rebranding", "dirección creativa", "pub", "hostelería", "Jaén"],
+    "image": "https://www.ascndrworld.com/images/conclave/portada-conclave2.jpg"
+  }
+])} />
+
+<!-- ── Protección de imágenes y vídeos ── -->
+<script is:inline>
+  document.addEventListener("contextmenu", function(e) {
+    if (e.target.closest("img, video, .work-media, .gallery-item, .hw3-item, .ds-item, .gallery-cv-item, .lightbox-overlay")) {
+      e.preventDefault();
+    }
+  });
+  document.addEventListener("dragstart", function(e) {
+    if (e.target.tagName === "IMG" || e.target.tagName === "VIDEO") {
+      e.preventDefault();
+    }
+  });
+  document.querySelectorAll("video").forEach(function(v) {
+    v.setAttribute("controlslist", "nodownload");
+    v.addEventListener("contextmenu", function(e){ e.preventDefault(); });
+  });
+</script>
+
+<!-- ── Carruseles (proceso = todos los anchos; testimonios = solo móvil): autoplay +
+     swipe/scroll + puntos (+ flechas en proceso) ── -->
+<script is:inline>
+  (function () {
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function initCarousel(trackSel, dotsSel, itemSel, dotClass, label, enableMq, arrowSel) {
+      var track = document.querySelector(trackSel);
+      var dotsWrap = document.querySelector(dotsSel);
+      if (!track || !dotsWrap) return;
+
+      var items = Array.prototype.slice.call(track.querySelectorAll(itemSel));
+      if (items.length < 2) return;
+      var DELAY = 5000;
+      var timer = null, current = 0, built = false, paused = false;
+
+      function buildDots() {
+        if (built) return;
+        items.forEach(function (_, i) {
+          var b = document.createElement("button");
+          b.className = dotClass;
+          b.type = "button";
+          b.setAttribute("role", "tab");
+          b.setAttribute("aria-label", label + " " + (i + 1));
+          b.addEventListener("click", function () {
+            pause();
+            goTo(i);
+          });
+          dotsWrap.appendChild(b);
+        });
+        built = true;
+      }
+
+      function setActive(i) {
+        current = i;
+        var dots = dotsWrap.children;
+        for (var d = 0; d < dots.length; d++) {
+          dots[d].setAttribute("aria-selected", d === i ? "true" : "false");
+        }
+      }
+
+      function goTo(i) {
+        track.scrollTo({ left: items[i].offsetLeft - track.offsetLeft, behavior: "smooth" });
+        setActive(i);
+      }
+
+      function next() { goTo((current + 1) % items.length); }
+
+      function start() {
+        if (paused || timer || reduce) return;
+        timer = setInterval(next, DELAY);
+      }
+      function stop() { if (timer) { clearInterval(timer); timer = null; } }
+      function pause() { paused = true; stop(); dotsWrap.classList.add("is-paused"); }
+
+      // Sincroniza los puntos EN VIVO mientras el usuario desliza/scrollea
+      // (rAF en vez de debounce: el indicador cambia al cruzar la mitad, sin retardo)
+      var raf = null;
+      track.addEventListener("scroll", function () {
+        if (raf) return;
+        raf = requestAnimationFrame(function () {
+          raf = null;
+          var i = Math.round(track.scrollLeft / track.clientWidth);
+          i = Math.max(0, Math.min(items.length - 1, i));
+          if (i !== current) setActive(i);
+        });
+      }, { passive: true });
+
+      // Al tocar/interactuar, se detiene el autoplay
+      track.addEventListener("touchstart", function () { pause(); }, { passive: true });
+
+      // Flechas (opcional, p. ej. en proceso): saltan con wrap-around
+      if (arrowSel) {
+        Array.prototype.forEach.call(document.querySelectorAll(arrowSel), function (btn) {
+          btn.addEventListener("click", function () {
+            pause();
+            var dir = parseInt(btn.getAttribute("data-dir"), 10) || 1;
+            goTo((current + dir + items.length) % items.length);
+          });
+        });
+      }
+
+      function enable() { buildDots(); dotsWrap.classList.remove("is-paused"); setActive(0); paused = false; start(); }
+      function disable() { stop(); }
+
+      return function apply() { enableMq.matches ? enable() : disable(); };
+    }
+
+    var procMq = window.matchMedia("(min-width: 0px)");   // proceso: carrusel en todos los anchos
+    var tstMq = window.matchMedia("(max-width: 600px)");  // testimonios: solo móvil
+
+    var apply = [
+      initCarousel(".proc-viewport", ".proc-dots", ".proc-panel", "proc-dot", "Paso", procMq, ".proc-arrow"),
+      initCarousel(".tst-grid", ".tst-dots", ".tst-item", "tst-dot", "Testimonio", tstMq)
+    ].filter(Boolean);
+
+    function applyAll() { apply.forEach(function (fn) { fn(); }); }
+    applyAll();
+    (tstMq.addEventListener ? tstMq.addEventListener("change", applyAll) : tstMq.addListener(applyAll));
+  })();
+</script>
+
+<!-- ── Marquee de marcas: en Safari iOS la animación se "congela" y sale cortada
+     al salir de pantalla y volver (la capa de composición se descarta). La
+     reiniciamos cada vez que vuelve a entrar en viewport para repintar limpio. -->
+<script is:inline>
+  (function () {
+    var track = document.querySelector(".brandstrip-track");
+    if (!track) return;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!("IntersectionObserver" in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        // Reinicio por reflow: vuelve a aplicar la animación del CSS desde 0.
+        track.style.animation = "none";
+        void track.offsetWidth;
+        track.style.animation = "";
+      });
+    }, { threshold: 0.01 });
+    io.observe(track);
+  })();
+</script>
+
+<!-- ── "Servicios": la cruz se dibuja + iconos pop + cascada (rejilla 2×2, PC) ── -->
+<script is:inline>
+  (function () {
+    var svc = document.getElementById("servicios");
+    if (!svc) return;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    svc.classList.add("svc-anim");
+    if (!("IntersectionObserver" in window)) { svc.classList.add("is-in"); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { svc.classList.add("is-in"); io.disconnect(); }
+      });
+    }, { threshold: 0.35 });
+    io.observe(svc);
+  })();
+</script>
+
+</Layout>
+

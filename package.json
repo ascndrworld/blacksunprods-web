@@ -1,0 +1,24 @@
+{
+  "name": "ascndr",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "report:ga": "node scripts/ga-report.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/vercel": "^10.0.6",
+    "astro": "^6.1.9"
+  },
+  "devDependencies": {
+    "@google-analytics/data": "^6.1.0",
+    "@types/node": "^25.6.2"
+  }
+}

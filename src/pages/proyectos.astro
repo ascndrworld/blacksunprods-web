@@ -1,0 +1,413 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Proyectos | Ascndr — Portfolio Creativo"
+  description="Portfolio de proyectos de Ascndr: branding, dirección creativa, fotografía de eventos y gestión de redes sociales. Trabajamos desde Jaén para toda España."
+  canonical="https://www.ascndrworld.com/proyectos"
+>
+
+<!-- ENCABEZADO SEO (oculto visualmente, accesible para Googlebot y lectores) -->
+<h1 class="tp-sr-only">Portfolio de Ascndr — Branding, Dirección Creativa, Fotografía y Redes Sociales</h1>
+
+<!-- FILTROS — desplegable centrado, estilo Somos -->
+<div class="tp-filter-section">
+  <div class="tp-filter-dropdown" id="tpDropdown">
+    <button class="tp-filter-trigger" id="tpTrigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+      <span class="tp-filter-current" id="tpCurrent">Filter</span>
+      <svg class="tp-filter-caret" viewBox="0 0 12 8" width="12" height="8" aria-hidden="true"><path d="M1 1l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <ul class="tp-filter-menu" id="tpMenu" role="listbox">
+      <li><button class="tp-filter-option active" type="button" role="option" aria-selected="true" data-filter="all">All</button></li>
+      <li><button class="tp-filter-option" type="button" role="option" data-filter="branding">Branding</button></li>
+      <li><button class="tp-filter-option" type="button" role="option" data-filter="social">Redes Sociales</button></li>
+      <li><button class="tp-filter-option" type="button" role="option" data-filter="photography">Fotografía</button></li>
+      <li><button class="tp-filter-option" type="button" role="option" data-filter="direction">Dirección Creativa</button></li>
+      <li><button class="tp-filter-option" type="button" role="option" data-filter="web">Web</button></li>
+    </ul>
+  </div>
+</div>
+
+<!-- GRID — columnas iguales cuadradas, gap:0, igual /proyectos de Somos -->
+<div class="tp-grid" id="tpGrid">
+
+  <a class="tp-item" data-category="direction" href="/proyectos/direccion-creativa/conclave">
+    <img class="tp-img" src="/images/conclave/portada-conclave2.jpg" alt="Cónclave — Rebranding y dirección creativa de pub en Jaén por Ascndr" fetchpriority="high" style="object-position:center 37%;"/>
+    <div class="tp-hover">
+      <span class="tp-hover-cat">Dirección Creativa</span>
+      <span class="tp-hover-title">Cónclave</span>
+    </div>
+  </a>
+
+  <a class="tp-item" data-category="branding" href="/proyectos/branding/halloweenfest">
+    <img class="tp-img" src="/images/halloween-fest/pulsera-portada.webp" alt="Halloween Fest — Branding e identidad visual de evento en Los Villares, Jaén" loading="lazy"/>
+    <div class="tp-hover">
+      <span class="tp-hover-cat">Branding</span>
+      <span class="tp-hover-title">Halloween Fest</span>
+    </div>
+  </a>
+
+  <a class="tp-item" data-category="social" href="/proyectos/redes-sociales/briefing">
+    <img class="tp-img" src="/images/conclave/rrss-02.jpg" alt="Briefing — Gestión de redes sociales y contenido para Cónclave en Jaén" loading="lazy"/>
+    <div class="tp-hover">
+      <span class="tp-hover-cat">Redes Sociales</span>
+      <span class="tp-hover-title">Briefing</span>
+    </div>
+  </a>
+
+  <a class="tp-item" data-category="web" href="/proyectos/web/eventsy">
+    <img class="tp-img" src="/images/eventsy/portada-carrusel.webp" alt="Eventsy — Diseño de plataforma web y app de gestión de eventos por Ascndr" loading="lazy" style="object-position:center 45%;"/>
+    <div class="tp-hover">
+      <span class="tp-hover-cat">Web</span>
+      <span class="tp-hover-title">Eventsy</span>
+    </div>
+  </a>
+
+  <a class="tp-item" data-category="photography" href="/proyectos/fotografia/halloweenfest-fotografia">
+    <img class="tp-img" src="/images/halloween-fest/portada-fotografia.jpg" alt="Fotografía de evento — DJ en directo en Halloween Fest, Jaén, por Ascndr" loading="lazy" style="object-position:center 32%;"/>
+    <div class="tp-hover">
+      <span class="tp-hover-cat">Fotografía</span>
+      <span class="tp-hover-title">Shooting evento</span>
+    </div>
+  </a>
+
+</div>
+
+<!-- CTA -->
+<div class="tp-cta">
+  <p>¿Tienes un proyecto en mente?</p>
+  <a href="/contacto">Iniciar proyecto ›</a>
+</div>
+
+<!-- FOOTER -->
+<footer class="tp-footer">
+  <a href="/" class="tp-footer-logo"><img src="/ascndr-logo.png" alt="Ascndr"/></a>
+  <div class="tp-footer-links">
+    <a href="/proyectos">Proyectos</a>
+    <span class="tp-footer-sep">·</span>
+    <a href="/contacto">Contacto</a>
+    <span class="tp-footer-sep">·</span>
+    <a href="https://www.instagram.com/ascndr.world" target="_blank" rel="noopener">Instagram</a>
+  </div>
+  <p class="tp-footer-copy">© Ascndr 2026 · Marca Registrada</p>
+</footer>
+
+<script is:inline>
+  (function() {
+    var grid = document.getElementById('tpGrid');
+    var dropdown = document.getElementById('tpDropdown');
+    var trigger = document.getElementById('tpTrigger');
+    var menu = document.getElementById('tpMenu');
+    var current = document.getElementById('tpCurrent');
+    var options = document.querySelectorAll('.tp-filter-option');
+    var items = document.querySelectorAll('.tp-item');
+
+    function setOpen(open) {
+      if (!dropdown) return;
+      dropdown.classList.toggle('open', open);
+      if (trigger) trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    if (trigger) {
+      trigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        setOpen(!dropdown.classList.contains('open'));
+      });
+    }
+
+    document.addEventListener('click', function(e) {
+      if (!dropdown) return;
+      if (!dropdown.contains(e.target)) setOpen(false);
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') setOpen(false);
+    });
+
+    options.forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        options.forEach(function(o) {
+          o.classList.remove('active');
+          o.setAttribute('aria-selected', 'false');
+        });
+        opt.classList.add('active');
+        opt.setAttribute('aria-selected', 'true');
+
+        var f = opt.dataset.filter;
+        if (grid) grid.classList.toggle('filtered', f !== 'all');
+        items.forEach(function(item) {
+          item.style.display = (f === 'all' || item.dataset.category === f) ? 'block' : 'none';
+        });
+        setOpen(false);
+      });
+    });
+  })();
+
+</script>
+
+<style>
+  body { background: var(--bg, #000000) !important; }
+
+  .tp-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .tp-filter-section {
+    padding-top: 140px;
+    padding-bottom: 24px;
+    text-align: center;
+    background: var(--bg, #000000);
+  }
+
+  /* DROPDOWN — centrado, estilo Somos */
+  .tp-filter-dropdown {
+    position: relative;
+    display: inline-block;
+    text-align: left;
+  }
+  .tp-filter-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    background: none;
+    border: none;
+    padding: 10px 4px;
+    cursor: pointer;
+    font-family: "Montserrat", sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: #F7EFDB;
+    transition: color 0.2s;
+  }
+  .tp-filter-trigger:hover { color: #fff; }
+  .tp-filter-caret {
+    color: #F7EFDB;
+    transition: transform 0.2s ease;
+  }
+  .tp-filter-dropdown.open .tp-filter-caret { transform: rotate(180deg); }
+
+  .tp-filter-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-6px);
+    margin: 0;
+    padding: 8px 0;
+    list-style: none;
+    min-width: 240px;
+    background: #0a0a0a;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    z-index: 20;
+  }
+  .tp-filter-dropdown.open .tp-filter-menu {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+  .tp-filter-menu li { margin: 0; padding: 0; }
+  .tp-filter-option {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 10px 24px;
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.55);
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+  }
+  .tp-filter-option:hover { color: #F7EFDB; background: rgba(255,255,255,0.04); }
+  .tp-filter-option.active { color: #F7EFDB; font-weight: 600; }
+
+  /* GRID — 3 columnas, gap 0. El mosaico (spans) se define más abajo, solo en
+     escritorio y en la vista sin filtrar; al filtrar, las tarjetas vuelven a
+     ser cuadradas con colocación automática. */
+  .tp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    /* Mata cualquier hueco fantasma por nodos de texto entre <a> items */
+    font-size: 0;
+    line-height: 0;
+    background: var(--bg, #000000);
+  }
+
+  .tp-item {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    display: block;
+    vertical-align: top;
+    text-decoration: none;
+    color: inherit;
+    aspect-ratio: 1 / 1;
+    /* Restablece la tipografía dentro del item (el grid usa font-size:0/line-height:0) */
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .tp-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+  }
+  .tp-item:hover .tp-img { transform: scale(1.05); }
+
+  /* HOVER — rgba(0,0,0,0.7), texto abajo izquierda */
+  .tp-hover {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+  }
+  .tp-item:hover .tp-hover,
+  .tp-item.is-touch-active .tp-hover { opacity: 1; }
+
+  .tp-hover-title {
+    font-family: "Montserrat", sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 0.98;
+    color: #F7EFDB;
+    display: block;
+  }
+  .tp-hover-cat {
+    font-family: "Montserrat", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(247, 239, 219, 0.55);
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  /* ── MOSAICO (escritorio · vista sin filtrar) ──
+     Fila 1:  Cónclave (cols 1-2)  ·  Halloween Fest (col 3)
+     Fila 2:  Eventsy (col 1)      ·  Briefing (cols 2-3)
+     Fila 3:  Fotografía (ancho completo)
+     Las tarjetas anchas usan aspect-ratio 2/1 y 3/1 para conservar la misma
+     altura (1 columna) que sus vecinas cuadradas. */
+  @media (min-width: 769px) {
+    .tp-grid:not(.filtered) .tp-item:nth-child(1) { grid-column: 1 / 3; grid-row: 1; aspect-ratio: 2 / 1; } /* Cónclave */
+    .tp-grid:not(.filtered) .tp-item:nth-child(2) { grid-column: 3 / 4; grid-row: 1; }                      /* Halloween Fest */
+    .tp-grid:not(.filtered) .tp-item:nth-child(3) { grid-column: 2 / 4; grid-row: 2; aspect-ratio: 2 / 1; } /* Briefing */
+    .tp-grid:not(.filtered) .tp-item:nth-child(4) { grid-column: 1 / 2; grid-row: 2; }                      /* Eventsy */
+    .tp-grid:not(.filtered) .tp-item:nth-child(5) { grid-column: 1 / 4; grid-row: 3; aspect-ratio: 1 / 1; justify-self: start; width: 50%; } /* Fotografía — cuadrada, media pantalla (hueco a la derecha para otro trabajo) */
+  }
+
+  /* CTA */
+  .tp-cta {
+    background: var(--bg, #000000);
+    /* Mismo hueco arriba (130px) que el que hay entre el botón y el footer
+       (60px de este padding inferior + 70px del padding superior del footer). */
+    padding: 130px 40px 60px;
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .tp-cta p {
+    font-size: 16px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 20px;
+  }
+  .tp-cta a {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #F7EFDB;
+    text-decoration: none;
+    border: 1.5px solid rgba(255,255,255,0.5);
+    padding: 12px 28px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .tp-cta a:hover { background: #fff; color: #000; }
+
+  /* FOOTER — mismo estilo que las fichas de proyecto */
+  .tp-footer {
+    background: #000;
+    color: rgba(255,255,255,0.55);
+    padding: 70px 24px 40px;
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .tp-footer-logo { display: inline-block; margin-bottom: 28px; }
+  .tp-footer-logo img { height: 40px; display: block; opacity: 0.95; }
+  .tp-footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+    margin-bottom: 18px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .tp-footer-links a { color: rgba(255,255,255,0.55); text-decoration: none; transition: color .2s; }
+  .tp-footer-links a:hover { color: #fff; }
+  .tp-footer-sep { color: rgba(255,255,255,0.2); }
+  .tp-footer-copy { color: rgba(255,255,255,0.3); font-size: 11px; letter-spacing: 0.14em; margin-top: 14px; text-transform: uppercase; }
+
+  /* Tablet/Móvil — una sola columna, un trabajo debajo de otro */
+  @media (max-width: 768px) {
+    .tp-filter-section { padding-top: 110px; padding-bottom: 16px; }
+    .tp-filter-trigger { font-size: 18px; }
+    .tp-filter-menu { min-width: 220px; }
+    .tp-filter-option { font-size: 14px; padding: 9px 20px; }
+    .tp-grid { grid-template-columns: 1fr; }
+    /* Orden en móvil: Cónclave, Halloween, Eventsy, Fotografía y Briefing al final */
+    .tp-grid .tp-item:nth-child(1) { order: 1; } /* Cónclave */
+    .tp-grid .tp-item:nth-child(2) { order: 2; } /* Halloween Fest */
+    .tp-grid .tp-item:nth-child(4) { order: 3; } /* Eventsy */
+    .tp-grid .tp-item:nth-child(5) { order: 4; } /* Fotografía */
+    .tp-grid .tp-item:nth-child(3) { order: 5; } /* Briefing */
+    /* Overlay oculto; al tocar/deslizar el dedo se oscurece y salen los datos */
+    .tp-hover {
+      opacity: 0;
+      background: rgba(0,0,0,0.7);
+      padding: 20px;
+    }
+    .tp-hover-title { font-size: 26px; }
+    .tp-hover-cat { font-size: 11px; }
+    .tp-cta { padding: 22px 24px 32px; }
+    .tp-cta p { font-size: 14px; margin-bottom: 14px; }
+  }
+
+  /* Móvil pequeño */
+  @media (max-width: 480px) {
+    .tp-filter-section { padding-top: 96px; padding-bottom: 12px; }
+    .tp-filter-trigger { font-size: 16px; }
+    .tp-hover { padding: 10px; }
+    .tp-hover-title { font-size: 21px; line-height: 1.0; }
+    .tp-hover-cat { font-size: 10px; margin-bottom: 8px; }
+  }
+</style>
+
+</Layout>

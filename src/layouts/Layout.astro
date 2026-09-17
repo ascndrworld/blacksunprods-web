@@ -1,0 +1,199 @@
+---
+import Header from "../components/Header.astro";
+import Analytics from "../components/Analytics.astro";
+import CookieConsent from "../components/CookieConsent.astro";
+import { SITE, absUrl } from "../config/site.mjs";
+const GTM_ID = import.meta.env.PUBLIC_GTM_ID;
+export interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  ogImageAlt?: string;
+  ogType?: string;
+}
+const {
+  title = SITE.defaultTitle,
+  description = SITE.defaultDescription,
+  canonical = SITE.url,
+  ogImage = absUrl(SITE.ogImage),
+  ogImageAlt = SITE.ogImageAlt,
+  ogType = "website"
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang={SITE.lang}>
+<head>
+  <!-- Marca JS activo cuanto antes (sin flash) para habilitar el scroll-reveal. -->
+  <script is:inline>document.documentElement.className += " js";</script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+
+  <!-- ── Analytics & tracking ── -->
+  <Analytics />
+
+  <!-- ── SEO básico ── -->
+  <title>{title}</title>
+  <meta name="description" content={description}/>
+  <meta name="robots" content="index, follow"/>
+  <meta name="author" content={SITE.name}/>
+  <meta name="theme-color" content={SITE.themeColor}/>
+  <link rel="canonical" href={canonical}/>
+
+  <!-- ── Favicons ── -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
+  <link rel="shortcut icon" href="/favicon.ico"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+
+  <!-- ── PWA / modo app (pantalla completa, contenido tras la isla) ── -->
+  <link rel="manifest" href="/site.webmanifest"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content={SITE.name}/>
+
+  <!-- ── Open Graph ── -->
+  <meta property="og:type" content={ogType}/>
+  <meta property="og:site_name" content={SITE.name}/>
+  <meta property="og:title" content={title}/>
+  <meta property="og:description" content={description}/>
+  <meta property="og:url" content={canonical}/>
+  <meta property="og:image" content={ogImage}/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:image:alt" content={ogImageAlt}/>
+  <meta property="og:locale" content={SITE.locale}/>
+
+  <!-- ── Twitter Card ── -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content={title}/>
+  <meta name="twitter:description" content={description}/>
+  <meta name="twitter:image" content={ogImage}/>
+  <meta name="twitter:image:alt" content={ogImageAlt}/>
+
+  <!-- ── Schema.org LocalBusiness ── -->
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": SITE.name,
+    "description": SITE.business.description,
+    "url": SITE.url,
+    "logo": absUrl(SITE.logo),
+    "image": ogImage,
+    "email": SITE.email,
+    "telephone": SITE.phone,
+    "priceRange": SITE.business.priceRange,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": SITE.business.city,
+      "addressRegion": SITE.business.region,
+      "addressCountry": SITE.business.country
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": SITE.business.latitude,
+      "longitude": SITE.business.longitude
+    },
+    "areaServed": SITE.business.areaServed,
+    "serviceType": SITE.business.serviceType,
+    "sameAs": [SITE.instagram]
+  })} />
+
+  <!-- ── Fuentes ── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+
+  <slot name="head"/>
+</head>
+<body>
+  {GTM_ID && (
+    <noscript>
+      <iframe src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+  )}
+  <Header />
+  <slot />
+  <CookieConsent />
+
+  <!-- Scroll-reveal global: el contenido marcado con [data-reveal] aparece
+       subiendo al entrar en pantalla (estilo dialedweb.com). Un único
+       IntersectionObserver para toda la página; stagger automático entre
+       hermanos directos que comparten el mismo padre. -->
+  <script is:inline>
+    (function () {
+      var root = document.documentElement;
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      var nodes = [].slice.call(document.querySelectorAll("[data-reveal]"));
+      if (!nodes.length) return;
+
+      // Sin IntersectionObserver: revela todo de golpe.
+      if (!("IntersectionObserver" in window)) {
+        nodes.forEach(function (el) { el.classList.add("is-revealed"); });
+        return;
+      }
+
+      // Stagger automático: a cada hermano [data-reveal] dentro de un mismo
+      // padre se le asigna un retardo creciente, salvo que ya traiga uno propio.
+      var counters = [];
+      nodes.forEach(function (el) {
+        if (el.style.getPropertyValue("--reveal-delay")) return;
+        var p = el.parentNode;
+        var idx = counters.indexOf(p);
+        var n;
+        if (idx === -1) { counters.push(p); n = 0; }
+        else { n = (counters[idx]._rc = (counters[idx]._rc || 0) + 1); }
+        if (n > 0) el.style.setProperty("--reveal-delay", (n * 90) + "ms");
+      });
+
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-revealed");
+            io.unobserve(e.target);
+          }
+        });
+      }, { rootMargin: "0px 0px -12% 0px", threshold: 0.12 });
+
+      nodes.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+
+  <!-- Revela el caption de las tarjetas al DESLIZAR el dedo por encima (táctil),
+       sin abrir el proyecto; un toque limpio sí navega. En escritorio manda :hover. -->
+  <script is:inline>
+    (function(){
+      var SEL = '.tp-item, .hs-work-item';
+      var active = null, moved = false;
+      function setActive(el){
+        if (active === el) return;
+        if (active) active.classList.remove('is-touch-active');
+        active = el;
+        if (el) el.classList.add('is-touch-active');
+      }
+      document.addEventListener('touchstart', function(){ moved = false; }, { passive: true });
+      document.addEventListener('touchmove', function(e){
+        moved = true;
+        var t = e.touches[0];
+        if (!t) return;
+        var el = document.elementFromPoint(t.clientX, t.clientY);
+        setActive(el && el.closest ? el.closest(SEL) : null);
+      }, { passive: true });
+      document.addEventListener('touchend', function(){ setActive(null); }, { passive: true });
+      document.addEventListener('touchcancel', function(){ setActive(null); }, { passive: true });
+      // Si venías deslizando, cancela la apertura accidental de la tarjeta.
+      document.addEventListener('click', function(e){
+        if (!moved) return;
+        var item = e.target && e.target.closest ? e.target.closest(SEL) : null;
+        if (item) { e.preventDefault(); e.stopPropagation(); }
+      }, true);
+    })();
+  </script>
+</body>
+</html>
+<style is:global>
+  @import "../styles/global.css";
+</style>
