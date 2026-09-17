@@ -14,9 +14,23 @@ const WHO = `${SITE.name}, ${SITE.tagline.toLowerCase()} de ${SITE.business.city
 export interface Lead {
   name: string;
   email: string;
-  phone: string;   // "Dónde está" (ubicación) del formulario
+  clientType: string; // valor del formulario: ayuntamiento, sala, promotor, marca, privado
+  eventType: string;
+  location: string;   // municipio o recinto
+  date: string;       // fecha aproximada (texto libre)
+  capacity: string;   // aforo estimado
   consulta: string;
 }
+
+// Etiquetas legibles de "¿Quién eres?" (compartidas por email, Telegram y prompts).
+export const CLIENT_TYPES: Record<string, string> = {
+  ayuntamiento: "Ayuntamiento / concejalía",
+  sala: "Sala, pub o recinto",
+  promotor: "Promotor",
+  marca: "Marca o empresa",
+  privado: "Privado o asociación",
+};
+export const clientTypeLabel = (v: string) => CLIENT_TYPES[v] || v || "";
 
 export interface DossierConfig {
   anthropicKey?: string;
@@ -108,29 +122,46 @@ async function callClaude(key: string, prompt: string, useWebSearch: boolean): P
     .trim();
 }
 
-function dossierPrompt(lead: Lead): string {
+function leadLines(lead: Lead): string[] {
+  const nd = "no indicado";
   return [
-    `Eres el asistente de ${WHO}: ${SERVICES}.`,
-    "Acaba de entrar este lead por el formulario de la web y",
-    `${SITE.ownerName} va a responderle. Prepárale un dossier para contextualizar.`,
-    "",
     `- Nombre: ${lead.name}`,
     `- Email: ${lead.email}`,
-    `- Ubicación indicada: ${lead.phone || "no indicada"}`,
-    `- Consulta: ${lead.consulta || "no indicada"}`,
+    `- Tipo de cliente: ${clientTypeLabel(lead.clientType) || nd}`,
+    `- Tipo de evento: ${lead.eventType || nd}`,
+    `- Municipio o recinto: ${lead.location || nd}`,
+    `- Fecha aproximada: ${lead.date || nd}`,
+    `- Aforo estimado: ${lead.capacity || nd}`,
+    `- Mensaje: ${lead.consulta || nd}`,
+  ];
+}
+
+function dossierPrompt(lead: Lead): string {
+  return [
+    `Eres el asistente de ${WHO}. Producimos: ${SERVICES}.`,
+    "Dirigimos el evento completo coordinando proveedores (artistas, sonido, luces, LED,",
+    "seguridad, personal, ticketing, accesos). Acaba de entrar este lead por el formulario",
+    `de la web y ${SITE.ownerName} va a responderle. Prepárale un dossier para contextualizar.`,
+    "",
+    ...leadLines(lead),
     "",
     "Investiga con BÚSQUEDA WEB únicamente información PÚBLICA y PROFESIONAL. Pistas:",
-    "deduce la empresa por el dominio del email si no es genérico (gmail, hotmail, outlook…),",
-    "busca su web, perfiles y redes de la MARCA (Instagram, LinkedIn, etc.), sector, ubicación,",
-    "y prensa o eventos locales relevantes. No inventes: si algo no se encuentra, dilo claramente.",
-    "No incluyas datos personales sensibles ni especulaciones intrusivas sobre la persona.",
+    "- Si es un AYUNTAMIENTO: población, fiestas y eventos del calendario, concejalía",
+    "  responsable (fiestas, cultura, juventud), eventos de años anteriores y quién los",
+    "  produjo, y contratos o licitaciones públicas de eventos si aparecen.",
+    "- Si es SALA, RECINTO o PROMOTOR: aforo, tipo de programación, estilo musical,",
+    "  público, redes sociales y eventos recientes.",
+    "- Si es MARCA o EMPRESA: sector, público, acciones o eventos que hayan hecho.",
+    "Deduce la entidad por el dominio del email si no es genérico (gmail, hotmail…).",
+    "No inventes: si algo no se encuentra, dilo claramente. No incluyas datos personales",
+    "sensibles ni especulaciones intrusivas sobre la persona.",
     "",
     "Devuelve un dossier BREVE en español, en TEXTO PLANO (sin markdown ni asteriscos),",
     "con estas secciones (una o dos líneas cada una, incluye enlaces cuando los tengas):",
-    "QUIÉN ES / EMPRESA",
-    "PRESENCIA ONLINE",
-    "CONTEXTO ÚTIL",
+    "QUIÉN ES",
+    "CONTEXTO (municipio / recinto / marca)",
     "QUÉ QUIERE",
+    "ENCAJE CON NUESTROS FORMATOS",
     "ÁNGULO DE RESPUESTA",
     "Máximo unas 250 palabras. Sé concreto y accionable.",
   ].join("\n");
@@ -139,8 +170,8 @@ function dossierPrompt(lead: Lead): string {
 function replyPrompt(name: string, dossier: string): string {
   return [
     `Eres ${SITE.ownerName}, de ${WHO} (${SERVICES}).`,
-    "Vas a responder por email a un lead que escribió por el",
-    "formulario de la web. Tienes este dossier de investigación previa:",
+    "Vas a responder por email a un lead que escribió por el formulario de la web.",
+    "Tienes este dossier de investigación previa:",
     "",
     "----- DOSSIER -----",
     dossier,
@@ -149,13 +180,15 @@ function replyPrompt(name: string, dossier: string): string {
     "Redacta un BORRADOR de respuesta en español, cercano pero profesional, listo para",
     "enviar (TEXTO PLANO, sin markdown). Estructura:",
     `- Saludo personal a ${name}.`,
-    "- Muestra natural de que entendéis su negocio/contexto (sin parecer que le has espiado).",
-    "- 3 a 5 PUNTOS DE MEJORA concretos y detallados para su marca / identidad / presencia",
-    "  online, basados en el estudio. Cada punto: qué mejorar y por qué le aporta.",
-    `- Cómo lo abordaría ${SITE.name} y propuesta de siguiente paso (una llamada breve).`,
+    "- Muestra natural de que entiendes su evento y su contexto (sin parecer que le has espiado).",
+    "- Una primera idea de cómo plantearíamos el evento: formato, experiencia para el público",
+    "  y qué nos encargaríamos de coordinar (artistas, técnica, seguridad, accesos…).",
+    "- Si faltan datos clave (fecha, aforo, espacio, presupuesto orientativo), pídelos en",
+    "  2 o 3 preguntas concretas.",
+    "- Propuesta de siguiente paso: una llamada breve o preparar una propuesta.",
     `- Cierre y firma SOLO como '${SITE.ownerName}' (o '${SITE.ownerName} · ${SITE.name}'). NO inventes email,`,
-    "  teléfono, web ni ningún dato de contacto.",
-    "No prometas datos inventados. Tono humano, nada robótico. Máximo unas 280 palabras.",
+    "  teléfono, web, precios ni ningún dato de contacto.",
+    "No prometas nada que no esté confirmado. Tono humano, nada robótico. Máximo unas 280 palabras.",
   ].join("\n");
 }
 

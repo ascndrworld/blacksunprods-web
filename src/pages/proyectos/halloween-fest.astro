@@ -1,0 +1,205 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import { SITE, absUrl } from "../../config/site.mjs";
+
+const facts = [
+  { num: "4", label: "ediciones" },
+  { num: "2022–2025", label: "años de recorrido" },
+  { num: "500–600", label: "asistentes en las noches de mayor respuesta" },
+  { num: "Jaén", label: "Los Villares, Andalucía" },
+];
+
+const coordinado = [
+  "Artistas", "Sonido", "Iluminación", "Pantalla LED", "Personal", "Barra",
+  "Seguridad", "Ticketing", "Accesos", "Comunicación", "Promoción", "Operación completa",
+];
+
+// Galería: foto + texto alternativo. Las anchas (wide) ocupan toda la fila.
+const gallery = [
+  { src: "hw3-12.webp", alt: "Escenario con truss, iluminación y pantalla en Halloween Fest", wide: true },
+  { src: "hw3-03.webp", alt: "Público y cabezas móviles durante la noche de Halloween Fest" },
+  { src: "hw3-04.webp", alt: "Asistentes disfrazados en la pista de Halloween Fest" },
+  { src: "hw3-13.webp", alt: "DJ en cabina durante Halloween Fest" },
+  { src: "hw3-09.webp", alt: "Artista actuando en directo en Halloween Fest" },
+  { src: "hw3-01.webp", alt: "Equipo de producción y artistas de Halloween Fest", wide: true },
+  { src: "hw3-11.webp", alt: "Público disfrazado en Halloween Fest" },
+  { src: "hw3-10.webp", alt: "Asistentes en Halloween Fest" },
+];
+
+const canonical = absUrl("/proyectos/halloween-fest");
+const ogImage = absUrl("/images/halloween-fest/hw3-07.webp");
+---
+
+<Layout
+  title={`Halloween Fest — Producción de evento · ${SITE.name}`}
+  description="Halloween Fest: 4 ediciones entre 2022 y 2025 en Los Villares (Jaén), con 500–600 asistentes en sus noches de mayor respuesta. Artistas, técnica, seguridad, ticketing y operación completa."
+  canonical={canonical}
+  ogImage={ogImage}
+  ogImageAlt="Público de Halloween Fest en Los Villares, Jaén"
+>
+
+<Fragment slot="head">
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Inicio", "item": absUrl("/") },
+          { "@type": "ListItem", "position": 2, "name": "Proyectos", "item": absUrl("/proyectos") },
+          { "@type": "ListItem", "position": 3, "name": "Halloween Fest", "item": canonical }
+        ]
+      },
+      {
+        "@type": "CreativeWork",
+        "name": "Halloween Fest — Producción de evento",
+        "description": "Producción y operación de Halloween Fest en Los Villares (Jaén): 4 ediciones entre 2022 y 2025.",
+        "url": canonical,
+        "image": ogImage,
+        "creator": { "@type": "Organization", "name": SITE.name, "url": SITE.url },
+        "locationCreated": { "@type": "Place", "name": "Los Villares, Jaén, España" },
+        "keywords": ["producción de eventos", "Halloween", "fiesta temática", "Jaén"],
+        "inLanguage": "es-ES"
+      }
+    ]
+  })} />
+</Fragment>
+
+<main class="hf">
+
+  <section class="hf-header">
+    <img class="hf-header-img" src="/images/halloween-fest/hw3-07.webp" alt="Público en la pista de Halloween Fest" fetchpriority="high"/>
+    <div class="hf-header-overlay" aria-hidden="true"></div>
+    <div class="hf-titleblock">
+      <p class="hf-cat">Caso destacado · Producción de evento</p>
+      <h1 class="hf-title">Halloween Fest</h1>
+      <p class="hf-desc">Cuatro ediciones de una fiesta temática que creció hasta reunir a 500–600 personas por noche. La experiencia de la que nace {SITE.name}.</p>
+    </div>
+  </section>
+
+  <ul class="hf-facts">
+    {facts.map((f) => (
+      <li><span class="hf-facts-num">{f.num}</span><span class="hf-facts-label">{f.label}</span></li>
+    ))}
+  </ul>
+
+  <section class="hf-study">
+    <div class="hf-study-col">
+      <h2>El evento</h2>
+      <p><strong>Halloween Fest</strong> es una fiesta temática anual en Los Villares (Jaén). Entre 2022 y 2025 se celebraron cuatro ediciones, y en las de mayor respuesta reunió a entre 500 y 600 asistentes.</p>
+
+      <h2>El reto</h2>
+      <p>Que una noche con cientos de personas funcione exige que todo esté coordinado a la vez: cartel, técnica, accesos, barra, seguridad y comunicación. Y que cada edición llegue a más gente que la anterior.</p>
+
+      <h2>Qué hicimos</h2>
+      <p>Llevamos la <strong>producción y la operación completa</strong> del evento: desde la programación artística y la promoción hasta el montaje, el control de accesos y la dirección de la noche en directo.</p>
+    </div>
+    <div class="hf-study-col">
+      <h2>Qué coordinamos</h2>
+      <ul class="hf-tags">
+        {coordinado.map((c) => <li>{c}</li>)}
+      </ul>
+
+      <h2>El resultado</h2>
+      <p>Un evento consolidado, con comunidad propia y cuatro ediciones consecutivas. Es la base de experiencia con la que hoy producimos para ayuntamientos, salas y promotores.</p>
+    </div>
+  </section>
+
+  <section class="hf-gallery" aria-label="Galería de Halloween Fest">
+    {gallery.map((g) => (
+      <img class:list={["hf-gallery-img", { "is-wide": g.wide }]} src={`/images/halloween-fest/${g.src}`} alt={g.alt} loading="lazy"/>
+    ))}
+  </section>
+
+  <section class="hf-identity">
+    <div class="hf-identity-text">
+      <h2>Imagen y ticketing</h2>
+      <p>Carteles de cada edición, entradas y pulseras de acceso: la parte visible de una producción que también controla quién entra y cuándo.</p>
+    </div>
+    <div class="hf-identity-grid">
+      <img src="/images/halloween-fest/pulsera-portada.webp" alt="Pulsera de acceso de Halloween Fest" loading="lazy"/>
+      <img src="/images/halloween-fest/tickets.webp" alt="Entradas de Halloween Fest" loading="lazy"/>
+    </div>
+  </section>
+
+  <section class="hf-ig">
+    <p>Reels, vídeos y aftermovies oficiales en Instagram</p>
+    <a href="https://www.instagram.com/halloweenfestlv" target="_blank" rel="noopener">@halloweenfestlv ↗</a>
+  </section>
+
+  <section class="hf-cta">
+    <h2>¿llevamos tu idea<br/>al directo?</h2>
+    <div class="hf-cta-links">
+      <a class="hf-btn" href="/contacto">Hablemos de tu evento</a>
+      <a class="hf-back" href="/proyectos">Volver a proyectos</a>
+    </div>
+  </section>
+
+</main>
+
+<SiteFooter />
+
+<style>
+  .hf { background: #000; color: #F7EFDB; font-family: "Montserrat", sans-serif; }
+
+  .hf-header { position: relative; min-height: 100vh; min-height: 100dvh; overflow: hidden; }
+  .hf-header-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .hf-header-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.15) 40%, rgba(0,0,0,.85) 100%); }
+  .hf-titleblock { position: absolute; left: clamp(20px, 5vw, 88px); right: 20px; bottom: clamp(32px, 7vh, 72px); max-width: 760px; }
+  .hf-cat { font-size: 11px; letter-spacing: .32em; text-transform: uppercase; color: rgba(247,239,219,.8); margin: 0 0 18px; }
+  .hf-title { font-size: clamp(48px, 9vw, 132px); font-weight: 800; letter-spacing: -.04em; line-height: .9; margin: 0 0 24px; }
+  .hf-desc { font-size: clamp(15px, 1.3vw, 18px); line-height: 1.6; color: rgba(247,239,219,.85); max-width: 54ch; margin: 0; }
+
+  .hf-facts { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid rgba(247,239,219,.1); }
+  .hf-facts li { display: flex; flex-direction: column; gap: 8px; padding: clamp(28px, 3.5vw, 48px) clamp(20px, 2.5vw, 40px); border-left: 1px solid rgba(247,239,219,.1); }
+  .hf-facts li:first-child { border-left: none; padding-left: clamp(20px, 5vw, 88px); }
+  .hf-facts-num { font-size: clamp(28px, 3.4vw, 52px); font-weight: 800; letter-spacing: -.03em; line-height: 1; white-space: nowrap; }
+  .hf-facts-label { font-size: 13px; color: rgba(247,239,219,.55); line-height: 1.5; }
+
+  .hf-study { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 110px); padding: clamp(64px, 8vw, 120px) clamp(20px, 5vw, 88px); }
+  .hf-study h2 { font-size: clamp(22px, 2.2vw, 30px); font-weight: 800; letter-spacing: -.02em; margin: 48px 0 16px; }
+  .hf-study-col > h2:first-child { margin-top: 0; }
+  .hf-study p { font-size: 16px; line-height: 1.75; color: rgba(247,239,219,.68); margin: 0; }
+  .hf-study strong { color: #F7EFDB; font-weight: 600; }
+  .hf-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .hf-tags li { font-size: 14px; padding: 9px 15px; border: 1px solid rgba(247,239,219,.2); border-radius: 999px; }
+
+  .hf-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .hf-gallery-img { width: 100%; height: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+  .hf-gallery-img.is-wide { grid-column: 1 / -1; aspect-ratio: 21 / 9; }
+
+  .hf-identity { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: clamp(32px, 5vw, 88px); align-items: center; padding: clamp(64px, 8vw, 120px) clamp(20px, 5vw, 88px); }
+  .hf-identity h2 { font-size: clamp(22px, 2.2vw, 30px); font-weight: 800; letter-spacing: -.02em; margin: 0 0 16px; }
+  .hf-identity p { font-size: 16px; line-height: 1.75; color: rgba(247,239,219,.68); margin: 0; }
+  .hf-identity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .hf-identity-grid img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+
+  .hf-ig { text-align: center; padding: clamp(48px, 6vw, 80px) 20px; border-top: 1px solid rgba(247,239,219,.1); border-bottom: 1px solid rgba(247,239,219,.1); }
+  .hf-ig p { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: rgba(247,239,219,.5); margin: 0 0 14px; }
+  .hf-ig a { font-size: clamp(26px, 4vw, 52px); font-weight: 800; letter-spacing: -.03em; color: #F7EFDB; text-decoration: none; }
+  .hf-ig a:hover { opacity: .7; }
+
+  .hf-cta { text-align: center; padding: clamp(80px, 11vw, 150px) 20px; }
+  .hf-cta h2 { font-size: clamp(40px, 7vw, 88px); font-weight: 800; letter-spacing: -.04em; line-height: .95; margin: 0 0 40px; }
+  .hf-cta-links { display: flex; flex-direction: column; align-items: center; gap: 28px; }
+  .hf-btn { font-size: 14px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #000; background: #F7EFDB; border: 2px solid #F7EFDB; padding: 16px 36px; text-decoration: none; transition: background .25s, color .25s; }
+  .hf-btn:hover { background: transparent; color: #F7EFDB; }
+  .hf-back { font-size: 12px; letter-spacing: .28em; text-transform: uppercase; color: rgba(247,239,219,.7); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
+
+  @media (max-width: 900px) {
+    .hf-study, .hf-identity { grid-template-columns: 1fr; }
+    .hf-facts { grid-template-columns: 1fr 1fr; }
+    .hf-facts li { border-left: none; border-top: 1px solid rgba(247,239,219,.1); padding: 24px 16px; }
+    .hf-facts li:first-child { padding-left: 16px; }
+    .hf-facts li:nth-child(-n+2) { border-top: none; }
+    .hf-facts li:nth-child(even) { border-left: 1px solid rgba(247,239,219,.1); }
+  }
+  @media (max-width: 600px) {
+    .hf-gallery { grid-template-columns: 1fr; }
+    .hf-gallery-img.is-wide { aspect-ratio: 4 / 3; }
+    .hf-study p, .hf-identity p { font-size: 15px; }
+  }
+</style>
+
+</Layout>

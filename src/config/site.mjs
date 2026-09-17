@@ -29,18 +29,18 @@ export const SITE = {
   /** Cómo se muestra el dominio en textos y firmas de email. */
   domainLabel: "blacksunprods.com",
   /** Bajada corta de una línea. Aparece en el manifest de la PWA. */
-  tagline: "Consultoría creativa",
+  tagline: "Productora de eventos",
   /** Idioma y locale del sitio. */
   lang: "es",
   locale: "es_ES",
 
   // ── SEO por defecto (cada página puede sobreescribirlo) ────
-  defaultTitle: "Black Sun Prods · Consultoría Creativa",
+  defaultTitle: "Black Sun Prods · Productora de eventos en Jaén",
   defaultDescription:
-    "Descripción por defecto de Black Sun Prods. 150-160 caracteres, con el servicio principal y la zona en la que opera.",
+    "Productora de eventos en Jaén: dirigimos, producimos y ejecutamos eventos musicales, fiestas temáticas y programación para ayuntamientos, salas y marcas.",
   /** Ruta de la imagen para compartir en redes (1200x630). JPG, no WebP. */
-  ogImage: "/images/og-marca.jpg",
-  ogImageAlt: "Black Sun Prods — consultoría creativa",
+  ogImage: "/images/og-blacksunprods.jpg",
+  ogImageAlt: "Black Sun Prods — productora de eventos. De la idea al directo.",
 
   // ── Contacto ───────────────────────────────────────────────
   email: "info@blacksunprods.com",
@@ -49,7 +49,7 @@ export const SITE = {
   /** Solo dígitos con prefijo de país, para el enlace de WhatsApp. */
   whatsapp: "34600000000",
   /** Nombre de quien firma los emails automáticos. */
-  ownerName: "Nombre",
+  ownerName: "Francisco José",
 
   // ── Redes ──────────────────────────────────────────────────
   instagram: "https://www.instagram.com/blacksunprods",
@@ -65,16 +65,22 @@ export const SITE = {
 
   // ── Negocio local (Schema.org LocalBusiness) ───────────────
   business: {
-    city: "Ciudad",
-    region: "Comunidad",
+    city: "Jaén",
+    region: "Andalucía",
     country: "ES",
-    latitude: 0,
-    longitude: 0,
+    latitude: 37.7796,
+    longitude: -3.7849,
     priceRange: "€€",
-    areaServed: ["Ciudad", "Comunidad", "España"],
-    serviceType: ["Servicio 1", "Servicio 2", "Servicio 3"],
+    areaServed: ["Jaén", "Andalucía", "España"],
+    serviceType: [
+      "Producción de eventos",
+      "Eventos para ayuntamientos",
+      "Eventos musicales y fiestas temáticas",
+      "Producción para salas y ocio nocturno",
+      "Activaciones de marca",
+    ],
     description:
-      "Descripción larga del negocio para los datos estructurados: qué hace, para quién y desde dónde.",
+      "Black Sun Prods es una productora de eventos y experiencias en directo con base en Jaén. Dirige, produce y ejecuta eventos musicales, fiestas temáticas, programación cultural y eventos para ayuntamientos, salas, promotores y marcas, coordinando artistas, técnica, seguridad, ticketing y operación.",
   },
 };
 

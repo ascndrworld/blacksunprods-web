@@ -1,19 +1,30 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { SITE, absUrl } from "../config/site.mjs";
+
+// Tipos de cliente: el valor viaja en ?tipo= desde "Para quién" y /ayuntamientos.
+const clientTypes = [
+  { value: "ayuntamiento", label: "Ayuntamiento / concejalía" },
+  { value: "sala", label: "Sala, pub o recinto" },
+  { value: "promotor", label: "Promotor" },
+  { value: "marca", label: "Marca o empresa" },
+  { value: "privado", label: "Privado o asociación" },
+];
+const capacities = ["Menos de 300", "300–700", "700–1.500", "Más de 1.500", "Aún no lo sé"];
 ---
 
 <Layout
-  title="Contacto | Ascndr — Iniciar Proyecto"
-  description="Cuéntanos tu proyecto y te respondemos en menos de 24h. Consultoría creativa en branding, dirección creativa y redes sociales. Desde Jaén, para toda España."
-  canonical="https://www.blacksunprods.com/contacto"
+  title={`Contacto | ${SITE.name} — Hablemos de tu evento`}
+  description="Cuéntanos tu evento y te respondemos en menos de 24h. Productora de eventos en Jaén para ayuntamientos, salas, promotores y marcas."
+  canonical={absUrl("/contacto")}
 >
 
 <main class="ct-page">
   <section class="ct-hero">
     <p class="ct-eyebrow">CONTACTO</p>
-    <h1 class="ct-title">iniciar<br/>proyecto</h1>
-    <p class="ct-sub">Cuéntanos qué tienes en mente. Te respondemos en menos de 24h.</p>
-    <p class="ct-direct">¿Prefieres el correo? Escríbenos a <a href="mailto:info@blacksunprods.com">info@blacksunprods.com</a></p>
+    <h1 class="ct-title">hablemos de<br/>tu evento</h1>
+    <p class="ct-sub">Cuéntanos qué evento tienes en mente. Te respondemos en menos de 24h.</p>
+    <p class="ct-direct">¿Prefieres el correo? Escríbenos a <a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
   </section>
 
   <section class="ct-form-wrap" id="ctFormWrap">
@@ -29,13 +40,40 @@ import Layout from "../layouts/Layout.astro";
       </div>
 
       <div class="ct-field">
-        <label for="ctTelefono">¿Dónde estás?</label>
-        <input id="ctTelefono" name="telefono" type="text" autocomplete="off" placeholder="@tumarca o tuweb.es"/>
+        <label for="ctTipo">¿Quién eres?</label>
+        <select id="ctTipo" name="tipo">
+          <option value="">Selecciona una opción</option>
+          {clientTypes.map((c) => <option value={c.value}>{c.label}</option>)}
+        </select>
       </div>
 
       <div class="ct-field">
-        <label for="ctConsulta">Cuéntanos tu proyecto</label>
-        <textarea id="ctConsulta" name="consulta" rows="5" maxlength="600" placeholder="Tipo de proyecto, referencias, necesidades..."></textarea>
+        <label for="ctEvento">Tipo de evento</label>
+        <input id="ctEvento" name="evento" type="text" autocomplete="off" placeholder="Fiestas patronales, concierto, fiesta temática…"/>
+      </div>
+
+      <div class="ct-row">
+        <div class="ct-field">
+          <label for="ctLugar">Municipio o recinto</label>
+          <input id="ctLugar" name="lugar" type="text" autocomplete="off" placeholder="Ej. Martos, Sala X…"/>
+        </div>
+        <div class="ct-field">
+          <label for="ctFecha">Fecha aproximada</label>
+          <input id="ctFecha" name="fecha" type="text" autocomplete="off" placeholder="Ej. finales de octubre"/>
+        </div>
+      </div>
+
+      <div class="ct-field">
+        <label for="ctAforo">Aforo estimado</label>
+        <select id="ctAforo" name="aforo">
+          <option value="">Selecciona una opción</option>
+          {capacities.map((c) => <option value={c}>{c}</option>)}
+        </select>
+      </div>
+
+      <div class="ct-field">
+        <label for="ctConsulta">Cuéntanos más <span class="ct-opt">opcional</span></label>
+        <textarea id="ctConsulta" name="consulta" rows="4" maxlength="600" placeholder="Idea, presupuesto orientativo, artistas, necesidades…"></textarea>
       </div>
 
       <input type="text" id="ctWebsite" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="ct-hp"/>
@@ -65,6 +103,13 @@ import Layout from "../layouts/Layout.astro";
     const errEl   = document.getElementById('ctError');
     const btn     = document.getElementById('ctSubmit');
 
+    // Preselecciona "¿Quién eres?" si se llega con ?tipo=ayuntamiento, sala…
+    var tipoParam = new URLSearchParams(location.search).get('tipo');
+    var tipoSel = document.getElementById('ctTipo');
+    if (tipoParam && tipoSel && tipoSel.querySelector('option[value="' + tipoParam + '"]')) {
+      tipoSel.value = tipoParam;
+    }
+
     function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
     function showErr(msg) { errEl.textContent = msg; errEl.classList.add('show'); }
     function clearErr() { errEl.textContent = ''; errEl.classList.remove('show'); }
@@ -75,7 +120,11 @@ import Layout from "../layouts/Layout.astro";
 
       const nombre   = document.getElementById('ctNombre').value.trim();
       const email    = document.getElementById('ctEmail').value.trim();
-      const telefono = document.getElementById('ctTelefono').value.trim();
+      const tipo     = document.getElementById('ctTipo').value;
+      const evento   = document.getElementById('ctEvento').value.trim();
+      const lugar    = document.getElementById('ctLugar').value.trim();
+      const fecha    = document.getElementById('ctFecha').value.trim();
+      const aforo    = document.getElementById('ctAforo').value;
       const consulta = document.getElementById('ctConsulta').value.trim();
       const honeypot = document.getElementById('ctWebsite').value;
 
@@ -94,7 +143,11 @@ import Layout from "../layouts/Layout.astro";
           body: JSON.stringify({
             name: nombre,
             email: email,
-            phone: telefono,
+            clientType: tipo,
+            eventType: evento,
+            location: lugar,
+            date: fecha,
+            capacity: aforo,
             consulta: consulta,
             website: honeypot
           })
@@ -197,6 +250,25 @@ import Layout from "../layouts/Layout.astro";
     text-transform: lowercase;
     margin-left: 6px;
   }
+  .ct-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .ct-field select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23F7EFDB' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 4px center;
+    border: none;
+    border-bottom: 1.5px solid rgba(247, 239, 219, 0.2);
+    border-radius: 0;
+    padding: 12px 24px 12px 0;
+    color: #F7EFDB;
+    font-family: inherit;
+    font-size: 17px;
+    outline: none;
+    width: 100%;
+    cursor: pointer;
+    transition: border-color 0.25s ease;
+  }
+  .ct-field select:focus { border-bottom-color: #F7EFDB; }
+  .ct-field select option { background: #0a0a0a; color: #F7EFDB; }
   .ct-field input,
   .ct-field textarea {
     background: transparent;
@@ -330,6 +402,8 @@ import Layout from "../layouts/Layout.astro";
     .ct-sub { font-size: 15px; }
     .ct-hero { margin-bottom: 40px; }
     .ct-form { gap: 24px; }
+    .ct-row { grid-template-columns: 1fr; gap: 24px; }
+    .ct-field select { font-size: 16px; }
     .ct-field input,
     .ct-field textarea { font-size: 16px; }
     .ct-success h2 { font-size: 32px; }

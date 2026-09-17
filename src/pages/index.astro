@@ -1,25 +1,30 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { SITE } from "../config/site.mjs";
+import { SITE, absUrl } from "../config/site.mjs";
 
-// Marcas que han confiado — logos reales, en su color original, integrados
-// en el hero debajo del CTA, en movimiento (marquee). Se repite el set y luego
-// se duplica el grupo entero para que el bucle no tenga saltos.
-// scale = ajuste óptico por logo para que se vean a la misma altura real
-// (cada PNG rellena su caja distinto: Halloween lleva subtítulo y letras altas).
-const logos = [
-  { name: "Halloween Fest", src: "/images/marcas/halloween-fest.png", scale: 1.34 },
-  { name: "Cónclave", src: "/images/marcas/conclave.png", scale: 1.13 },
-  { name: "Eventsy", src: "/images/marcas/eventsy.png", scale: 0.98 },
+// Cifras de la franja bajo el hero (fuente: experiencia real de Halloween Fest).
+const stats = [
+  { num: "4", label: "ediciones de Halloween Fest" },
+  { num: "500–600", label: "asistentes en sus noches de mayor respuesta" },
+  { num: "2022–2025", label: "produciendo eventos en directo" },
+  { num: "Jaén", label: "base en Andalucía" },
 ];
-const group = Array.from({ length: 4 }, () => logos).flat();
+
+// Lo que Black Sun coordina bajo una sola dirección.
+const coordinamos = [
+  "Concepto y dirección creativa", "Producción ejecutiva", "Contratación artística",
+  "Sonido", "Iluminación", "Pantalla LED", "Montaje", "Seguridad", "Personal",
+  "Ticketing", "Accesos", "Comunicación", "Contenido", "Operación del evento", "Desmontaje",
+];
+
+const year = new Date().getFullYear();
 ---
 
 <Layout
-  title="Ascndr | Consultoría Creativa - Branding, Lanzamientos y RRSS"
-  description="Branding, dirección creativa de eventos, fotografía y gestión de redes sociales. Desde Jaén, para marcas de toda España. Eleva tu marca con visión estratégica."
-  canonical="https://www.blacksunprods.com"
-  ogImage="https://www.blacksunprods.com/images/og-ascndr.jpg"
+  title="Black Sun Prods | Productora de eventos en Jaén — de la idea al directo"
+  description="Productora de eventos en Jaén. Dirigimos, producimos y ejecutamos eventos musicales, fiestas temáticas y programación para ayuntamientos, salas, promotores y marcas."
+  canonical={SITE.url}
+  ogImage={absUrl(SITE.ogImage)}
 >
 
 
@@ -71,45 +76,39 @@ const group = Array.from({ length: 4 }, () => logos).flat();
     })();
   </script>
 
-  <!-- HERO: texto izquierda, pegado arriba tras el header -->
+  <!-- HERO: titular en español + firma en inglés -->
   <div class="home-hero-content">
-    <h1 class="home-hero-title">eleva<br/>tu marca<br/>o quédate<br/>donde estás.</h1>
+    <h1 class="home-hero-title">de la idea<br/>al directo.</h1>
+    <p class="home-hero-sub">from concept to crowd.</p>
     <a class="home-hero-btn" href="/proyectos">VER PROYECTOS</a>
   </div>
 
   </div><!-- /#home -->
 
-  <!-- ════ MARCAS QUE HAN CONFIADO (strip en movimiento, bajo el header) ════ -->
-  <section class="brandstrip" aria-label="Marcas que han confiado en Ascndr">
-    <p class="brandstrip-eyebrow">Han confiado en nosotros</p>
-    <!-- PC: 3 logos fijos y centrados (de momento; con más marcas → movimiento) -->
-    <div class="brandstrip-static">
-      {logos.map((b) => (
-        <img class="brandstrip-logo" src={b.src} alt={b.name} loading="lazy" style={`--brand-scale:${b.scale}`} />
+  <!-- ════ CIFRAS (sustituye a la franja de logos) ════ -->
+  <section class="stats" aria-label={`${SITE.name} en cifras`}>
+    <ul class="stats-list">
+      {stats.map((s) => (
+        <li class="stats-item" data-reveal>
+          <span class="stats-num">{s.num}</span>
+          <span class="stats-label">{s.label}</span>
+        </li>
       ))}
-    </div>
-    <!-- Móvil: en movimiento (marquee) -->
-    <div class="brandstrip-marquee" aria-hidden="true">
-      <div class="brandstrip-track">
-        {[...group, ...group].map((b) => (
-          <img class="brandstrip-logo" src={b.src} alt="" aria-hidden="true" loading="eager" decoding="async" draggable="false" style={`--brand-scale:${b.scale}`} />
-        ))}
-      </div>
-    </div>
+    </ul>
   </section>
 
-  <!-- ════ SECCIÓN SERVICIOS — igual que "branding" en Somos ════ -->
+  <!-- ════ INTRO ════ -->
   <section class="hs-services">
-    <h2 class="hs-services-title" data-reveal>consultoría<br/>creativa</h2>
-    <p class="hs-services-text" data-reveal>La identidad visual es la primera impresión que se lleva un cliente de tu marca. Trabajamos para que sea la correcta.</p>
-    <p class="hs-services-text" data-reveal>Branding, dirección creativa, web, redes sociales. Todo bajo una misma visión estratégica.</p>
-    <a class="hs-services-btn" href="/contacto" data-reveal>HABLEMOS DE TU MARCA</a>
+    <h2 class="hs-services-title" data-reveal>productora<br/>de eventos</h2>
+    <p class="hs-services-text" data-reveal>Dirigimos, producimos y ejecutamos eventos en directo: desde la primera idea hasta la última persona que sale del recinto.</p>
+    <p class="hs-services-text" data-reveal>No alquilamos equipo ni montamos fiestas sueltas. Coordinamos artistas, técnica, seguridad, ticketing y equipo bajo una sola dirección.</p>
+    <a class="hs-services-btn" href="/contacto" data-reveal>HABLEMOS DE TU EVENTO</a>
   </section>
 
-  <!-- ════ SECCIÓN SERVICIOS DESGLOSADOS ════ -->
+  <!-- ════ BLOQUE 1: QUÉ PRODUCIMOS ════ -->
   <section class="svc" id="servicios">
     <div class="svc-head">
-      <span class="svc-eyebrow">QUÉ HACEMOS</span>
+      <span class="svc-eyebrow">QUÉ PRODUCIMOS</span>
       <h2 class="svc-title">servicios</h2>
     </div>
     <ul class="svc-rows">
@@ -117,105 +116,129 @@ const group = Array.from({ length: 4 }, () => logos).flat();
         <div class="svc-row-main">
           <span class="svc-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M11 21a1 1 0 0 1 0-19 9.5 8.5 0 0 1 9.5 8.5 4.5 4.5 0 0 1-4.5 4.5h-2a1.6 1.6 0 0 0-1.28 2.56l.27.36A1.6 1.6 0 0 1 11 21z"/>
-              <circle cx="6.2" cy="11.5" r=".95" fill="currentColor" stroke="none"/>
-              <circle cx="8.2" cy="6.8" r=".95" fill="currentColor" stroke="none"/>
-              <circle cx="12.6" cy="5.8" r=".95" fill="currentColor" stroke="none"/>
-              <path d="M22 2 17 7"/>
-              <path d="m15.6 8.4 2 2 1.4-1.4-2-2z"/>
-              <path d="M15.6 8.4 13 11l2.6-.6z" fill="currentColor" stroke="none"/>
+              <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
             </svg>
           </span>
-          <h3 class="svc-name">Branding</h3>        </div>
+          <h3 class="svc-name">Eventos musicales y fiestas temáticas</h3>        </div>
         <div class="svc-reveal"><div class="svc-reveal-inner">
-          <p class="svc-desc">Naming, logo, tipografías, color y el sistema visual completo que hace que tu marca se reconozca y se recuerde.</p>
+          <p class="svc-desc">Conciertos, sesiones, noches temáticas y conceptos propios. Diseñamos el formato, el cartel y la experiencia, y lo llevamos al directo.</p>
         </div></div>
       </li>
       <li class="svc-row">
         <div class="svc-row-main">
           <span class="svc-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/>
-              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 22h18"/><path d="M6 18v-7"/><path d="M10 18v-7"/><path d="M14 18v-7"/><path d="M18 18v-7"/><path d="M12 2l8 5H4z"/>
             </svg>
           </span>
-          <h3 class="svc-name">Dirección Creativa</h3>        </div>
+          <h3 class="svc-name">Ayuntamientos y programación cultural</h3>        </div>
         <div class="svc-reveal"><div class="svc-reveal-inner">
-          <p class="svc-desc">La idea que lo unifica todo. Eventos, lanzamientos y campañas donde cada pieza cuenta la misma historia.</p>
+          <p class="svc-desc">Fiestas patronales y de verano, Halloween, carnavales, festivales y eventos juveniles. Producción cerrada o colaborativa, con un único interlocutor. <a class="svc-link" href="/ayuntamientos">Ver formatos →</a></p>
         </div></div>
       </li>
       <li class="svc-row">
         <div class="svc-row-main">
           <span class="svc-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="16 18 22 12 16 6"/>
-              <polyline points="8 6 2 12 8 18"/>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>
             </svg>
           </span>
-          <h3 class="svc-name">Web</h3>        </div>
+          <h3 class="svc-name">Salas, pubs y ocio nocturno</h3>        </div>
         <div class="svc-reveal"><div class="svc-reveal-inner">
-          <p class="svc-desc">Diseño y desarrollo de webs y productos digitales a medida: UX/UI y código, pensados para reflejar tu marca y funcionar de verdad.</p>
+          <p class="svc-desc">Producciones para salas, pubs y recintos: conceptos que llenan fechas, con dirección artística, promoción y operación de la noche.</p>
         </div></div>
       </li>
       <li class="svc-row">
         <div class="svc-row-main">
           <span class="svc-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-              <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>
             </svg>
           </span>
-          <h3 class="svc-name">Redes Sociales</h3>        </div>
+          <h3 class="svc-name">Activaciones de marca y formatos itinerantes</h3>        </div>
         <div class="svc-reveal"><div class="svc-reveal-inner">
-          <p class="svc-desc">Estrategia y contenido con intención: un feed reconocible que atrae, genera confianza y convierte.</p>
+          <p class="svc-desc">Experiencias en directo que conectan una marca con su público, y formatos pensados para viajar de un municipio o recinto a otro.</p>
         </div></div>
       </li>
     </ul>
   </section>
 
-  <!-- ════ SECCIÓN PROYECTOS DESTACADOS ════ -->
+  <!-- ════ BLOQUE 2: QUÉ COORDINAMOS ════ -->
+  <section class="coord" aria-labelledby="coordTitle">
+    <div class="coord-head" data-reveal>
+      <span class="svc-eyebrow">QUÉ COORDINAMOS</span>
+      <h2 class="svc-title" id="coordTitle">un único interlocutor</h2>
+      <p class="coord-text">Trabajamos con una red de proveedores especializados. Tú hablas con una persona; nosotros dirigimos al resto.</p>
+    </div>
+    <ul class="coord-list" data-reveal>
+      {coordinamos.map((c) => <li>{c}</li>)}
+    </ul>
+  </section>
+
+  <!-- ════ PARA QUIÉN ════ -->
+  <section class="aud" id="para-quien">
+    <div class="aud-head" data-reveal>
+      <span class="svc-eyebrow">PARA QUIÉN</span>
+      <h2 class="svc-title">con quién trabajamos</h2>
+    </div>
+    <div class="aud-grid">
+      <a class="aud-card" href="/ayuntamientos" data-reveal>
+        <span class="aud-num">01</span>
+        <h3 class="aud-name">Ayuntamientos</h3>
+        <p class="aud-desc">Fiestas, festivales y programación cultural producidos de principio a fin.</p>
+        <span class="aud-cta">Ver formatos →</span>
+      </a>
+      <a class="aud-card" href="/contacto?tipo=sala" data-reveal>
+        <span class="aud-num">02</span>
+        <h3 class="aud-name">Salas y promotores</h3>
+        <p class="aud-desc">Noches temáticas, conceptos propios y producción para salas, pubs y recintos.</p>
+        <span class="aud-cta">Hablemos →</span>
+      </a>
+      <a class="aud-card" href="/contacto?tipo=marca" data-reveal>
+        <span class="aud-num">03</span>
+        <h3 class="aud-name">Marcas</h3>
+        <p class="aud-desc">Activaciones y experiencias en directo que ponen tu marca delante de su público.</p>
+        <span class="aud-cta">Hablemos →</span>
+      </a>
+      <a class="aud-card" href="/contacto?tipo=privado" data-reveal>
+        <span class="aud-num">04</span>
+        <h3 class="aud-name">Privados</h3>
+        <p class="aud-desc">Empresas, asociaciones y eventos privados con producción profesional.</p>
+        <span class="aud-cta">Hablemos →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ════ PROYECTOS ════ -->
   <div class="works-head" data-reveal>
     <span class="svc-eyebrow">NUESTRA EXPERIENCIA</span>
     <h2 class="svc-title">proyectos</h2>
   </div>
   <section class="hs-works">
-    <a class="hs-work-item" href="/proyectos/direccion-creativa/conclave" data-reveal>
-      <img class="hs-work-img" src="/images/conclave/portada-conclave2.jpg" alt="Cónclave — Rebranding y dirección creativa de pub en Jaén por Ascndr" loading="lazy" style="object-position:center 37%;"/>
+    <a class="hs-work-item" href="/proyectos/halloween-fest" data-reveal>
+      <img class="hs-work-img" src="/images/halloween-fest/hw3-07.webp" alt="Halloween Fest — público en la pista durante una de sus ediciones en Jaén" loading="lazy"/>
       <div class="hs-work-overlay">
-        <span class="hs-work-cat">Dirección Creativa</span>
-        <h3 class="hs-work-name">Cónclave</h3>
-      </div>
-    </a>
-    <a class="hs-work-item" href="/proyectos/branding/halloweenfest" data-reveal>
-      <img class="hs-work-img" src="/images/halloween-fest/pulsera-portada.webp" alt="Halloween Fest — Branding e identidad visual de evento en Los Villares, Jaén" loading="lazy"/>
-      <div class="hs-work-overlay">
-        <span class="hs-work-cat">Branding</span>
+        <span class="hs-work-cat">Producción · 4 ediciones</span>
         <h3 class="hs-work-name">Halloween Fest</h3>
       </div>
     </a>
-    <a class="hs-work-item" href="/proyectos/web/eventsy" data-reveal>
-      <img class="hs-work-img" src="/images/eventsy/portada-carrusel.webp" alt="Eventsy — Diseño de plataforma web y app de gestión de eventos por Ascndr" loading="lazy"/>
-      <div class="hs-work-overlay">
-        <span class="hs-work-cat">Web</span>
-        <h3 class="hs-work-name">Eventsy</h3>
+    <a class="hs-work-item hs-work-item--concept" href="/proyectos/bendito-castigo" data-reveal>
+      <div class="hs-work-img hs-work-concept" aria-hidden="true">
+        <span>bendito<br/>castigo</span>
       </div>
-    </a>
-    <a class="hs-work-item" href="/proyectos/redes-sociales/briefing" data-reveal>
-      <img class="hs-work-img" src="/images/conclave/rrss-02.jpg" alt="Briefing — Gestión de redes sociales y contenido para Cónclave en Jaén" loading="lazy"/>
       <div class="hs-work-overlay">
-        <span class="hs-work-cat">Redes Sociales</span>
-        <h3 class="hs-work-name">Briefing</h3>
+        <span class="hs-work-cat">Concepto propio</span>
+        <h3 class="hs-work-name">Bendito Castigo</h3>
       </div>
     </a>
   </section>
 
-  <!-- ════ CÓMO TRABAJAMOS — proceso (scroll horizontal fijado) ════ -->
+  <!-- ════ EL PROCESO ════ -->
   <section class="proc proc-h" id="proceso">
     <div class="proc-pin">
       <div class="proc-sticky">
         <div class="proc-head">
-          <span class="proc-eyebrow">CÓMO TRABAJAMOS</span>
+          <span class="proc-eyebrow">FROM CONCEPT TO CROWD</span>
           <h2 class="proc-title">el proceso</h2>
         </div>
         <div class="proc-viewport">
@@ -223,29 +246,36 @@ const group = Array.from({ length: 4 }, () => logos).flat();
         <li class="proc-panel">
           <span class="proc-num">01</span>
           <div class="proc-text">
-            <h3 class="proc-name">Hablamos</h3>
-            <p class="proc-desc">Nos cuentas tu proyecto y entendemos tu negocio, tu público y a dónde quieres llegar.</p>
+            <h3 class="proc-name">Concepto</h3>
+            <p class="proc-desc">Entendemos el evento, el público y el objetivo. Definimos la idea, el formato y la experiencia que queremos crear.</p>
           </div>
         </li>
         <li class="proc-panel">
           <span class="proc-num">02</span>
           <div class="proc-text">
-            <h3 class="proc-name">Estrategia</h3>
-            <p class="proc-desc">Definimos el rumbo: posicionamiento, concepto y qué necesita tu marca para destacar.</p>
+            <h3 class="proc-name">Producción</h3>
+            <p class="proc-desc">Presupuesto, cartel artístico, proveedores, permisos, seguridad y ticketing. Todo planificado y bajo un único responsable.</p>
           </div>
         </li>
         <li class="proc-panel">
           <span class="proc-num">03</span>
           <div class="proc-text">
-            <h3 class="proc-name">Creamos</h3>
-            <p class="proc-desc">Diseñamos la identidad, las piezas y el contenido, todo bajo una misma visión.</p>
+            <h3 class="proc-name">Montaje</h3>
+            <p class="proc-desc">Sonido, iluminación, pantalla LED, escenario y accesos. Coordinamos a cada equipo para que todo esté listo a tiempo.</p>
           </div>
         </li>
         <li class="proc-panel">
           <span class="proc-num">04</span>
           <div class="proc-text">
-            <h3 class="proc-name">Lanzamos</h3>
-            <p class="proc-desc">Ponemos tu marca en el mundo y te dejamos las herramientas para mantenerla.</p>
+            <h3 class="proc-name">Ejecución</h3>
+            <p class="proc-desc">Dirigimos la operación en directo: artistas, personal, barra, accesos y tiempos. Control total durante el evento.</p>
+          </div>
+        </li>
+        <li class="proc-panel">
+          <span class="proc-num">05</span>
+          <div class="proc-text">
+            <h3 class="proc-name">Público</h3>
+            <p class="proc-desc">La gente vive la experiencia. Después, desmontaje, material audiovisual y una memoria con resultados para la siguiente edición.</p>
           </div>
         </li>
           </ol>
@@ -263,32 +293,34 @@ const group = Array.from({ length: 4 }, () => logos).flat();
     </div>
   </section>
 
-  <!-- ════ TESTIMONIOS ════ -->
+  <!-- ════ TESTIMONIOS ════
+       PENDIENTE: son huecos de recordatorio. Sustituir por testimonios reales de
+       ayuntamientos y promotores antes de publicar (ver PENDIENTES.md). -->
   <section class="tst" id="testimonios">
     <div class="tst-head" data-reveal>
       <span class="svc-eyebrow">lo que dicen</span>
       <h2 class="svc-title">testimonios</h2>
     </div>
     <div class="tst-grid">
-      <figure class="tst-item">
-        <blockquote class="tst-quote">Llevo muchos años trabajando en la noche y pensaba que un cambio tan drástico no iba a funcionar, pero han rejuvenecido mi negocio. Tomé la decisión correcta: ahora mi local vuelve a ser el punto de encuentro en el pueblo.</blockquote>
+      <figure class="tst-item tst-item--pending">
+        <blockquote class="tst-quote">Pendiente: testimonio de un ayuntamiento o concejalía con la que hayamos producido un evento.</blockquote>
         <figcaption class="tst-author">
-          <span class="tst-name">Lorenzo Hidalgo</span>
-          <span class="tst-role">Dueño de Pub Milenio · +26 años en el sector</span>
+          <span class="tst-name">Ayuntamiento</span>
+          <span class="tst-role">Concejalía de Fiestas / Cultura · por conseguir</span>
         </figcaption>
       </figure>
-      <figure class="tst-item">
-        <blockquote class="tst-quote">En las dos primeras ediciones se nos veía como un evento poco profesional. Hace 2 años que trabajamos juntos y nuestro evento ahora crea comunidad y llega a más gente en cada edición.</blockquote>
+      <figure class="tst-item tst-item--pending">
+        <blockquote class="tst-quote">Pendiente: testimonio de un promotor, sala o recinto con el que hayamos trabajado.</blockquote>
         <figcaption class="tst-author">
-          <span class="tst-name">Luis Ramírez</span>
-          <span class="tst-role">Founder de Halloween Fest · 4 ediciones consecutivas</span>
+          <span class="tst-name">Promotor / sala</span>
+          <span class="tst-role">Por conseguir</span>
         </figcaption>
       </figure>
-      <figure class="tst-item">
-        <blockquote class="tst-quote">Quería crear una aplicación web seria desde el primer día. Nos orientaron sobre variables y herramientas que desconocíamos. Nuestra marca está presente entre promotores de eventos.</blockquote>
+      <figure class="tst-item tst-item--pending">
+        <blockquote class="tst-quote">Pendiente: testimonio de un segundo ayuntamiento, marca o partner.</blockquote>
         <figcaption class="tst-author">
-          <span class="tst-name">Juan Delgado</span>
-          <span class="tst-role">CEO y Co-Founder de Eventsy</span>
+          <span class="tst-name">Ayuntamiento / partner</span>
+          <span class="tst-role">Por conseguir</span>
         </figcaption>
       </figure>
     </div>
@@ -297,9 +329,9 @@ const group = Array.from({ length: 4 }, () => logos).flat();
 
   <!-- ════ CTA DE CIERRE ════ -->
   <section class="cta" id="empecemos">
-    <h2 class="cta-title" data-reveal>¿elevamos<br/>tu marca?</h2>
-    <p class="cta-text" data-reveal>Cuéntanos qué tienes en mente. Te respondemos en menos de 24h.</p>
-    <a class="cta-btn" href="/contacto" data-reveal>INICIAR PROYECTO</a>
+    <h2 class="cta-title" data-reveal>¿llevamos tu idea<br/>al directo?</h2>
+    <p class="cta-text" data-reveal>Cuéntanos qué evento tienes en mente. Te respondemos en menos de 24h.</p>
+    <a class="cta-btn" href="/contacto" data-reveal>HABLEMOS DE TU EVENTO</a>
   </section>
 
   <!-- ════ FOOTER GLOBAL ════ -->
@@ -307,7 +339,7 @@ const group = Array.from({ length: 4 }, () => logos).flat();
     <div class="hs-footer-line"></div>
     <div class="hs-footer-middle">
       <div class="hs-footer-social">
-        <a href="https://www.instagram.com/blacksunprods" target="_blank" rel="noopener" aria-label="Instagram">
+        <a href={SITE.instagram} target="_blank" rel="noopener" aria-label="Instagram">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
           <span class="hs-footer-ig-label">instagram</span>
         </a>
@@ -327,7 +359,7 @@ const group = Array.from({ length: 4 }, () => logos).flat();
     <nav class="hs-footer-nav">
       <a href="/proyectos">Proyectos</a>
       <span>·</span>
-      <a href="/blog">Blog</a>
+      <a href="/ayuntamientos">Ayuntamientos</a>
       <span>·</span>
       <a href="/terminos">Términos</a>
       <span>·</span>
@@ -335,7 +367,7 @@ const group = Array.from({ length: 4 }, () => logos).flat();
       <span>·</span>
       <a href="/contacto">Contacto</a>
     </nav>
-    <p class="hs-footer-copy">© Ascndr 2026 · Marca Registrada</p>
+    <p class="hs-footer-copy">© {SITE.name} {year}</p>
   </footer>
 
 
@@ -359,82 +391,190 @@ img, video {
   pointer-events: auto;
 }
 
-/* ════ MARCAS EN EL HERO (logos en color original, bajo el CTA) ════ */
-.brandstrip {
-  position: relative;
+/* ════ HERO — firma en inglés bajo el titular ════ */
+.home-hero-sub {
+  font-family: "Montserrat", sans-serif;
+  font-size: clamp(14px, 1.5vw, 20px);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(247, 239, 219, 0.75);
+  margin: -8px 0 32px;
+}
+@media (max-width: 768px) {
+  .home-hero-sub { text-align: right; font-size: 11px; margin: -6px 0 22px; }
+}
+
+/* ════ CIFRAS (bajo el hero) ════ */
+.stats {
   background: #000;
-  overflow: hidden;
-  padding: clamp(30px, 4vw, 50px) 0;
+  color: #F7EFDB;
+  font-family: "Montserrat", sans-serif;
   border-top: 1px solid rgba(247, 239, 219, 0.08);
   border-bottom: 1px solid rgba(247, 239, 219, 0.08);
 }
-.brandstrip-eyebrow {
-  text-align: center;
-  font-family: "Montserrat", sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: rgba(247, 239, 219, 0.5);
-  margin: 0 0 clamp(22px, 3vw, 34px);
-  padding: 0 24px;
+.stats-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
 }
-/* PC: los 3 logos fijos y centrados */
-.brandstrip-static {
+.stats-item {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: clamp(40px, 7vw, 100px);
-  padding: 0 24px;
+  flex-direction: column;
+  gap: 10px;
+  padding: clamp(32px, 4vw, 56px) clamp(20px, 2.5vw, 40px);
+  border-left: 1px solid rgba(247, 239, 219, 0.08);
 }
-/* Móvil: marquee (oculto en PC) */
-.brandstrip-marquee { display: none; position: relative; }
-/* Desvanecido en los bordes con degradados estáticos ENCIMA (no con mask sobre
-   el contenido animado): en iOS la máscara sobre un track en movimiento recompone
-   la capa cada frame y provoca tirones/parones. Estos overlays no se animan. */
-.brandstrip-marquee::before,
-.brandstrip-marquee::after {
-  content: ""; position: absolute; top: 0; bottom: 0; width: 16%;
-  z-index: 2; pointer-events: none;
+.stats-item:first-child { border-left: none; }
+.stats-num {
+  font-size: clamp(34px, 4.2vw, 64px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
 }
-.brandstrip-marquee::before { left: 0;  background: linear-gradient(to right, #000 0, transparent 100%); }
-.brandstrip-marquee::after  { right: 0; background: linear-gradient(to left,  #000 0, transparent 100%); }
-.brandstrip-track {
-  display: flex;
-  align-items: center;
-  width: max-content;
-  will-change: transform;
-  backface-visibility: hidden;
-  animation: brandstrip-scroll 28s linear infinite;
+.stats-label {
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(247, 239, 219, 0.55);
+  max-width: 24ch;
 }
-.brandstrip-logo {
-  height: calc(clamp(32px, 4.4vw, 50px) * var(--brand-scale, 1));
-  width: auto;
-  object-fit: contain;
-  flex-shrink: 0;
-  opacity: 0.85;
-  transition: opacity .3s ease;
+@media (min-width: 769px) {
+  .stats-item:first-child { padding-left: clamp(24px, 5vw, 88px); }
 }
-.brandstrip-static:hover .brandstrip-logo { opacity: 1; }
-.brandstrip-track .brandstrip-logo { margin: 0 clamp(28px, 6vw, 44px); }
-@keyframes brandstrip-scroll {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(-50%, 0, 0); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .brandstrip-track { animation: none; }
+@media (max-width: 768px) {
+  .stats-list { grid-template-columns: repeat(2, 1fr); }
+  .stats-item { padding: 28px 16px; border-left: none; border-top: 1px solid rgba(247, 239, 219, 0.08); }
+  .stats-item:nth-child(-n+2) { border-top: none; }
+  .stats-item:nth-child(even) { border-left: 1px solid rgba(247, 239, 219, 0.08); }
+  .stats-num { font-size: clamp(26px, 8vw, 40px); }
+  .stats-label { font-size: 12px; }
 }
 
-/* En móvil/tablet: ocultar fijos, mostrar marquee con fade en los bordes */
-@media (max-width: 768px) {
-  .brandstrip-static { display: none; }
-  .brandstrip-marquee {
-    display: block;
-    overflow: hidden;
-    /* El desvanecido lo dan ahora los overlays ::before/::after (ver arriba) */
-  }
+/* Servicios: nombres más largos que antes → tipografía algo menor */
+.svc-name { font-size: clamp(26px, 3.2vw, 46px); }
+.svc-link { color: #F7EFDB; text-underline-offset: 3px; white-space: nowrap; }
+
+/* ════ QUÉ COORDINAMOS ════ */
+.coord {
+  background: #000;
+  color: #F7EFDB;
+  font-family: "Montserrat", sans-serif;
+  padding: clamp(24px, 3vw, 44px) 10px clamp(56px, 7vw, 96px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: clamp(32px, 5vw, 88px);
+  align-items: start;
 }
+.coord-text {
+  font-size: clamp(15px, 1.2vw, 17px);
+  line-height: 1.7;
+  color: rgba(247, 239, 219, 0.6);
+  max-width: 40ch;
+  margin: 20px 0 0;
+}
+.coord-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.coord-list li {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 10px 16px;
+  border: 1px solid rgba(247, 239, 219, 0.2);
+  border-radius: 999px;
+  color: rgba(247, 239, 219, 0.9);
+}
+@media (min-width: 769px) {
+  .coord { padding-inline: clamp(24px, 5vw, 88px); }
+}
+@media (max-width: 900px) {
+  .coord { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .coord-list li { font-size: 13px; padding: 8px 13px; }
+}
+
+/* ════ PARA QUIÉN ════ */
+.aud {
+  background: #000;
+  color: #F7EFDB;
+  font-family: "Montserrat", sans-serif;
+  padding: clamp(56px, 7vw, 96px) 10px clamp(24px, 3vw, 40px);
+  border-top: 1px solid rgba(247, 239, 219, 0.08);
+}
+.aud-head { margin: 0 0 clamp(28px, 4vw, 48px); }
+.aud-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid rgba(247, 239, 219, 0.14);
+}
+.aud-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: clamp(24px, 2.6vw, 40px) clamp(18px, 2vw, 32px) clamp(28px, 3vw, 44px);
+  border-left: 1px solid rgba(247, 239, 219, 0.14);
+  color: inherit;
+  text-decoration: none;
+  transition: background 0.35s ease;
+}
+.aud-card:first-child { border-left: none; }
+.aud-num { font-size: 12px; letter-spacing: 0.2em; color: rgba(247, 239, 219, 0.4); }
+.aud-name { font-size: clamp(24px, 2.4vw, 34px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; margin: 0; }
+.aud-desc { font-size: 15px; line-height: 1.6; color: rgba(247, 239, 219, 0.6); margin: 0; flex: 1; }
+.aud-cta { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
+@media (hover: hover) {
+  .aud-card:hover { background: rgba(247, 239, 219, 0.05); }
+}
+@media (min-width: 769px) {
+  .aud { padding-inline: clamp(24px, 5vw, 88px); }
+  .aud-card:first-child { padding-left: 0; }
+}
+@media (max-width: 900px) {
+  .aud-grid { grid-template-columns: 1fr 1fr; }
+  .aud-card:nth-child(3) { border-left: none; }
+  .aud-card:nth-child(n+3) { border-top: 1px solid rgba(247, 239, 219, 0.14); }
+}
+@media (max-width: 520px) {
+  .aud-grid { grid-template-columns: 1fr; }
+  .aud-card { border-left: none; padding-inline: 0; }
+  .aud-card + .aud-card { border-top: 1px solid rgba(247, 239, 219, 0.14); }
+}
+
+/* ════ PROYECTOS — tarjeta tipográfica para conceptos sin fotos todavía ════ */
+.hs-work-concept {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0d0d0d;
+  border: 1px solid rgba(247, 239, 219, 0.08);
+  box-sizing: border-box;
+}
+.hs-work-concept span {
+  font-family: "Montserrat", sans-serif;
+  font-size: clamp(34px, 4.4vw, 68px);
+  font-weight: 800;
+  font-style: italic;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  text-align: center;
+  color: #F7EFDB;
+}
+@media (max-width: 768px) {
+  .hs-works { grid-template-columns: 1fr 1fr; }
+}
+
+/* ════ TESTIMONIOS PENDIENTES (recordatorio visible) ════ */
+.tst-item--pending .tst-quote { color: rgba(247, 239, 219, 0.45); font-style: italic; }
+.tst-item--pending .tst-name { color: rgba(247, 239, 219, 0.7); }
 
 /* ════════════════════════════════════════════════════════
    SECCIONES LANDING — Servicios, Antes/Después, Proceso, CTA
@@ -448,7 +588,7 @@ img, video {
 .svc  { padding: clamp(24px, 3vw, 44px) 0 clamp(44px, 5vw, 72px); }
 .proc { padding: clamp(72px, 9vw, 120px) 10px clamp(72px, 9vw, 116px); }
 .works-head { padding: clamp(48px, 6vw, 88px) 10px clamp(44px, 5vw, 64px); text-align: left; }
-/* La intro "consultoría creativa" deja menos hueco abajo para juntarse con servicios */
+/* La intro "productora de eventos" deja menos hueco abajo para juntarse con servicios */
 .hs-services { padding-bottom: clamp(40px, 5vw, 64px); }
 
 /* Cabeceras de sección compartidas */
@@ -904,25 +1044,16 @@ img, video {
 </style>
 
 
-<!-- ── Schema.org: portfolio de proyectos ── -->
+<!-- ── Schema.org: experiencia de referencia ── -->
 <script type="application/ld+json" is:inline set:html={JSON.stringify([
   {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
-    "name": "Halloween Fest — Branding e Identidad Visual",
-    "description": "Diseño de identidad visual completa para Halloween Fest Jaén: logo, carteles, pulseras, acreditaciones y dirección creativa del evento.",
-    "creator": { "@type": "Organization", "name": "Ascndr", "url": "https://www.blacksunprods.com" },
-    "keywords": ["branding", "identidad visual", "evento", "Halloween", "Jaén"],
-    "image": "https://www.blacksunprods.com/images/halloween-fest/pulsera-portada.webp"
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "CreativeWork",
-    "name": "Cónclave — Dirección Creativa y Rebranding",
-    "description": "Transformación completa del pub Milenio 2.0 en Cónclave: naming, identidad visual, señalética y gestión de redes sociales en Jaén.",
-    "creator": { "@type": "Organization", "name": "Ascndr", "url": "https://www.blacksunprods.com" },
-    "keywords": ["rebranding", "dirección creativa", "pub", "hostelería", "Jaén"],
-    "image": "https://www.blacksunprods.com/images/conclave/portada-conclave2.jpg"
+    "name": "Halloween Fest — Producción de evento",
+    "description": "Producción y operación completa de Halloween Fest (Jaén): 4 ediciones entre 2022 y 2025, con 500–600 asistentes en sus noches de mayor respuesta.",
+    "creator": { "@type": "Organization", "name": SITE.name, "url": SITE.url },
+    "keywords": ["producción de eventos", "Halloween", "Jaén", "fiesta temática"],
+    "image": absUrl("/images/halloween-fest/hw3-07.webp")
   }
 ])} />
 
@@ -1043,28 +1174,6 @@ img, video {
     function applyAll() { apply.forEach(function (fn) { fn(); }); }
     applyAll();
     (tstMq.addEventListener ? tstMq.addEventListener("change", applyAll) : tstMq.addListener(applyAll));
-  })();
-</script>
-
-<!-- ── Marquee de marcas: en Safari iOS la animación se "congela" y sale cortada
-     al salir de pantalla y volver (la capa de composición se descarta). La
-     reiniciamos cada vez que vuelve a entrar en viewport para repintar limpio. -->
-<script is:inline>
-  (function () {
-    var track = document.querySelector(".brandstrip-track");
-    if (!track) return;
-    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (!("IntersectionObserver" in window)) return;
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        // Reinicio por reflow: vuelve a aplicar la animación del CSS desde 0.
-        track.style.animation = "none";
-        void track.offsetWidth;
-        track.style.animation = "";
-      });
-    }, { threshold: 0.01 });
-    io.observe(track);
   })();
 </script>
 

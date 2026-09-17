@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { SITE as BRAND, absUrl } from "../../config/site.mjs";
+import { clientTypeLabel, type Lead } from "../../lib/dossier";
 
 // Endpoint bajo demanda (serverless en Vercel); el resto del sitio sigue estático.
 export const prerender = false;
@@ -149,12 +150,7 @@ async function sendTelegram(text: string, replyMarkup?: unknown) {
 // ausente, API caída, campo inexistente) avisa por consola y devuelve null,
 // para no romper la respuesta al usuario. Devuelve el id del registro creado
 // ("rec…") por si más adelante se quiere actualizar su Estado.
-async function createLead(lead: {
-  name: string;
-  email: string;
-  phone: string;
-  consulta: string;
-}): Promise<string | null> {
+async function createLead(lead: Lead): Promise<string | null> {
   if (!AIRTABLE_TOKEN || !AIRTABLE_BASE_ID || !AIRTABLE_TABLE) {
     console.warn(
       "Airtable sin configurar (faltan AIRTABLE_TOKEN / AIRTABLE_BASE_ID / AIRTABLE_TABLE)."
@@ -175,7 +171,11 @@ async function createLead(lead: {
         fields: {
           Nombre: lead.name,
           Email: lead.email,
-          "Web/Handle": lead.phone,
+          "Tipo de cliente": clientTypeLabel(lead.clientType),
+          "Tipo de evento": lead.eventType,
+          "Municipio/Recinto": lead.location,
+          Fecha: lead.date,
+          Aforo: lead.capacity,
           Consulta: lead.consulta,
           Estado: "Nuevo",
           Fuente: "Web",
@@ -210,10 +210,19 @@ export const POST: APIRoute = async ({ request }) => {
     return json(400, { error: "Petición inválida." });
   }
 
-  const name = (data.name || "").trim();
-  const email = (data.email || "").trim();
-  const phone = (data.phone || "").trim();
-  const consulta = (data.consulta || "").trim();
+  const str = (v: unknown, max = 200) => String(v ?? "").trim().slice(0, max);
+  const lead: Lead = {
+    name: str(data.name),
+    email: str(data.email),
+    clientType: str(data.clientType, 40),
+    eventType: str(data.eventType),
+    location: str(data.location),
+    date: str(data.date),
+    capacity: str(data.capacity, 40),
+    consulta: str(data.consulta, 600),
+  };
+  const { name, email, consulta } = lead;
+  const tipo = clientTypeLabel(lead.clientType);
   const website = data.website || ""; // honeypot
 
   // Bot: fingimos éxito y no enviamos nada
@@ -228,8 +237,12 @@ export const POST: APIRoute = async ({ request }) => {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       ${field("Nombre", esc(name))}
       ${field("Email", `<a href="mailto:${esc(email)}" style="color:#141414;text-decoration:underline;">${esc(email)}</a>`)}
-      ${field("Dónde está", esc(phone) || "No facilitado")}
-      ${field("Proyecto", esc(consulta).replace(/\n/g, "<br>") || "Sin consulta previa")}
+      ${field("Quién es", esc(tipo) || "No indicado")}
+      ${field("Tipo de evento", esc(lead.eventType) || "No indicado")}
+      ${field("Municipio o recinto", esc(lead.location) || "No indicado")}
+      ${field("Fecha aproximada", esc(lead.date) || "No indicada")}
+      ${field("Aforo estimado", esc(lead.capacity) || "No indicado")}
+      ${field("Mensaje", esc(consulta).replace(/\n/g, "<br>") || "Sin mensaje")}
     </table>
     <a href="mailto:${esc(email)}" style="${BTN}margin-top:10px;">Responder a ${esc(name)}</a>`);
 
@@ -246,8 +259,12 @@ export const POST: APIRoute = async ({ request }) => {
     "",
     `Nombre: ${name}`,
     `Email: ${email}`,
-    `Dónde está: ${phone || "No facilitado"}`,
-    `Proyecto: ${consulta || "Sin consulta previa"}`,
+    `Quién es: ${tipo || "No indicado"}`,
+    `Tipo de evento: ${lead.eventType || "No indicado"}`,
+    `Municipio o recinto: ${lead.location || "No indicado"}`,
+    `Fecha aproximada: ${lead.date || "No indicada"}`,
+    `Aforo estimado: ${lead.capacity || "No indicado"}`,
+    `Mensaje: ${consulta || "Sin mensaje"}`,
     "",
     `Responder: ${email}`,
     "",
@@ -275,7 +292,7 @@ export const POST: APIRoute = async ({ request }) => {
       from: FROM_NOTIFY,
       to: [OWNER_EMAIL],
       reply_to: email,
-      subject: `Nuevo contacto: ${name}`,
+      subject: `Nuevo contacto: ${name}${tipo ? ` · ${tipo}` : ""}`,
       html: notifyHtml,
       text: notifyText,
     });
@@ -301,7 +318,7 @@ export const POST: APIRoute = async ({ request }) => {
   // 3) Alta en el CRM (Airtable). Se lanza aquí sin await para que viaje en
   //    paralelo al aviso de Telegram; createLead() no lanza nunca, así que la
   //    promesa es segura mientras está en vuelo.
-  const leadRecord = createLead({ name, email, phone, consulta });
+  const leadRecord = createLead(lead);
 
   // 4) Aviso instantáneo a Telegram (no bloquea: si falla, el email ya salió)
   const tgText = [
@@ -309,10 +326,14 @@ export const POST: APIRoute = async ({ request }) => {
     "",
     `👤 <b>${esc(name)}</b>`,
     `✉️ ${esc(email)}`,
-    `📍 ${esc(phone) || "—"}`,
+    `🏢 ${esc(tipo) || "—"}`,
+    `🎪 ${esc(lead.eventType) || "—"}`,
+    `📍 ${esc(lead.location) || "—"}`,
+    `📅 ${esc(lead.date) || "—"}`,
+    `👥 ${esc(lead.capacity) || "—"}`,
     "",
     "📝 <b>Consulta</b>",
-    esc(consulta) || "Sin consulta previa",
+    esc(consulta) || "Sin mensaje",
   ].join("\n");
   // Botones: el dossier (que cuesta API) NO se lanza solo. Tú decides desde Telegram.
   const tgButtons = {

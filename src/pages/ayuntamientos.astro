@@ -1,0 +1,180 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { SITE, absUrl } from "../config/site.mjs";
+
+const formatos = [
+  { name: "Fiestas patronales y de verano", desc: "Programación completa de las fiestas: noches musicales, actuaciones y producción técnica." },
+  { name: "Halloween", desc: "Nuestro formato más rodado: 4 ediciones produciendo Halloween Fest." },
+  { name: "Carnavales", desc: "Fiesta, música y animación con la operación resuelta." },
+  { name: "Festivales y conciertos", desc: "Cartel artístico, escenario, técnica y control de accesos." },
+  { name: "Eventos juveniles", desc: "Formatos pensados para el público joven del municipio, con seguridad y control." },
+  { name: "Programación cultural y musical", desc: "Ciclos y fechas sueltas dentro de la agenda cultural." },
+  { name: "Eventos temáticos", desc: "Conceptos propios adaptados a la identidad de cada pueblo." },
+  { name: "Producción técnica", desc: "Sonido, iluminación, escenario y pantalla LED para eventos del ayuntamiento." },
+];
+
+const modalidades = [
+  { name: "Producción cerrada", desc: "Nos encargamos de todo: concepto, artistas, técnica, personal, seguridad y ejecución. El ayuntamiento recibe el evento terminado." },
+  { name: "Producción colaborativa", desc: "Nos integramos con la programación, los espacios y los recursos que ya tiene el ayuntamiento, y producimos la parte que falta." },
+];
+
+const pasos = [
+  { name: "Escuchamos", desc: "Fiestas, público, espacios, fechas y presupuesto del municipio." },
+  { name: "Propuesta", desc: "Concepto, producción, artistas, técnica y experiencia, en un único documento." },
+  { name: "Presupuesto", desc: "Cerrado y desglosado, adaptado al procedimiento de contratación que corresponda." },
+  { name: "Producción y directo", desc: "Coordinamos proveedores, montaje, operación y desmontaje." },
+  { name: "Memoria", desc: "Material audiovisual, datos, resultados y propuesta para la siguiente edición." },
+];
+---
+
+<Layout
+  title={`Eventos para ayuntamientos en Jaén y Andalucía | ${SITE.name}`}
+  description="Productora de eventos para ayuntamientos de Jaén y Andalucía: fiestas patronales, Halloween, carnavales, festivales y programación cultural. Un único interlocutor de la idea al directo."
+  canonical={absUrl("/ayuntamientos")}
+>
+
+<main class="ay">
+
+  <section class="ay-hero">
+    <img class="ay-hero-img" src="/images/halloween-fest/hw3-12.webp" alt="Escenario con iluminación y público durante un evento producido por Black Sun Prods" fetchpriority="high"/>
+    <div class="ay-hero-overlay" aria-hidden="true"></div>
+    <div class="ay-hero-content">
+      <p class="ay-eyebrow">AYUNTAMIENTOS · JAÉN Y ANDALUCÍA</p>
+      <h1 class="ay-title">tu evento,<br/>un solo<br/>interlocutor.</h1>
+      <p class="ay-sub">Diseñamos, producimos y ejecutamos el evento de principio a fin. La concejalía habla con una persona; nosotros coordinamos al resto.</p>
+      <a class="ay-btn" href="/contacto?tipo=ayuntamiento">Pedir propuesta</a>
+    </div>
+  </section>
+
+  <section class="ay-section">
+    <div class="ay-head">
+      <span class="ay-kicker">FORMATOS</span>
+      <h2 class="ay-h2">qué producimos</h2>
+    </div>
+    <ul class="ay-formats">
+      {formatos.map((f) => (
+        <li data-reveal>
+          <h3>{f.name}</h3>
+          <p>{f.desc}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="ay-section ay-section--line">
+    <div class="ay-head">
+      <span class="ay-kicker">MODALIDADES</span>
+      <h2 class="ay-h2">cerrada o colaborativa</h2>
+    </div>
+    <div class="ay-modes">
+      {modalidades.map((m) => (
+        <div class="ay-mode" data-reveal>
+          <h3>{m.name}</h3>
+          <p>{m.desc}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="ay-section ay-section--line">
+    <div class="ay-head">
+      <span class="ay-kicker">CÓMO TRABAJAMOS</span>
+      <h2 class="ay-h2">de la idea al directo</h2>
+    </div>
+    <ol class="ay-steps">
+      {pasos.map((p, i) => (
+        <li data-reveal>
+          <span class="ay-step-num">{String(i + 1).padStart(2, "0")}</span>
+          <h3>{p.name}</h3>
+          <p>{p.desc}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="ay-proof">
+    <img src="/images/halloween-fest/hw3-04.webp" alt="Público disfrazado en Halloween Fest" loading="lazy"/>
+    <div class="ay-proof-text">
+      <span class="ay-kicker">EXPERIENCIA</span>
+      <h2 class="ay-h2">Halloween Fest</h2>
+      <p>4 ediciones entre 2022 y 2025 y 500–600 asistentes en sus noches de mayor respuesta. Artistas, técnica, seguridad, ticketing, accesos y operación completa.</p>
+      <a class="ay-link" href="/proyectos/halloween-fest">Ver el caso →</a>
+    </div>
+  </section>
+
+  <section class="ay-cta">
+    <h2>¿preparamos una propuesta<br/>para tu municipio?</h2>
+    <p>Cuéntanos qué fiestas o fechas tenéis en mente. Te respondemos en menos de 24h.</p>
+    <a class="ay-btn ay-btn--solid" href="/contacto?tipo=ayuntamiento">Pedir propuesta</a>
+  </section>
+
+</main>
+
+<SiteFooter />
+
+<style>
+  .ay { background: #000; color: #F7EFDB; font-family: "Montserrat", sans-serif; }
+
+  .ay-hero { position: relative; min-height: 100vh; min-height: 100dvh; display: flex; align-items: flex-end; overflow: hidden; }
+  .ay-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .ay-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.35) 40%, rgba(0,0,0,.9) 100%); }
+  .ay-hero-content { position: relative; padding: 0 clamp(20px, 5vw, 88px) clamp(48px, 9vh, 96px); max-width: 900px; }
+  .ay-eyebrow { font-size: 11px; letter-spacing: .3em; color: rgba(247,239,219,.75); margin: 0 0 22px; }
+  .ay-title { font-size: clamp(48px, 8vw, 116px); font-weight: 800; letter-spacing: -.045em; line-height: .92; margin: 0 0 28px; }
+  .ay-sub { font-size: clamp(15px, 1.35vw, 19px); line-height: 1.6; color: rgba(247,239,219,.82); max-width: 52ch; margin: 0 0 36px; }
+  .ay-btn { display: inline-block; font-size: 14px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #F7EFDB; border: 2px solid #F7EFDB; padding: 15px 34px; text-decoration: none; transition: background .25s, color .25s; }
+  .ay-btn:hover { background: #F7EFDB; color: #000; }
+  .ay-btn--solid { background: #F7EFDB; color: #000; }
+  .ay-btn--solid:hover { background: transparent; color: #F7EFDB; }
+
+  .ay-section { padding: clamp(72px, 9vw, 128px) clamp(20px, 5vw, 88px); }
+  .ay-section--line { border-top: 1px solid rgba(247,239,219,.1); }
+  .ay-head { margin: 0 0 clamp(32px, 4vw, 56px); }
+  .ay-kicker { display: block; font-size: 11px; letter-spacing: .28em; color: rgba(247,239,219,.5); margin-bottom: 16px; font-weight: 500; }
+  .ay-h2 { font-size: clamp(30px, 4vw, 52px); font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: 0; }
+
+  .ay-formats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(247,239,219,.14); }
+  .ay-formats li { padding: 28px 24px 32px 0; border-bottom: 1px solid rgba(247,239,219,.14); }
+  .ay-formats li:not(:nth-child(4n+1)) { padding-left: 24px; border-left: 1px solid rgba(247,239,219,.14); }
+  .ay-formats h3 { font-size: clamp(18px, 1.6vw, 22px); font-weight: 700; letter-spacing: -.01em; line-height: 1.2; margin: 0 0 10px; }
+  .ay-formats p { font-size: 14px; line-height: 1.6; color: rgba(247,239,219,.6); margin: 0; }
+
+  .ay-modes { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2vw, 28px); }
+  .ay-mode { border: 1px solid rgba(247,239,219,.16); padding: clamp(28px, 3.5vw, 52px); }
+  .ay-mode h3 { font-size: clamp(24px, 2.6vw, 36px); font-weight: 800; letter-spacing: -.02em; margin: 0 0 16px; }
+  .ay-mode p { font-size: 16px; line-height: 1.7; color: rgba(247,239,219,.65); margin: 0; }
+
+  .ay-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(20px, 2.5vw, 40px); }
+  .ay-step-num { display: block; font-size: clamp(40px, 5vw, 72px); font-weight: 800; letter-spacing: -.05em; line-height: .9; color: rgba(247,239,219,.2); margin-bottom: 18px; }
+  .ay-steps h3 { font-size: 19px; font-weight: 700; margin: 0 0 10px; }
+  .ay-steps p { font-size: 14px; line-height: 1.6; color: rgba(247,239,219,.6); margin: 0; }
+
+  .ay-proof { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; border-top: 1px solid rgba(247,239,219,.1); }
+  .ay-proof img { width: 100%; height: 100%; min-height: 420px; object-fit: cover; display: block; }
+  .ay-proof-text { padding: clamp(48px, 6vw, 96px) clamp(20px, 5vw, 88px); display: flex; flex-direction: column; justify-content: center; }
+  .ay-proof-text p { font-size: 16px; line-height: 1.7; color: rgba(247,239,219,.65); margin: 20px 0 28px; max-width: 46ch; }
+  .ay-link { color: #F7EFDB; font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; align-self: flex-start; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
+
+  .ay-cta { text-align: center; padding: clamp(88px, 11vw, 150px) 20px; border-top: 1px solid rgba(247,239,219,.1); }
+  .ay-cta h2 { font-size: clamp(34px, 6vw, 80px); font-weight: 800; letter-spacing: -.04em; line-height: .98; margin: 0 0 24px; }
+  .ay-cta p { font-size: 17px; line-height: 1.5; color: rgba(247,239,219,.6); margin: 0 auto 40px; max-width: 44ch; }
+
+  @media (max-width: 1024px) {
+    .ay-formats { grid-template-columns: 1fr 1fr; }
+    .ay-formats li, .ay-formats li:not(:nth-child(4n+1)) { padding: 24px 20px 28px 0; border-left: none; }
+    .ay-formats li:nth-child(even) { padding-left: 20px; border-left: 1px solid rgba(247,239,219,.14); }
+    .ay-steps { grid-template-columns: repeat(2, 1fr); row-gap: 40px; }
+  }
+  @media (max-width: 768px) {
+    .ay-modes, .ay-proof { grid-template-columns: 1fr; }
+    .ay-proof img { min-height: 280px; aspect-ratio: 4 / 3; }
+  }
+  @media (max-width: 520px) {
+    .ay-formats { grid-template-columns: 1fr; }
+    .ay-formats li:nth-child(even) { padding-left: 0; border-left: none; }
+    .ay-steps { grid-template-columns: 1fr; }
+  }
+</style>
+
+</Layout>

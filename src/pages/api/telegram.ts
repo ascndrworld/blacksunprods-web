@@ -38,18 +38,30 @@ async function tg(method: string, payload: Record<string, unknown>) {
 const noKeyboard = { inline_keyboard: [] as unknown[] };
 
 // El texto del aviso (parse_mode HTML) llega aquí ya SIN etiquetas, por líneas:
-//   👤 Nombre / ✉️ email / 📍 ubicación / 📝 Consulta\n…
+//   👤 Nombre / ✉️ email / 🏢 tipo de cliente / 🎪 evento / 📍 municipio o recinto /
+//   📅 fecha / 👥 aforo / 📝 Consulta\n…
 function pick(lines: string[], emoji: string): string {
   const line = lines.find((l) => l.trimStart().startsWith(emoji));
   return line ? line.slice(line.indexOf(emoji) + emoji.length).trim() : "";
 }
 function parseLead(text: string): Lead {
   const lines = text.split("\n");
-  let phone = pick(lines, "📍");
-  if (phone === "—") phone = "";
+  const val = (emoji: string) => {
+    const v = pick(lines, emoji);
+    return v === "—" ? "" : v;
+  };
   const idx = lines.findIndex((l) => l.includes("Consulta"));
   const consulta = idx >= 0 ? lines.slice(idx + 1).join("\n").trim() : "";
-  return { name: pick(lines, "👤"), email: pick(lines, "✉️"), phone, consulta };
+  return {
+    name: val("👤"),
+    email: val("✉️"),
+    clientType: val("🏢"), // llega como etiqueta legible; clientTypeLabel() la deja igual
+    eventType: val("🎪"),
+    location: val("📍"),
+    date: val("📅"),
+    capacity: val("👥"),
+    consulta: consulta === "Sin mensaje" ? "" : consulta,
+  };
 }
 
 // El mensaje del dossier empieza por "🔎 DOSSIER · {nombre}" y debajo el texto.

@@ -1841,7 +1841,7 @@
 
 /* Tablet 768px — hero abajo-izquierda + altura reducida para asomar siguiente sección */
 @media (max-width: 768px) {
-  /* #home ocupa solo 85vh para que se asome la sección 'consultoría' */
+  /* #home ocupa solo 85vh para que se asome la sección siguiente */
   #home {
     height: 85vh !important;
     min-height: 85vh !important;
