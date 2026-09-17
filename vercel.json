@@ -2,8 +2,8 @@
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "^dominio\\.com$" }],
-      "destination": "https://www.dominio.com/:path*",
+      "has": [{ "type": "host", "value": "^blacksunprods\\.com$" }],
+      "destination": "https://www.blacksunprods.com/:path*",
       "permanent": true
     }
   ]

@@ -18,12 +18,12 @@ const AUTHOR = {
   initials: "FM",
   jobTitle: "Fundador y director creativo de Ascndr",
   bio: "Dirige los proyectos de branding, dirección creativa y redes sociales del estudio, del concepto a la ejecución.",
-  url: "https://www.ascndrworld.com",
+  url: "https://www.blacksunprods.com",
   sameAs: ["https://www.instagram.com/ascndr.world"],
 };
 
-const url = `https://www.ascndrworld.com/blog/${post.id}`;
-const cover = `https://www.ascndrworld.com${data.cover}`;
+const url = `https://www.blacksunprods.com/blog/${post.id}`;
+const cover = `https://www.blacksunprods.com${data.cover}`;
 const fmt = (d: Date) =>
   d.toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
 
@@ -65,8 +65,8 @@ const jsonld = {
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.ascndrworld.com/" },
-        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.ascndrworld.com/blog" },
+        { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.blacksunprods.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.blacksunprods.com/blog" },
         { "@type": "ListItem", "position": 3, "name": data.title, "item": url },
       ],
     },
@@ -85,12 +85,12 @@ const jsonld = {
         "jobTitle": AUTHOR.jobTitle,
         "url": AUTHOR.url,
         "sameAs": AUTHOR.sameAs,
-        "worksFor": { "@type": "Organization", "name": "Ascndr", "url": "https://www.ascndrworld.com" },
+        "worksFor": { "@type": "Organization", "name": "Ascndr", "url": "https://www.blacksunprods.com" },
       },
       "publisher": {
         "@type": "Organization",
         "name": "Ascndr",
-        "logo": { "@type": "ImageObject", "url": "https://www.ascndrworld.com/logo.png" },
+        "logo": { "@type": "ImageObject", "url": "https://www.blacksunprods.com/logo.png" },
       },
       "mainEntityOfPage": { "@type": "WebPage", "@id": url },
       "articleSection": data.category,

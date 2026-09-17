@@ -25,9 +25,9 @@ export const SITE = {
   /** Nombre comercial, tal cual se escribe. */
   name: "Black Sun Prods",
   /** Dominio canónico CON www y sin barra final. */
-  url: "https://www.dominio.com",
+  url: "https://www.blacksunprods.com",
   /** Cómo se muestra el dominio en textos y firmas de email. */
-  domainLabel: "dominio.com",
+  domainLabel: "blacksunprods.com",
   /** Bajada corta de una línea. Aparece en el manifest de la PWA. */
   tagline: "Consultoría creativa",
   /** Idioma y locale del sitio. */
