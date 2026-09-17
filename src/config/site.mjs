@@ -43,7 +43,7 @@ export const SITE = {
   ogImageAlt: "Black Sun Prods — consultoría creativa",
 
   // ── Contacto ───────────────────────────────────────────────
-  email: "hola@dominio.com",
+  email: "info@blacksunprods.com",
   /** Teléfono en formato E.164 (para Schema.org y el enlace tel:). */
   phone: "+34600000000",
   /** Solo dígitos con prefijo de país, para el enlace de WhatsApp. */
