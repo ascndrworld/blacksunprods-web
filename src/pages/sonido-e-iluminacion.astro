@@ -1,0 +1,231 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { SITE, absUrl } from "../config/site.mjs";
+
+// Servicios parciales: alquiler y operación de rider técnico SIN producir el evento.
+// Es la puerta de entrada para teatros, galas y actos que solo necesitan la técnica.
+//
+// Los tres montajes salen del rider real. NO se publican precios (ni el coste de
+// montaje ni el de transporte): el presupuesto se cierra caso por caso.
+const montajes = [
+  {
+    name: "Montaje pequeño",
+    alcance: "500 – 1.000 personas",
+    sonido: ["2× T24N · 3.000 W AES", "Subgrave DAS ST-2 18\" · 4.000 W AES", "Total: 7.000 W AES"],
+    luz: ["Puente de 6 m", "4 beam 7R", "2 cabezas wash 16×32", "4 PAR LED", "2 cegadoras"],
+  },
+  {
+    name: "Montaje mediano",
+    alcance: "1.000 – 1.500 personas",
+    sonido: ["Torres 15\" · 5.000 W AES", "Subgraves · 7.000 W AES", "Total: 12.000 W AES"],
+    luz: ["Puente de 9 m", "6 beam 7R", "4 cabezas wash 16×32", "4 PAR LED", "4 cegadoras"],
+  },
+  {
+    name: "Montaje grande",
+    alcance: "1.500 – 2.000 personas",
+    sonido: ["Line array · 6.000 W AES", "Subgraves · 9.500 W AES", "Total: 15.500 W AES"],
+    luz: ["Puente de 9 m", "6 beam 7R", "4 cabezas wash 16×32", "4 PAR LED", "4 cegadoras"],
+  },
+];
+
+// Van con cualquiera de los tres montajes.
+const efectos = ["Máquina de humo 2.500 W", "Máquina de hazer"];
+
+const eventos = [
+  { name: "Entregas de premios", desc: "Sonido claro para discursos y vídeo, y una luz que funcione en foto." },
+  { name: "Teatro y artes escénicas", desc: "Refuerzo de sonido e iluminación de escena adaptados a la sala." },
+  { name: "Galas y ceremonias", desc: "Montaje limpio y discreto, pensado para que no se vea el equipo." },
+  { name: "Actos institucionales", desc: "Atriles, microfonía inalámbrica y megafonía para exterior o interior." },
+  { name: "Eventos de empresa", desc: "Presentaciones, aniversarios y convenciones con técnica resuelta." },
+  { name: "Congresos y conferencias", desc: "Microfonía de mesa, grabación de sala y proyección." },
+  { name: "Conciertos y fechas sueltas", desc: "Backline, monitores y control para bandas o sesiones concretas." },
+  { name: "Celebraciones privadas", desc: "Bodas y fiestas donde solo falta el equipo y quien lo maneje." },
+];
+
+const pasos = [
+  { name: "Leemos el rider", desc: "Si ya tienes rider técnico, lo revisamos. Si no, lo escribimos nosotros a partir del espacio y del aforo." },
+  { name: "Presupuesto cerrado", desc: "Material, transporte, montaje, personal y desmontaje, desglosados. Sin sorpresas el día del evento." },
+  { name: "Montaje y prueba", desc: "Llegamos con margen, montamos y dejamos probados sonido y luces antes de que entre el público." },
+  { name: "Operación y recogida", desc: "Técnico al mando durante el evento si lo necesitas, y desmontaje al terminar." },
+];
+---
+
+<Layout
+  title={`Alquiler de sonido e iluminación en Jaén | ${SITE.name}`}
+  description="Alquiler y operación de rider técnico de sonido e iluminación en Jaén y Andalucía: entregas de premios, teatros, galas, actos institucionales y eventos de empresa. Solo la técnica, sin producir el evento."
+  canonical={absUrl("/sonido-e-iluminacion")}
+>
+
+<main class="st">
+
+  <section class="st-hero">
+    <img class="st-hero-img" src="/images/halloween-fest/hw3-12.webp" alt="Escenario con truss, iluminación y pantalla montado por Black Sun Prods" fetchpriority="high"/>
+    <div class="st-hero-overlay" aria-hidden="true"></div>
+    <div class="st-hero-content">
+      <p class="st-eyebrow">SONIDO E ILUMINACIÓN · JAÉN Y ANDALUCÍA</p>
+      <h1 class="st-title">solo la técnica,<br/>si es lo único<br/>que necesitas.</h1>
+      <p class="st-sub">No hace falta que produzcamos tu evento para montarte el equipo. Alquilamos y operamos el rider de sonido, iluminación o ambos: tú pones el acto, nosotros que suene y se vea.</p>
+      <a class="st-btn" href="/contacto?evento=Sonido%20e%20iluminaci%C3%B3n">Pedir presupuesto</a>
+    </div>
+  </section>
+
+  <section class="st-section">
+    <div class="st-head">
+      <span class="st-kicker">PARA QUÉ EVENTOS</span>
+      <h2 class="st-h2">no solo fiestas</h2>
+    </div>
+    <ul class="st-formats">
+      {eventos.map((e) => (
+        <li data-reveal>
+          <h3>{e.name}</h3>
+          <p>{e.desc}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="st-section st-section--line">
+    <div class="st-head">
+      <span class="st-kicker">QUÉ ALQUILAMOS</span>
+      <h2 class="st-h2">tres montajes</h2>
+      <p class="st-lead">Elegimos el montaje por el aforo y por el espacio, no por catálogo. Cada uno se puede contratar completo, solo sonido o solo iluminación.</p>
+    </div>
+    <div class="st-modes">
+      {montajes.map((m) => (
+        <article class="st-mode" data-reveal>
+          <span class="st-mode-reach">{m.alcance}</span>
+          <h3>{m.name}</h3>
+          <div class="st-spec">
+            <h4>Sonido</h4>
+            <ul>{m.sonido.map((i) => <li>{i}</li>)}</ul>
+          </div>
+          <div class="st-spec">
+            <h4>Iluminación</h4>
+            <ul>{m.luz.map((i) => <li>{i}</li>)}</ul>
+          </div>
+          <div class="st-spec">
+            <h4>Efectos</h4>
+            <ul>{efectos.map((i) => <li>{i}</li>)}</ul>
+          </div>
+        </article>
+      ))}
+    </div>
+    <p class="st-note" data-reveal>¿El evento pide más? Pantalla LED, escenario, estructura o potencia extra: lo ajustamos a lo que haga falta. Dinos el espacio y la gente que esperas y te decimos qué necesitas de verdad.</p>
+  </section>
+
+  <section class="st-section st-section--line">
+    <div class="st-head">
+      <span class="st-kicker">CÓMO TRABAJAMOS</span>
+      <h2 class="st-h2">del rider al desmontaje</h2>
+    </div>
+    <ol class="st-steps">
+      {pasos.map((p, i) => (
+        <li data-reveal>
+          <span class="st-step-num">{String(i + 1).padStart(2, "0")}</span>
+          <h3>{p.name}</h3>
+          <p>{p.desc}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="st-proof">
+    <img src="/images/halloween-fest/hw3-04.webp" alt="Público durante un evento producido por Black Sun Prods" loading="lazy"/>
+    <div class="st-proof-text">
+      <span class="st-kicker">Y SI QUIERES MÁS</span>
+      <h2 class="st-h2">también el evento entero</h2>
+      <p>Si lo que necesitas no es solo el equipo sino el evento completo —concepto, artistas, seguridad, ticketing y operación— ese es nuestro trabajo de siempre.</p>
+      <a class="st-link" href="/#servicios">Ver qué producimos →</a>
+    </div>
+  </section>
+
+  <section class="st-cta">
+    <h2>¿te montamos<br/>el rider?</h2>
+    <p>Dinos qué evento es, dónde y para cuánta gente. Te respondemos en menos de 24h.</p>
+    <a class="st-btn st-btn--solid" href="/contacto?evento=Sonido%20e%20iluminaci%C3%B3n">Pedir presupuesto</a>
+  </section>
+
+</main>
+
+<SiteFooter />
+
+<style>
+  .st { background: #000; color: #F3F3F0; font-family: "Montserrat", sans-serif; }
+
+  .st-hero { position: relative; min-height: 100vh; min-height: 100dvh; display: flex; align-items: flex-end; overflow: hidden; }
+  .st-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .st-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.35) 40%, rgba(0,0,0,.9) 100%); }
+  /* padding-top que reserve el alto del header: si el titular crece, el hero
+     crece con él (min-height, no height) en vez de meterse bajo el logo. */
+  .st-hero-content { position: relative; padding: clamp(112px, 15vh, 160px) clamp(20px, 5vw, 88px) clamp(48px, 9vh, 96px); max-width: 980px; }
+  .st-eyebrow { font-size: 11px; letter-spacing: .3em; color: rgba(243, 243, 240,.75); margin: 0 0 22px; }
+  /* Máximo 96px (no 116): "solo la técnica," a 116px no cabía en el contenedor
+     y partía en dos, convirtiendo el titular de 3 líneas en 5. */
+  .st-title { font-size: clamp(42px, 6.4vw, 96px); font-weight: 800; letter-spacing: -.045em; line-height: .95; margin: 0 0 28px; text-wrap: balance; }
+  .st-sub { font-size: clamp(15px, 1.35vw, 19px); line-height: 1.6; color: rgba(243, 243, 240,.82); max-width: 52ch; margin: 0 0 36px; }
+  .st-btn { display: inline-block; font-size: 14px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #F3F3F0; border: 2px solid #F3F3F0; padding: 15px 34px; text-decoration: none; transition: background .25s, color .25s; }
+  .st-btn:hover { background: #F3F3F0; color: #000; }
+  .st-btn--solid { background: #F3F3F0; color: #000; }
+  .st-btn--solid:hover { background: transparent; color: #F3F3F0; }
+
+  .st-section { padding: clamp(72px, 9vw, 128px) clamp(20px, 5vw, 88px); }
+  .st-section--line { border-top: 1px solid rgba(243, 243, 240,.1); }
+  .st-head { margin: 0 0 clamp(32px, 4vw, 56px); }
+  .st-kicker { display: block; font-size: 11px; letter-spacing: .28em; color: rgba(243, 243, 240,.5); margin-bottom: 16px; font-weight: 500; }
+  .st-h2 { font-size: clamp(30px, 4vw, 52px); font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: 0; }
+  .st-lead { font-size: 16px; line-height: 1.7; color: rgba(243, 243, 240,.65); margin: 20px 0 0; max-width: 60ch; }
+
+  .st-modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(16px, 2vw, 28px); align-items: start; }
+  .st-mode { border: 1px solid rgba(243, 243, 240,.16); padding: clamp(28px, 3.5vw, 44px); }
+  .st-mode-reach { display: block; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: rgba(243, 243, 240,.5); margin-bottom: 14px; font-weight: 600; }
+  .st-mode h3 { font-size: clamp(22px, 2.2vw, 32px); font-weight: 800; letter-spacing: -.02em; margin: 0 0 28px; }
+  .st-spec { border-top: 1px solid rgba(243, 243, 240,.12); padding-top: 16px; margin-top: 20px; }
+  .st-spec:first-of-type { margin-top: 0; }
+  .st-spec h4 { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: rgba(243, 243, 240,.5); font-weight: 600; margin: 0 0 12px; }
+  .st-spec ul { list-style: none; margin: 0; padding: 0; }
+  .st-spec li { font-size: 15px; line-height: 1.55; color: rgba(243, 243, 240,.8); margin: 0 0 6px; }
+  .st-spec li:last-child { margin-bottom: 0; }
+
+  .st-note { font-size: 16px; line-height: 1.7; color: rgba(243, 243, 240,.6); margin: clamp(32px, 4vw, 52px) 0 0; max-width: 62ch; }
+
+  .st-formats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(243, 243, 240,.14); }
+  .st-formats li { padding: 28px 24px 32px 0; border-bottom: 1px solid rgba(243, 243, 240,.14); }
+  .st-formats li:not(:nth-child(4n+1)) { padding-left: 24px; border-left: 1px solid rgba(243, 243, 240,.14); }
+  .st-formats h3 { font-size: clamp(18px, 1.6vw, 22px); font-weight: 700; letter-spacing: -.01em; line-height: 1.2; margin: 0 0 10px; }
+  .st-formats p { font-size: 14px; line-height: 1.6; color: rgba(243, 243, 240,.6); margin: 0; }
+
+  .st-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(20px, 2.5vw, 40px); }
+  .st-step-num { display: block; font-size: clamp(40px, 5vw, 72px); font-weight: 800; letter-spacing: -.05em; line-height: .9; color: rgba(243, 243, 240,.2); margin-bottom: 18px; }
+  .st-steps h3 { font-size: 19px; font-weight: 700; margin: 0 0 10px; }
+  .st-steps p { font-size: 14px; line-height: 1.6; color: rgba(243, 243, 240,.6); margin: 0; }
+
+  .st-proof { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; border-top: 1px solid rgba(243, 243, 240,.1); }
+  .st-proof img { width: 100%; height: 100%; min-height: 420px; object-fit: cover; display: block; }
+  .st-proof-text { padding: clamp(48px, 6vw, 96px) clamp(20px, 5vw, 88px); display: flex; flex-direction: column; justify-content: center; }
+  .st-proof-text p { font-size: 16px; line-height: 1.7; color: rgba(243, 243, 240,.65); margin: 20px 0 28px; max-width: 46ch; }
+  .st-link { color: #F3F3F0; font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; align-self: flex-start; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
+
+  .st-cta { text-align: center; padding: clamp(88px, 11vw, 150px) 20px; border-top: 1px solid rgba(243, 243, 240,.1); }
+  .st-cta h2 { font-size: clamp(34px, 6vw, 80px); font-weight: 800; letter-spacing: -.04em; line-height: .98; margin: 0 0 24px; }
+  .st-cta p { font-size: 17px; line-height: 1.5; color: rgba(243, 243, 240,.6); margin: 0 auto 40px; max-width: 44ch; }
+
+  @media (max-width: 1024px) {
+    .st-modes { grid-template-columns: 1fr; }
+    .st-formats { grid-template-columns: 1fr 1fr; }
+    .st-formats li, .st-formats li:not(:nth-child(4n+1)) { padding: 24px 20px 28px 0; border-left: none; }
+    .st-formats li:nth-child(even) { padding-left: 20px; border-left: 1px solid rgba(243, 243, 240,.14); }
+    .st-steps { grid-template-columns: repeat(2, 1fr); row-gap: 40px; }
+  }
+  @media (max-width: 768px) {
+    .st-proof { grid-template-columns: 1fr; }
+    .st-proof img { min-height: 280px; aspect-ratio: 4 / 3; }
+  }
+  @media (max-width: 520px) {
+    .st-formats { grid-template-columns: 1fr; }
+    .st-formats li:nth-child(even) { padding-left: 0; border-left: none; }
+    .st-steps { grid-template-columns: 1fr; }
+  }
+</style>
+
+</Layout>

@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import SiteFooter from "../components/SiteFooter.astro";
+import { LEGAL_UPDATED } from "../config/site.mjs";
 ---
 <Layout
   title="Política de Privacidad | Black Sun Prods"
@@ -13,7 +14,7 @@ import SiteFooter from "../components/SiteFooter.astro";
     <header>
       <span class="legal-kicker">Legal</span>
       <h1 class="legal-title">Política de privacidad</h1>
-      <p class="legal-updated">Última actualización: mayo 2026</p>
+      <p class="legal-updated">Última actualización: {LEGAL_UPDATED}</p>
     </header>
 
     <section class="legal-section">

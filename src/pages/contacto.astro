@@ -15,7 +15,7 @@ const capacities = ["Menos de 300", "300–700", "700–1.500", "Más de 1.500",
 
 <Layout
   title={`Contacto | ${SITE.name} — Hablemos de tu evento`}
-  description="Cuéntanos tu evento y te respondemos en menos de 24h. Productora de eventos en Jaén para ayuntamientos, salas, promotores y marcas."
+  description="Cuéntanos tu evento y te respondemos en menos de 24h. Productora de eventos en Jaén para ayuntamientos, salas, promotores y marcas. También alquiler de sonido e iluminación."
   canonical={absUrl("/contacto")}
 >
 
@@ -23,7 +23,7 @@ const capacities = ["Menos de 300", "300–700", "700–1.500", "Más de 1.500",
   <section class="ct-hero">
     <p class="ct-eyebrow">CONTACTO</p>
     <h1 class="ct-title">hablemos de<br/>tu evento</h1>
-    <p class="ct-sub">Cuéntanos qué evento tienes en mente. Te respondemos en menos de 24h.</p>
+    <p class="ct-sub">Cuéntanos qué evento tienes en mente, o solo qué técnica necesitas. Te respondemos en menos de 24h.</p>
     <p class="ct-direct">¿Prefieres el correo? Escríbenos a <a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
   </section>
 
@@ -49,7 +49,7 @@ const capacities = ["Menos de 300", "300–700", "700–1.500", "Más de 1.500",
 
       <div class="ct-field">
         <label for="ctEvento">Tipo de evento</label>
-        <input id="ctEvento" name="evento" type="text" autocomplete="off" placeholder="Fiestas patronales, concierto, fiesta temática…"/>
+        <input id="ctEvento" name="evento" type="text" autocomplete="off" placeholder="Fiestas patronales, concierto, gala, solo sonido e iluminación…"/>
       </div>
 
       <div class="ct-row">
@@ -104,10 +104,18 @@ const capacities = ["Menos de 300", "300–700", "700–1.500", "Más de 1.500",
     const btn     = document.getElementById('ctSubmit');
 
     // Preselecciona "¿Quién eres?" si se llega con ?tipo=ayuntamiento, sala…
-    var tipoParam = new URLSearchParams(location.search).get('tipo');
+    var params = new URLSearchParams(location.search);
+    var tipoParam = params.get('tipo');
     var tipoSel = document.getElementById('ctTipo');
     if (tipoParam && tipoSel && tipoSel.querySelector('option[value="' + tipoParam + '"]')) {
       tipoSel.value = tipoParam;
+    }
+
+    // Rellena "Tipo de evento" si se llega con ?evento=… (p. ej. desde /sonido-e-iluminacion)
+    var eventoParam = params.get('evento');
+    var eventoInput = document.getElementById('ctEvento');
+    if (eventoParam && eventoInput) {
+      eventoInput.value = eventoParam.slice(0, 120);
     }
 
     function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }

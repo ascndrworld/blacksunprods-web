@@ -17,6 +17,11 @@ Lista viva de lo que falta. Tacha (o borra) cada punto al resolverlo.
 - [ ] **Cambiar imágenes de portada de Halloween Fest** (pedido por Frank): la de la tarjeta de `/proyectos` y la de la caja de proyectos de la home (ahora ambas `hw3-07.webp`) → `src/pages/proyectos.astro` y `src/pages/index.astro`.
 - [ ] **Bendito Castigo**: Frank enviará logo y conceptos para subirlos; también fotos/vídeos, identidad visual y fechas → `src/pages/proyectos/bendito-castigo.astro` (y quitar la tarjeta tipográfica de proyectos/home cuando haya imagen).
 - [ ] **Vídeo del hero**: ahora reutiliza el vídeo de Halloween Fest que tenía la web de Ascndr. Valorar un aftermovie/reel propio de @halloweenfestlv.
+- [ ] **Fotos propias para `/sonido-e-iluminacion`**: la landing de servicios técnicos reutiliza `hw3-12.webp` (la misma del hero de `/ayuntamientos`) y `hw3-04.webp`. Ideal: fotos de montaje, truss, mesa de sonido o un evento "solo técnica" (teatro, gala, entrega de premios).
+- [ ] **Confirmar la nomenclatura del rider** en `src/pages/sonido-e-iluminacion.astro` (`montajes`). Transcrito de las notas de Frank, con estas interpretaciones que hay que validar: `was 16x32` → "cabezas **wash** 16×32"; `X2 T24n` → "2× T24N"; `Sub das st2 18` → "Subgrave **DAS ST-2** 18\"". En el montaje mediano las torres y los subs van sin marca porque la nota tampoco la daba.
+- [ ] **¿Mediano y grande comparten iluminación?** Tal cual están las notas, los dos llevan puente de 9 m, 6 beam 7R, 4 cabezas wash, 4 PAR LED y 4 cegadoras: solo cambia el sonido (12.000 W vs 15.500 W). Si es un copia-pega de las notas y el grande lleva más luz, hay que corregirlo.
+- [ ] **Precios fuera de la web a propósito**: el montaje (550/700/850) y el transporte (3,5 €/km) NO se publican. El presupuesto se cierra caso por caso.
+- [ ] **Valorar una tarjeta en "Para quién"** (`#para-quien` de la home) para teatros/empresas que solo buscan técnica; ahora solo están ayuntamientos, salas, promotores y marcas.
 - [ ] **Cónclave**: retirado de la web (era trabajo de diseño de Ascndr). Si fue producción vuestra, recuperarlo del historial de git.
 
 ## Configuración

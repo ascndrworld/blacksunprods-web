@@ -21,6 +21,7 @@ import { SITE } from "../config/site.mjs";
     <li><a href="/">home</a></li>
     <li><a href="/proyectos">proyectos</a></li>
     <li><a href="/ayuntamientos">ayuntamientos</a></li>
+    <li><a href="/sonido-e-iluminacion">sonido e iluminación</a></li>
     <li><a href="/contacto">contacto</a></li>
   </ul>
   <div class="site-menu-bottom">
@@ -113,11 +114,13 @@ import { SITE } from "../config/site.mjs";
   }
   /* Sobre el hero: grande y transparente. Al pasar a la primera sección (lo activa
      el JS al salir del hero) transiciona limpio a barra negra y se encoge. */
+  /* Opaco del todo, no 0.92: con un 8% de transparencia el texto que pasa por
+     debajo se translucía y las líneas quedaban cortadas por la mitad contra el
+     borde inferior del header. Sobre fondo negro el blur no aportaba nada
+     (no hay color que difuminar), así que solo se veía la fuga. */
   .site-header.scrolled {
     height: 70px;
-    background-color: rgba(0, 0, 0, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background-color: #000;
   }
 
   .site-logo {
@@ -182,7 +185,9 @@ import { SITE } from "../config/site.mjs";
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(0,0,0,0.9);
+    /* Opaco: con 0.9 se transparentaba la página por debajo y los enlaces del
+       menú se leían encima del contenido. */
+    background: #000;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.35s ease;
@@ -209,14 +214,18 @@ import { SITE } from "../config/site.mjs";
 
   .site-menu-links {
     list-style: none;
-    padding: 0;
+    padding: 0 20px;
     margin: 0;
     text-align: center;
+    max-width: 100%;
   }
   .site-menu-links li { line-height: 1; }
   .site-menu-links li a {
     font-family: "Montserrat", sans-serif;
-    font-size: 60px;
+    /* Fluido, no 60px fijos: el enlace más largo ("sonido e iluminación") se
+       salía de pantalla en móvil. El clamp sigue la escala que tenían los
+       breakpoints (60 en escritorio, ~44 en tablet, ~30 en móvil pequeño). */
+    font-size: clamp(28px, 4.2vw, 60px);
     font-weight: 900;
     color: rgb(112,112,112);
     text-decoration: underline;
@@ -275,7 +284,7 @@ import { SITE } from "../config/site.mjs";
     .site-header.scrolled .site-logo img { height: 26px; }
     .site-hamburger { right: 20px; }
     .site-menu-close { top: 45px; right: 20px; }
-    .site-menu-links li a { font-size: 44px; line-height: 1.15; letter-spacing: -1px; }
+    .site-menu-links li a { line-height: 1.15; letter-spacing: -1px; }
     .site-menu-bottom { bottom: 20px; }
   }
 
@@ -287,9 +296,5 @@ import { SITE } from "../config/site.mjs";
     .site-header.scrolled .site-logo img { height: 24px; }
     .site-hamburger { right: 16px; }
     .site-menu-close { top: 40px; right: 16px; }
-    .site-menu-links li a { font-size: 36px; }
-  }
-  @media (max-width: 360px) {
-    .site-menu-links li a { font-size: 30px; }
   }
 </style>

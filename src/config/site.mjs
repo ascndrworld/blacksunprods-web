@@ -78,9 +78,11 @@ export const SITE = {
       "Eventos musicales y fiestas temáticas",
       "Producción para salas y ocio nocturno",
       "Activaciones de marca",
+      "Alquiler de sonido e iluminación",
+      "Producción técnica para teatros, galas y entregas de premios",
     ],
     description:
-      "Black Sun Prods es una productora de eventos y experiencias en directo con base en Jaén. Dirige, produce y ejecuta eventos musicales, fiestas temáticas, programación cultural y eventos para ayuntamientos, salas, promotores y marcas, coordinando artistas, técnica, seguridad, ticketing y operación.",
+      "Black Sun Prods es una productora de eventos y experiencias en directo con base en Jaén. Dirige, produce y ejecuta eventos musicales, fiestas temáticas, programación cultural y eventos para ayuntamientos, salas, promotores y marcas, coordinando artistas, técnica, seguridad, ticketing y operación. También presta servicios parciales: alquiler y operación de rider técnico de sonido e iluminación para teatros, galas, entregas de premios, actos institucionales y eventos de empresa, sin necesidad de producir el evento completo.",
   },
 };
 
@@ -93,5 +95,15 @@ export const CONSENT_KEY = "site_cookie_consent";
 
 /** Une el dominio canónico con una ruta: absUrl("/contacto"). */
 export const absUrl = (path = "/") => `${SITE.url}${path}`;
+
+// ── Fecha de los textos legales ───────────────────────────────────────────
+// A MANO, a propósito: "Última actualización" declara cuándo se revisó el
+// documento de verdad. No se calcula sola ni sube con cada despliegue, porque
+// entonces afirmaría una revisión que no ha existido y el dato dejaría de
+// servirle al usuario para saber si los términos han cambiado.
+//
+// Actualízala SOLO al tocar el contenido de /terminos o /privacidad.
+// La leen las dos páginas, así que no pueden quedarse desincronizadas.
+export const LEGAL_UPDATED = "septiembre 2026";
 
 export default SITE;
