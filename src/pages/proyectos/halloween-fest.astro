@@ -69,7 +69,7 @@ const ogImage = absUrl("/images/halloween-fest/hw3-07.webp");
 <main class="hf">
 
   <section class="hf-header">
-    <img class="hf-header-img" src="/images/halloween-fest/hw3-07.webp" alt="Público en la pista de Halloween Fest" fetchpriority="high"/>
+    <img class="hf-header-img" src="/images/halloween-fest/portada-fotografia.webp" alt="DJ con maquillaje de Halloween animando a la pista desde la cabina en Halloween Fest" fetchpriority="high"/>
     <div class="hf-header-overlay" aria-hidden="true"></div>
     <div class="hf-titleblock">
       <p class="hf-cat">Caso destacado · Producción de evento</p>
@@ -144,7 +144,8 @@ const ogImage = absUrl("/images/halloween-fest/hw3-07.webp");
   .hf { background: #000; color: #F3F3F0; font-family: "Montserrat", sans-serif; }
 
   .hf-header { position: relative; min-height: 100vh; min-height: 100dvh; overflow: hidden; }
-  .hf-header-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  /* Foto vertical: se encuadra por la cara del DJ (parte alta) */
+  .hf-header-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 12%; }
   .hf-header-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.15) 40%, rgba(0,0,0,.85) 100%); }
   .hf-titleblock { position: absolute; left: clamp(20px, 5vw, 88px); right: 20px; bottom: clamp(32px, 7vh, 72px); max-width: 760px; }
   .hf-cat { font-size: 11px; letter-spacing: .32em; text-transform: uppercase; color: rgba(243, 243, 240,.8); margin: 0 0 18px; }

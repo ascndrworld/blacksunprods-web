@@ -2148,14 +2148,13 @@
 }
 
 /* En PC, misma distribución y tamaños que el mosaico de /proyectos:
-   Fila 1: Cónclave (cols 1-2, 2/1) · Halloween Fest (col 3, cuadrada)
-   Fila 2: Eventsy (col 1, cuadrada) · Briefing (cols 2-3, 2/1)
-   Las tarjetas anchas usan 2/1 para igualar la altura de las cuadradas. */
+   Fila 1: Halloween Fest (cols 1-2, 2/1) · Bendito Castigo (col 3, cuadrada)
+   Fila 2: Cónclave x La Caseta (cols 1-3, 3/1)
+   Las tarjetas anchas igualan la altura de las cuadradas. */
 @media (min-width: 769px) {
-  .hs-works .hs-work-item:nth-child(1) { grid-column: 1 / 3; grid-row: 1; aspect-ratio: 2 / 1; } /* Cónclave */
-  .hs-works .hs-work-item:nth-child(2) { grid-column: 3 / 4; grid-row: 1; }                      /* Halloween Fest */
-  .hs-works .hs-work-item:nth-child(3) { grid-column: 1 / 2; grid-row: 2; }                      /* Eventsy */
-  .hs-works .hs-work-item:nth-child(4) { grid-column: 2 / 4; grid-row: 2; aspect-ratio: 2 / 1; } /* Briefing */
+  .hs-works .hs-work-item:nth-child(1) { grid-column: 1 / 3; grid-row: 1; aspect-ratio: 2 / 1; } /* Halloween Fest */
+  .hs-works .hs-work-item:nth-child(2) { grid-column: 3 / 4; grid-row: 1; }                      /* Bendito Castigo */
+  .hs-works .hs-work-item:nth-child(3) { grid-column: 1 / 4; grid-row: 2; aspect-ratio: 3 / 1; } /* Cónclave x La Caseta */
 }
 
 /* ── FOOTER GLOBAL ── */

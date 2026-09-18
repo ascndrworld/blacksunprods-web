@@ -2,10 +2,11 @@
 import Layout from "../layouts/Layout.astro";
 import { SITE, absUrl, hasWhatsapp } from "../config/site.mjs";
 
-// Cifras de la franja bajo el hero (fuente: experiencia real de Halloween Fest).
+// Cifras de la franja bajo el hero (fuente: experiencia real en Los Villares:
+// 4 ediciones de Halloween Fest + Nochebuena y Nochevieja de 2024 y 2025).
 const stats = [
-  { num: "4", label: "ediciones de Halloween Fest" },
-  { num: "600–700", label: "asistentes en sus noches de media" },
+  { num: "+8", label: "noches producidas al completo: Halloween, Nochebuena y Nochevieja" },
+  { num: "600–700", label: "asistentes de media por noche" },
   { num: "2022–2025", label: "produciendo eventos en directo" },
   { num: "Jaén", label: "base en Andalucía" },
 ];
@@ -240,19 +241,30 @@ const SHOW_TESTIMONIALS = false;
   </div>
   <section class="hs-works">
     <a class="hs-work-item" href="/proyectos/halloween-fest" data-reveal>
-      <img class="hs-work-img" src="/images/halloween-fest/hw3-07.webp" alt="Halloween Fest — público en la pista durante una de sus ediciones en Jaén" loading="lazy"/>
+      <div class="hs-work-img hs-work-concept">
+        <img src="/images/halloween-fest/logo.webp" alt="Logo de Halloween Fest" width="677" height="261" loading="lazy"/>
+      </div>
       <div class="hs-work-overlay">
         <span class="hs-work-cat">Producción · 4 ediciones</span>
         <h3 class="hs-work-name">Halloween Fest</h3>
       </div>
     </a>
     <a class="hs-work-item hs-work-item--concept" href="/proyectos/bendito-castigo" data-reveal>
-      <div class="hs-work-img hs-work-concept" aria-hidden="true">
-        <span>bendito<br/>castigo</span>
+      <div class="hs-work-img hs-work-concept">
+        <img src="/images/bendito-castigo/isologo.webp" alt="Isologo de Bendito Castigo: luna creciente con estrella" width="736" height="611" loading="lazy"/>
       </div>
       <div class="hs-work-overlay">
         <span class="hs-work-cat">Concepto propio</span>
         <h3 class="hs-work-name">Bendito Castigo</h3>
+      </div>
+    </a>
+    <a class="hs-work-item" href="/proyectos/conclave-x-la-caseta" data-reveal>
+      <div class="hs-work-img hs-work-concept">
+        <img class="hs-work-logo--wide" src="/images/navidad/logo.webp" alt="Logo de Cónclave x La Caseta" width="1201" height="482" loading="lazy"/>
+      </div>
+      <div class="hs-work-overlay">
+        <span class="hs-work-cat">Organización y producción</span>
+        <h3 class="hs-work-name">Nochebuena &amp; Nochevieja</h3>
       </div>
     </a>
   </section>
@@ -618,7 +630,7 @@ img, video {
   .aud-card + .aud-card { border-top: 1px solid rgba(243, 243, 240, 0.14); }
 }
 
-/* ════ PROYECTOS — tarjeta tipográfica para conceptos sin fotos todavía ════ */
+/* ════ PROYECTOS — tarjeta con el logo del proyecto centrado sobre fondo oscuro ════ */
 .hs-work-concept {
   display: flex;
   align-items: center;
@@ -627,18 +639,16 @@ img, video {
   border: 1px solid rgba(243, 243, 240, 0.08);
   box-sizing: border-box;
 }
-.hs-work-concept span {
-  font-family: "Montserrat", sans-serif;
-  font-size: clamp(34px, 4.4vw, 68px);
-  font-weight: 800;
-  font-style: italic;
-  line-height: 0.92;
-  letter-spacing: -0.04em;
-  text-align: center;
-  color: #F3F3F0;
+.hs-work-concept img {
+  width: 42%;
+  height: auto;
 }
+/* Logo apaisado en la tarjeta ancha de abajo: más estrecho para que respire */
+.hs-work-concept .hs-work-logo--wide { width: 28%; }
 @media (max-width: 768px) {
   .hs-works { grid-template-columns: 1fr 1fr; }
+  .hs-works .hs-work-item:nth-child(3) { grid-column: 1 / -1; }
+  .hs-work-concept .hs-work-logo--wide { width: 42%; }
 }
 
 /* ════ TESTIMONIOS PENDIENTES (recordatorio visible) ════ */

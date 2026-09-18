@@ -3,12 +3,18 @@ import Layout from "../../layouts/Layout.astro";
 import SiteFooter from "../../components/SiteFooter.astro";
 import { SITE, absUrl } from "../../config/site.mjs";
 
-// PENDIENTE: añadir fotos/vídeos, identidad visual y fechas cuando existan.
+// PENDIENTE: añadir fotos/vídeos del directo y fechas cuando existan.
 const formatos = [
   { name: "Verano", desc: "Beach club y open air: tardes y noches al aire libre." },
   { name: "Invierno", desc: "Formato clubbing en sala." },
 ];
 const sonido = ["Reguetón antiguo", "Latin house"];
+// Mockups de la identidad visual (4:5)
+const identidad = [
+  { src: "/images/bendito-castigo/cartel.webp", alt: "Cartel de Bendito Castigo en la pared de un beach club al atardecer" },
+  { src: "/images/bendito-castigo/acreditaciones.webp", alt: "Entrada, pulseras VIP y general, tarjeta de acceso y acreditación backstage de Bendito Castigo" },
+  { src: "/images/bendito-castigo/barra.webp", alt: "Vasos, botella, posavasos y carta de cócteles de Bendito Castigo en la barra" },
+];
 ---
 
 <Layout
@@ -19,6 +25,7 @@ const sonido = ["Reguetón antiguo", "Latin house"];
 
 <main class="bc">
   <section class="bc-hero">
+    <img class="bc-logo" src="/images/bendito-castigo/isologo.webp" alt="" width="736" height="611"/>
     <p class="bc-cat">Concepto propio · En desarrollo</p>
     <h1 class="bc-title">bendito<br/>castigo</h1>
     <p class="bc-desc">Un concepto musical con identidad lifestyle y comercial, pensado para funcionar todo el año: open air en verano, club en invierno.</p>
@@ -35,6 +42,18 @@ const sonido = ["Reguetón antiguo", "Latin house"];
         <p>{f.desc}</p>
       </div>
     ))}
+  </section>
+
+  <section class="bc-id" aria-labelledby="bcIdTitle">
+    <div class="bc-id-head" data-reveal>
+      <h2 id="bcIdTitle">Identidad visual</h2>
+      <p>Cartelería, acreditaciones y barra con una misma imagen: la luna y la estrella, y la paleta de un atardecer en la playa.</p>
+    </div>
+    <ul class="bc-gallery">
+      {identidad.map((img) => (
+        <li data-reveal><img src={img.src} alt={img.alt} width="1122" height="1402" loading="lazy"/></li>
+      ))}
+    </ul>
   </section>
 
   <section class="bc-cta">
@@ -63,6 +82,19 @@ const sonido = ["Reguetón antiguo", "Latin house"];
   .bc-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
   .bc-tags li { font-size: 15px; padding: 9px 16px; border: 1px solid rgba(243, 243, 240,.25); border-radius: 999px; }
 
+  .bc-logo { width: clamp(64px, 7vw, 104px); height: auto; margin: 0 0 32px; }
+
+  .bc-id { padding: clamp(64px, 8vw, 120px) clamp(20px, 5vw, 88px) 0; }
+  .bc-id-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: clamp(24px, 5vw, 88px); align-items: end; margin: 0 0 clamp(32px, 4vw, 56px); }
+  .bc-id-head h2 { font-size: clamp(32px, 4vw, 56px); font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: 0; }
+  .bc-id-head p { font-size: clamp(15px, 1.2vw, 17px); line-height: 1.7; color: rgba(243, 243, 240,.6); max-width: 48ch; margin: 0; }
+  .bc-gallery { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(8px, 1vw, 16px); }
+  .bc-gallery li { overflow: hidden; aspect-ratio: 4 / 5; background: #0d0d0d; }
+  .bc-gallery img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s cubic-bezier(.25,.46,.45,.94); }
+  @media (hover: hover) {
+    .bc-gallery li:hover img { transform: scale(1.04); }
+  }
+
   .bc-cta { text-align: center; padding: clamp(80px, 10vw, 140px) 20px; }
   .bc-cta p { font-size: clamp(22px, 2.6vw, 36px); font-weight: 800; letter-spacing: -.02em; line-height: 1.2; max-width: 24ch; margin: 0 auto 36px; }
   .bc-links { display: flex; flex-direction: column; align-items: center; gap: 28px; }
@@ -74,6 +106,8 @@ const sonido = ["Reguetón antiguo", "Latin house"];
     .bc-grid { grid-template-columns: 1fr; }
     .bc-block, .bc-block:first-child { border-left: none; padding: 32px 20px; }
     .bc-block + .bc-block { border-top: 1px solid rgba(243, 243, 240,.12); }
+    .bc-id-head { grid-template-columns: 1fr; align-items: start; }
+    .bc-gallery { grid-template-columns: 1fr; }
   }
 </style>
 

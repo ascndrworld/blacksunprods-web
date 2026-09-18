@@ -4,21 +4,34 @@ import SiteFooter from "../components/SiteFooter.astro";
 import { SITE, absUrl } from "../config/site.mjs";
 
 // Con pocos proyectos no hay filtro: cabecera + mosaico. Cuando haya más,
-// basta con añadir entradas aquí (image: null → tarjeta tipográfica).
+// basta con añadir entradas aquí (image → foto a sangre; logo → logo centrado sobre fondo oscuro).
 const projects = [
   {
     href: "/proyectos/halloween-fest",
     name: "Halloween Fest",
     cat: "Producción · 4 ediciones",
-    image: "/images/halloween-fest/hw3-07.webp",
-    alt: "Halloween Fest — público en la pista durante una de sus ediciones en Jaén",
+    image: null,
+    logo: "/images/halloween-fest/logo.webp",
+    logoSize: [677, 261],
+    alt: "Logo de Halloween Fest",
   },
   {
     href: "/proyectos/bendito-castigo",
     name: "Bendito Castigo",
     cat: "Concepto propio",
     image: null,
-    alt: "",
+    logo: "/images/bendito-castigo/isologo.webp",
+    logoSize: [736, 611],
+    alt: "Isologo de Bendito Castigo: luna creciente con estrella",
+  },
+  {
+    href: "/proyectos/conclave-x-la-caseta",
+    name: "Nochebuena & Nochevieja",
+    cat: "Organización y producción",
+    image: null,
+    logo: "/images/navidad/logo.webp",
+    logoSize: [1201, 482],
+    alt: "Logo de Cónclave x La Caseta",
   },
 ];
 ---
@@ -40,7 +53,7 @@ const projects = [
     <a class="tp-item" href={p.href}>
       {p.image
         ? <img class="tp-img" src={p.image} alt={p.alt} fetchpriority={i === 0 ? "high" : undefined} loading={i === 0 ? undefined : "lazy"}/>
-        : <div class="tp-img tp-concept" aria-hidden="true"><span set:html={p.name.toLowerCase().replace(" ", "<br/>")}/></div>}
+        : <div class="tp-img tp-concept"><img src={p.logo} alt={p.alt} width={p.logoSize[0]} height={p.logoSize[1]} loading={i === 0 ? undefined : "lazy"}/></div>}
       <div class="tp-hover">
         <span class="tp-hover-cat">{p.cat}</span>
         <span class="tp-hover-title">{p.name}</span>
@@ -70,7 +83,7 @@ const projects = [
   .tp-item:hover .tp-img { transform: scale(1.05); }
 
   .tp-concept { display: flex; align-items: center; justify-content: center; background: #0d0d0d; border: 1px solid rgba(243, 243, 240,.08); box-sizing: border-box; }
-  .tp-concept span { font-family: "Montserrat", sans-serif; font-size: clamp(34px, 4.4vw, 68px); font-weight: 800; font-style: italic; line-height: .92; letter-spacing: -.04em; text-align: center; color: #F3F3F0; }
+  .tp-concept img { width: 42%; height: auto; }
 
   .tp-hover { position: absolute; inset: 0; background: rgba(0,0,0,.7); opacity: 0; transition: opacity .3s ease; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; font-family: "Montserrat", sans-serif; }
   .tp-item:hover .tp-hover, .tp-item:focus-visible .tp-hover { opacity: 1; }
@@ -80,6 +93,9 @@ const projects = [
   /* Escritorio: primer proyecto ancho (2 columnas), el resto cuadrado */
   @media (min-width: 769px) {
     .tp-item:first-child { grid-column: span 2; aspect-ratio: 2 / 1; }
+    /* Tercer proyecto: fila completa, con el logo apaisado más estrecho */
+    .tp-item:nth-child(3) { grid-column: 1 / -1; aspect-ratio: 3 / 1; }
+    .tp-item:nth-child(3) .tp-concept img { width: 28%; }
   }
 
   .tp-cta { background: #000; padding: 130px 40px 60px; text-align: center; font-family: "Montserrat", sans-serif; border-top: 1px solid rgba(255,255,255,.06); }

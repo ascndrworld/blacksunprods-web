@@ -1,0 +1,138 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import { SITE, absUrl } from "../../config/site.mjs";
+
+// PENDIENTE: añadir galería de fotos y carteles cuando estén en /images/navidad.
+const facts = [
+  { num: "4", label: "noches: Nochebuena y Nochevieja" },
+  { num: "2024–2025", label: "dos temporadas de Navidad" },
+  { num: "600–700", label: "asistentes de media por noche" },
+];
+
+const coordinado = [
+  "Artistas", "Sonido", "Iluminación", "Personal", "Barra",
+  "Seguridad", "Ticketing", "Accesos", "Operación completa",
+];
+
+const canonical = absUrl("/proyectos/conclave-x-la-caseta");
+---
+
+<Layout
+  title={`Cónclave x La Caseta — Nochebuena y Nochevieja · ${SITE.name}`}
+  description="Cónclave x La Caseta: Nochebuena y Nochevieja de 2024 y 2025 en la caseta municipal de Los Villares (Jaén), con 600–700 asistentes de media. Organizado y producido por Black Sun Prods."
+  canonical={canonical}
+>
+
+<Fragment slot="head">
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Inicio", "item": absUrl("/") },
+          { "@type": "ListItem", "position": 2, "name": "Proyectos", "item": absUrl("/proyectos") },
+          { "@type": "ListItem", "position": 3, "name": "Cónclave x La Caseta", "item": canonical }
+        ]
+      },
+      {
+        "@type": "CreativeWork",
+        "name": "Cónclave x La Caseta — Nochebuena y Nochevieja",
+        "description": "Organización y producción de las noches de Nochebuena y Nochevieja de 2024 y 2025 en la caseta municipal de Los Villares (Jaén).",
+        "url": canonical,
+        "creator": { "@type": "Organization", "name": SITE.name, "url": SITE.url },
+        "locationCreated": { "@type": "Place", "name": "Caseta municipal, Los Villares, Jaén, España" },
+        "keywords": ["producción de eventos", "Nochevieja", "Nochebuena", "Jaén"],
+        "inLanguage": "es-ES"
+      }
+    ]
+  })} />
+</Fragment>
+
+<main class="cx">
+  <section class="cx-hero">
+    <img class="cx-hero-img" src="/images/navidad/portada.webp" alt="Vista desde la cabina del DJ: la caseta municipal de Los Villares llena de público en una de las noches de Navidad" width="1800" height="2400" fetchpriority="high"/>
+    <div class="cx-hero-overlay" aria-hidden="true"></div>
+    <p class="cx-cat">Organización y producción</p>
+    <h1 class="cx-title">Nochebuena<br/>&amp; Nochevieja</h1>
+    <p class="cx-desc">Cuatro noches de Navidad en la caseta municipal de Los Villares, organizadas y producidas de principio a fin por {SITE.name}.</p>
+  </section>
+
+  <ul class="cx-facts">
+    {facts.map((f) => (
+      <li><span class="cx-facts-num">{f.num}</span><span class="cx-facts-label">{f.label}</span></li>
+    ))}
+  </ul>
+
+  <section class="cx-study">
+    <div class="cx-study-col">
+      <h2>El evento</h2>
+      <p><strong>Cónclave x La Caseta</strong> son las fiestas de Nochebuena y Nochevieja de Los Villares (Jaén). En 2024 y 2025 se celebraron cuatro noches en la caseta municipal, con entre 600 y 700 asistentes de media.</p>
+
+      <h2>Cómo lo hicimos</h2>
+      <p>Llevamos la <strong>organización y la producción completa</strong> de las cuatro noches: programación, técnica, montaje, accesos y la dirección de cada noche en directo.</p>
+    </div>
+    <div class="cx-study-col">
+      <h2>Qué coordinamos</h2>
+      <ul class="cx-tags">
+        {coordinado.map((c) => <li>{c}</li>)}
+      </ul>
+
+      <h2>El resultado</h2>
+      <p>Dos temporadas seguidas reuniendo a +2000 personas en las fechas más señaladas del año. Un formato que demuestra lo que podemos hacer con una sala o un pub que quiera llevar su marca a un evento grande.</p>
+    </div>
+  </section>
+
+  <section class="cx-cta">
+    <p>¿Tienes un local y quieres llevarlo a un evento grande?</p>
+    <div class="cx-links">
+      <a class="cx-btn" href="/contacto?tipo=sala">Hablemos</a>
+      <a class="cx-back" href="/proyectos">Volver a proyectos</a>
+    </div>
+  </section>
+</main>
+
+<SiteFooter />
+
+<style>
+  .cx { background: #000; color: #F3F3F0; font-family: "Montserrat", sans-serif; }
+  .cx-hero { position: relative; overflow: hidden; min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; justify-content: flex-end; padding: 160px clamp(20px, 5vw, 88px) clamp(56px, 8vw, 110px); }
+  /* Foto vertical: se encuadra por la pista y el público (mitad de la imagen) */
+  .cx-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 45%; }
+  .cx-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.15) 40%, rgba(0,0,0,.85) 100%); }
+  .cx-hero > :not(.cx-hero-img):not(.cx-hero-overlay) { position: relative; }
+  .cx-cat { font-size: 11px; letter-spacing: .32em; text-transform: uppercase; color: rgba(243, 243, 240,.55); margin: 0 0 22px; }
+  .cx-title { font-size: clamp(52px, 10vw, 160px); font-weight: 800; letter-spacing: -.05em; line-height: .88; margin: 0 0 32px; }
+  .cx-desc { font-size: clamp(16px, 1.4vw, 20px); line-height: 1.6; color: rgba(243, 243, 240,.7); max-width: 52ch; margin: 0; }
+
+  .cx-facts { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid rgba(243, 243, 240,.12); border-bottom: 1px solid rgba(243, 243, 240,.12); }
+  .cx-facts li { display: flex; flex-direction: column; gap: 10px; padding: clamp(28px, 3.5vw, 48px) clamp(20px, 2.5vw, 40px); border-left: 1px solid rgba(243, 243, 240,.12); }
+  .cx-facts li:first-child { border-left: none; padding-left: clamp(20px, 5vw, 88px); }
+  .cx-facts-num { font-size: clamp(28px, 3.2vw, 48px); font-weight: 800; letter-spacing: -.03em; line-height: 1; white-space: nowrap; }
+  .cx-facts-label { font-size: 13px; line-height: 1.5; color: rgba(243, 243, 240,.55); }
+
+  .cx-study { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 110px); padding: clamp(64px, 8vw, 120px) clamp(20px, 5vw, 88px); }
+  .cx-study h2 { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: rgba(243, 243, 240,.5); font-weight: 500; margin: 0 0 16px; }
+  .cx-study h2:not(:first-child) { margin-top: 44px; }
+  .cx-study p { font-size: clamp(16px, 1.3vw, 19px); line-height: 1.7; color: rgba(243, 243, 240,.8); margin: 0; max-width: 52ch; }
+  .cx-study strong { color: #F3F3F0; }
+  .cx-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .cx-tags li { font-size: 14px; padding: 9px 16px; border: 1px solid rgba(243, 243, 240,.25); border-radius: 999px; }
+
+  .cx-cta { text-align: center; padding: clamp(80px, 10vw, 140px) 20px; border-top: 1px solid rgba(243, 243, 240,.12); }
+  .cx-cta p { font-size: clamp(22px, 2.6vw, 36px); font-weight: 800; letter-spacing: -.02em; line-height: 1.2; max-width: 24ch; margin: 0 auto 36px; }
+  .cx-links { display: flex; flex-direction: column; align-items: center; gap: 28px; }
+  .cx-btn { font-size: 14px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #000; background: #F3F3F0; border: 2px solid #F3F3F0; padding: 16px 40px; text-decoration: none; transition: background .25s, color .25s; }
+  .cx-btn:hover { background: transparent; color: #F3F3F0; }
+  .cx-back { font-size: 12px; letter-spacing: .28em; text-transform: uppercase; color: rgba(243, 243, 240,.7); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
+
+  @media (max-width: 900px) {
+    .cx-facts { grid-template-columns: 1fr; }
+    .cx-facts li { border-left: none; border-top: 1px solid rgba(243, 243, 240,.12); padding: 28px 20px; }
+    .cx-facts li:first-child { border-top: none; padding-left: 20px; }
+    .cx-study { grid-template-columns: 1fr; }
+  }
+</style>
+
+</Layout>
