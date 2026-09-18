@@ -472,6 +472,36 @@ img, video {
 @media (min-width: 769px) {
   .stats-item:first-child { padding-left: clamp(24px, 5vw, 88px); }
 }
+/* Hover: la celda se ilumina, la cifra sube un poco y aparece una línea de acento */
+.stats-item { position: relative; }
+/* El fondo va en un pseudo: .stats-item ya tiene la transición del scroll-reveal */
+.stats-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(243, 243, 240, 0.04);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.stats-item::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 2px;
+  background: #F3F3F0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.stats-num { display: inline-block; transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
+.stats-label { transition: color 0.35s ease; }
+@media (hover: hover) {
+  .stats-item:hover::before { opacity: 1; }
+  .stats-item:hover::after { transform: scaleX(1); }
+  .stats-item:hover .stats-num { transform: translateY(-4px); }
+  .stats-item:hover .stats-label { color: rgba(243, 243, 240, 0.85); }
+}
 @media (max-width: 768px) {
   .stats-list { grid-template-columns: repeat(2, 1fr); }
   .stats-item { padding: 28px 16px; border-left: none; border-top: 1px solid rgba(243, 243, 240, 0.08); }
@@ -519,6 +549,17 @@ img, video {
   border: 1px solid rgba(243, 243, 240, 0.2);
   border-radius: 999px;
   color: rgba(243, 243, 240, 0.9);
+  cursor: default;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Hover: la pill se rellena con el blanco roto del logo y sube ligeramente */
+@media (hover: hover) {
+  .coord-list li:hover {
+    background: #F3F3F0;
+    border-color: #F3F3F0;
+    color: #000;
+    transform: translateY(-2px);
+  }
 }
 @media (min-width: 769px) {
   .coord { padding-inline: clamp(24px, 5vw, 88px); }
