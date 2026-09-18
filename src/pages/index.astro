@@ -118,6 +118,41 @@ const SHOW_TESTIMONIALS = false;
     <a class="hs-services-btn" href="/contacto" data-reveal>HABLEMOS DE TU EVENTO</a>
   </section>
 
+  <!-- ════ PROYECTOS ════ -->
+  <div class="works-head" data-reveal>
+    <span class="svc-eyebrow">NUESTRA EXPERIENCIA</span>
+    <h2 class="svc-title">proyectos</h2>
+  </div>
+  <section class="hs-works">
+    <a class="hs-work-item" href="/proyectos/halloween-fest" data-reveal>
+      <div class="hs-work-img hs-work-concept">
+        <img src="/images/halloween-fest/logo.webp" alt="Logo de Halloween Fest" width="677" height="261" loading="lazy"/>
+      </div>
+      <div class="hs-work-overlay">
+        <span class="hs-work-cat">Producción · 4 ediciones</span>
+        <h3 class="hs-work-name">Halloween Fest</h3>
+      </div>
+    </a>
+    <a class="hs-work-item hs-work-item--concept" href="/proyectos/bendito-castigo" data-reveal>
+      <div class="hs-work-img hs-work-concept">
+        <img src="/images/bendito-castigo/isologo.webp" alt="Isologo de Bendito Castigo: luna creciente con estrella" width="736" height="611" loading="lazy"/>
+      </div>
+      <div class="hs-work-overlay">
+        <span class="hs-work-cat">Concepto propio</span>
+        <h3 class="hs-work-name">Bendito Castigo</h3>
+      </div>
+    </a>
+    <a class="hs-work-item" href="/proyectos/conclave-x-la-caseta" data-reveal>
+      <div class="hs-work-img hs-work-concept">
+        <img class="hs-work-logo--wide" src="/images/navidad/logo.webp" alt="Logo de Cónclave x La Caseta" width="1201" height="482" loading="lazy"/>
+      </div>
+      <div class="hs-work-overlay">
+        <span class="hs-work-cat">Organización y producción</span>
+        <h3 class="hs-work-name">Nochebuena &amp; Nochevieja</h3>
+      </div>
+    </a>
+  </section>
+
   <!-- ════ BLOQUE 1: QUÉ PRODUCIMOS ════ -->
   <section class="svc" id="servicios">
     <div class="svc-head">
@@ -232,41 +267,6 @@ const SHOW_TESTIMONIALS = false;
         <span class="aud-cta">Hablemos →</span>
       </a>
     </div>
-  </section>
-
-  <!-- ════ PROYECTOS ════ -->
-  <div class="works-head" data-reveal>
-    <span class="svc-eyebrow">NUESTRA EXPERIENCIA</span>
-    <h2 class="svc-title">proyectos</h2>
-  </div>
-  <section class="hs-works">
-    <a class="hs-work-item" href="/proyectos/halloween-fest" data-reveal>
-      <div class="hs-work-img hs-work-concept">
-        <img src="/images/halloween-fest/logo.webp" alt="Logo de Halloween Fest" width="677" height="261" loading="lazy"/>
-      </div>
-      <div class="hs-work-overlay">
-        <span class="hs-work-cat">Producción · 4 ediciones</span>
-        <h3 class="hs-work-name">Halloween Fest</h3>
-      </div>
-    </a>
-    <a class="hs-work-item hs-work-item--concept" href="/proyectos/bendito-castigo" data-reveal>
-      <div class="hs-work-img hs-work-concept">
-        <img src="/images/bendito-castigo/isologo.webp" alt="Isologo de Bendito Castigo: luna creciente con estrella" width="736" height="611" loading="lazy"/>
-      </div>
-      <div class="hs-work-overlay">
-        <span class="hs-work-cat">Concepto propio</span>
-        <h3 class="hs-work-name">Bendito Castigo</h3>
-      </div>
-    </a>
-    <a class="hs-work-item" href="/proyectos/conclave-x-la-caseta" data-reveal>
-      <div class="hs-work-img hs-work-concept">
-        <img class="hs-work-logo--wide" src="/images/navidad/logo.webp" alt="Logo de Cónclave x La Caseta" width="1201" height="482" loading="lazy"/>
-      </div>
-      <div class="hs-work-overlay">
-        <span class="hs-work-cat">Organización y producción</span>
-        <h3 class="hs-work-name">Nochebuena &amp; Nochevieja</h3>
-      </div>
-    </a>
   </section>
 
   <!-- ════ EL PROCESO ════ -->
@@ -458,7 +458,7 @@ img, video {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 .stats-item {
   display: flex;
@@ -469,14 +469,14 @@ img, video {
 }
 .stats-item:first-child { border-left: none; }
 .stats-num {
-  font-size: clamp(34px, 4.2vw, 64px);
+  font-size: clamp(34px, 3.4vw, 56px);
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.03em;
   white-space: nowrap;
 }
 .stats-label {
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
   color: rgba(243, 243, 240, 0.55);
   max-width: 24ch;
@@ -515,16 +515,14 @@ img, video {
   .stats-item:hover .stats-label { color: rgba(243, 243, 240, 0.85); }
 }
 @media (max-width: 768px) {
-  .stats-list { grid-template-columns: repeat(2, 1fr); }
+  .stats-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stats-item { padding: 28px 16px; border-left: none; border-top: 1px solid rgba(243, 243, 240, 0.08); }
   .stats-item:nth-child(-n+2) { border-top: none; }
   .stats-item:nth-child(even) { border-left: 1px solid rgba(243, 243, 240, 0.08); }
   .stats-num { font-size: clamp(26px, 8vw, 40px); }
-  .stats-label { font-size: 12px; }
+  .stats-label { font-size: 13px; }
 }
 
-/* Servicios: nombres más largos que antes → tipografía algo menor */
-.svc-name { font-size: clamp(26px, 3.2vw, 46px); }
 .svc-link { color: #F3F3F0; text-underline-offset: 3px; white-space: nowrap; }
 
 /* ════ QUÉ COORDINAMOS ════ */
@@ -539,7 +537,7 @@ img, video {
   align-items: start;
 }
 .coord-text {
-  font-size: clamp(15px, 1.2vw, 17px);
+  font-size: clamp(16px, 1.2vw, 18px);
   line-height: 1.7;
   color: rgba(243, 243, 240, 0.6);
   max-width: 40ch;
@@ -610,7 +608,7 @@ img, video {
 .aud-card:first-child { border-left: none; }
 .aud-num { font-size: 12px; letter-spacing: 0.2em; color: rgba(243, 243, 240, 0.4); }
 .aud-name { font-size: clamp(24px, 2.4vw, 34px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; margin: 0; }
-.aud-desc { font-size: 15px; line-height: 1.6; color: rgba(243, 243, 240, 0.6); margin: 0; flex: 1; }
+.aud-desc { font-size: 16px; line-height: 1.6; color: rgba(243, 243, 240, 0.6); margin: 0; flex: 1; }
 .aud-cta { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
 @media (hover: hover) {
   .aud-card:hover { background: rgba(243, 243, 240, 0.05); }
@@ -645,9 +643,12 @@ img, video {
 }
 /* Logo apaisado en la tarjeta ancha de abajo: más estrecho para que respire */
 .hs-work-concept .hs-work-logo--wide { width: 28%; }
-/* Móvil: un proyecto debajo de otro (columna única de global.css) */
+/* Móvil: un proyecto debajo de otro (columna única de global.css). La tarjeta
+   es apaisada: los logos se limitan en ancho y en alto para que el isologo
+   cuadrado de Bendito Castigo no llene la tarjeta. */
 @media (max-width: 768px) {
-  .hs-work-concept .hs-work-logo--wide { width: 42%; }
+  .hs-work-concept img,
+  .hs-work-concept .hs-work-logo--wide { width: auto; max-width: 42%; max-height: 40%; }
 }
 
 /* ════ TESTIMONIOS PENDIENTES (recordatorio visible) ════ */
@@ -662,11 +663,11 @@ img, video {
   color: #F3F3F0;
   font-family: "Montserrat", sans-serif;
 }
-/* Menos espacio arriba: pegadas a la sección anterior */
-.svc  { padding: clamp(24px, 3vw, 44px) 0 clamp(44px, 5vw, 72px); }
+/* Servicios va tras el mosaico de proyectos (a sangre): mismo aire que la cabecera de proyectos */
+.svc  { padding: clamp(48px, 6vw, 88px) 0 clamp(44px, 5vw, 72px); }
 .proc { padding: clamp(72px, 9vw, 120px) 10px clamp(72px, 9vw, 116px); }
 .works-head { padding: clamp(48px, 6vw, 88px) 10px clamp(44px, 5vw, 64px); text-align: left; }
-/* La intro "producimos tu evento" deja menos hueco abajo para juntarse con servicios */
+/* La intro "producimos tu evento" deja menos hueco abajo para juntarse con proyectos */
 .hs-services { padding-bottom: clamp(40px, 5vw, 64px); }
 
 /* Cabeceras de sección compartidas */
@@ -682,7 +683,7 @@ img, video {
 /* Título de sección a tamaño "etiqueta": contenido grande (filas/mosaico) como
    protagonista; el encabezado enmarca sin competir (registro Locomotive/Obys). */
 .svc-title, .proc-title {
-  font-size: clamp(28px, 3.4vw, 40px);
+  font-size: clamp(30px, 4.2vw, 60px);
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.02em;
@@ -736,7 +737,7 @@ img, video {
 .svc-icon svg { width: 100%; height: 100%; display: block; }
 .svc-name {
   flex: 1 1 auto;
-  font-size: clamp(30px, 5.4vw, 64px);
+  font-size: clamp(30px, 3.1vw, 46px);
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.02em;
@@ -754,7 +755,7 @@ img, video {
 }
 .svc-reveal-inner { overflow: hidden; min-height: 0; }
 .svc-desc {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.7;
   color: rgba(243, 243, 240, 0.6);
   max-width: 62ch;
@@ -822,7 +823,7 @@ img, video {
   color: #F3F3F0;
 }
 .proc-desc {
-  font-size: clamp(15px, 1.2vw, 17px);
+  font-size: clamp(16px, 1.2vw, 18px);
   line-height: 1.7;
   color: rgba(243, 243, 240, 0.6);
   max-width: 42ch;
@@ -854,12 +855,12 @@ img, video {
   }
   .proc-num {
     flex: 0 0 auto; margin: 0;
-    font-size: clamp(140px, 22vw, 340px); line-height: 0.8;
+    font-size: clamp(120px, 14.5vw, 220px); line-height: 0.8;
     color: rgba(243, 243, 240, 0.92);
   }
   .proc-text { max-width: 46ch; }
   .proc-name { font-size: clamp(34px, 4vw, 64px); margin: 0 0 18px; }
-  .proc-desc { font-size: clamp(15px, 1.15vw, 18px); max-width: 42ch; }
+  .proc-desc { font-size: clamp(16px, 1.2vw, 18px); max-width: 42ch; }
 
   /* flechas + puntos centrados debajo */
   .proc-controls { gap: clamp(24px, 2.5vw, 40px); margin-top: clamp(28px, 3.5vw, 52px); }
@@ -930,7 +931,7 @@ img, video {
   border-top: 1px solid rgba(243, 243, 240, 0.08);
 }
 .cta-title {
-  font-size: clamp(48px, 8vw, 96px);
+  font-size: clamp(40px, 8vw, 96px);
   font-weight: 800;
   line-height: 0.95;
   letter-spacing: -3px;
@@ -1022,9 +1023,9 @@ img, video {
 @media (max-width: 600px) {
   /* Servicios: filas más compactas; nombre e icono centrados verticalmente */
   .svc-row { padding: 22px 10px; }
-  .svc-name { font-size: clamp(26px, 8.5vw, 38px); }
+  .svc-name { font-size: clamp(24px, 6.7vw, 30px); }
   .svc-icon { width: 28px; height: 28px; }
-  .svc-desc { margin-left: calc(28px + 16px); font-size: 14px; }
+  .svc-desc { margin-left: calc(28px + 16px); font-size: 15px; }
   .works-head { text-align: left; }
 
   /* El proceso en móvil: slide/carrusel de una tarjeta (autoplay + swipe + puntos) */
@@ -1067,6 +1068,13 @@ img, video {
   }
 }
 
+/* ── MÓVIL: margen lateral único de 24px (el mismo que la intro) ──
+   Al final para ganar a los padding de 10px de cada sección. */
+@media (max-width: 768px) {
+  .works-head, .coord, .aud, .cta { padding-inline: 24px; }
+  .svc-head, .svc-row { padding-inline: 24px; }
+  .proc-sticky .proc-head, .proc-panel { padding-inline: 24px; }
+}
 </style>
 
 <!-- ── Estilos de los marcadores (botones creados por JS → fuera del scope de Astro) ── -->
