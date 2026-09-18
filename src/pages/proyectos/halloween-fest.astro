@@ -125,7 +125,7 @@ const ogImage = absUrl("/images/halloween-fest/hw3-07.webp");
 
   <section class="hf-ig">
     <p>Reels, vídeos y aftermovies oficiales en Instagram</p>
-    <a href="https://www.instagram.com/halloweenfestlv" target="_blank" rel="noopener">@halloweenfestlv ↗</a>
+    <a href="https://www.instagram.com/halloweenfestlv" target="_blank" rel="noopener">@halloweenfestlv<svg class="hf-ig-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
   </section>
 
   <section class="hf-cta">
@@ -180,6 +180,8 @@ const ogImage = absUrl("/images/halloween-fest/hw3-07.webp");
   .hf-ig p { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: rgba(243, 243, 240,.5); margin: 0 0 14px; }
   .hf-ig a { font-size: clamp(26px, 4vw, 52px); font-weight: 800; letter-spacing: -.03em; color: #F3F3F0; text-decoration: none; }
   .hf-ig a:hover { opacity: .7; }
+  /* Flecha en SVG: el carácter ↗ se muestra como emoji en iOS */
+  .hf-ig-arrow { width: .7em; height: .7em; margin-left: .25em; vertical-align: baseline; fill: none; stroke: currentColor; stroke-width: 3.5; stroke-linecap: square; }
 
   .hf-cta { text-align: center; padding: clamp(80px, 11vw, 150px) 20px; }
   .hf-cta h2 { font-size: clamp(40px, 7vw, 88px); font-weight: 800; letter-spacing: -.04em; line-height: .95; margin: 0 0 40px; }

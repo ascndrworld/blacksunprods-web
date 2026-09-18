@@ -5,7 +5,7 @@ import { SITE, absUrl, hasWhatsapp } from "../config/site.mjs";
 // Cifras de la franja bajo el hero (fuente: experiencia real en Los Villares:
 // 4 ediciones de Halloween Fest + Nochebuena y Nochevieja de 2024 y 2025).
 const stats = [
-  { num: "+8", label: "noches producidas al completo: Halloween, Nochebuena y Nochevieja" },
+  { num: "+8", label: "noches producidas al completo" },
   { num: "600–700", label: "asistentes de media por noche" },
   { num: "2022–2025", label: "produciendo eventos en directo" },
   { num: "Jaén", label: "base en Andalucía" },
@@ -112,8 +112,8 @@ const SHOW_TESTIMONIALS = false;
 
   <!-- ════ INTRO ════ -->
   <section class="hs-services">
-    <h2 class="hs-services-title" data-reveal>productora<br/>de eventos</h2>
-    <p class="hs-services-text" data-reveal>Dirigimos, producimos y ejecutamos eventos en directo: desde la primera idea hasta la última persona que sale del recinto.</p>
+    <h2 class="hs-services-title" data-reveal>producimos<br/>tu evento</h2>
+    <p class="hs-services-text" data-reveal>Dirigimos, organizamos y ejecutamos eventos en directo: desde la primera idea hasta la última persona que sale del recinto.</p>
     <p class="hs-services-text" data-reveal>Coordinamos artistas, técnica, seguridad, ticketing y equipo bajo una sola dirección. Y cuando solo hace falta la técnica, montamos el rider de sonido e iluminación: una entrega de premios, un teatro, una gala.</p>
     <a class="hs-services-btn" href="/contacto" data-reveal>HABLEMOS DE TU EVENTO</a>
   </section>
@@ -645,9 +645,8 @@ img, video {
 }
 /* Logo apaisado en la tarjeta ancha de abajo: más estrecho para que respire */
 .hs-work-concept .hs-work-logo--wide { width: 28%; }
+/* Móvil: un proyecto debajo de otro (columna única de global.css) */
 @media (max-width: 768px) {
-  .hs-works { grid-template-columns: 1fr 1fr; }
-  .hs-works .hs-work-item:nth-child(3) { grid-column: 1 / -1; }
   .hs-work-concept .hs-work-logo--wide { width: 42%; }
 }
 
@@ -667,7 +666,7 @@ img, video {
 .svc  { padding: clamp(24px, 3vw, 44px) 0 clamp(44px, 5vw, 72px); }
 .proc { padding: clamp(72px, 9vw, 120px) 10px clamp(72px, 9vw, 116px); }
 .works-head { padding: clamp(48px, 6vw, 88px) 10px clamp(44px, 5vw, 64px); text-align: left; }
-/* La intro "productora de eventos" deja menos hueco abajo para juntarse con servicios */
+/* La intro "producimos tu evento" deja menos hueco abajo para juntarse con servicios */
 .hs-services { padding-bottom: clamp(40px, 5vw, 64px); }
 
 /* Cabeceras de sección compartidas */

@@ -35,4 +35,13 @@ const year = new Date().getFullYear();
   .sf-sep { color: rgba(243, 243, 240,0.2); }
   .sf-legal { font-size: 10px; margin-bottom: 18px; }
   .sf-copy { color: rgba(243, 243, 240,0.3); font-size: 11px; letter-spacing: 0.14em; margin: 14px 0 0; text-transform: uppercase; }
+
+  /* Móvil: enlaces en columna bajo el logo; sin puntos separadores, que
+     quedaban sueltos al saltar de línea */
+  @media (max-width: 600px) {
+    .sf { padding: 56px 24px 36px; }
+    .sf-links { flex-direction: column; align-items: center; gap: 16px; margin-bottom: 28px; }
+    .sf-sep { display: none; }
+    .sf-legal { flex-direction: row; gap: 24px; margin-bottom: 14px; }
+  }
 </style>
