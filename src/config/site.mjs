@@ -44,6 +44,14 @@ export const SITE = {
 
   // ── Contacto ───────────────────────────────────────────────
   email: "info@blacksunprods.com",
+  /**
+   * Remitente del aviso interno de nuevos contactos. Está en el mismo
+   * dominio (verificado en Resend) pero NO es `email` a propósito: mandar
+   * de info@ a info@ desde un servidor externo es un patrón de auto-envío
+   * que los filtros archivan como spam. No necesita buzón: las respuestas
+   * salen por reply_to (van al cliente) y los rebotes los recoge Resend.
+   */
+  notifySender: "web@blacksunprods.com",
   /** Teléfono en formato E.164 (para Schema.org y el enlace tel:). */
   phone: "+34600000000",
   /** Solo dígitos con prefijo de país, para el enlace de WhatsApp. */
@@ -58,7 +66,7 @@ export const SITE = {
   /** Logo del header (PNG con transparencia). */
   logo: "/logo.png",
   /** Banda de cabecera de los emails (600px de ancho, PNG). */
-  emailBanner: "/email-logo-band.png",
+  emailBanner: "/email-logo-band-bsp.png",
   /** Color de la barra del navegador y fondo de la PWA. */
   themeColor: "#0a0a0a",
   backgroundColor: "#000000",

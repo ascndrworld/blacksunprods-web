@@ -7,7 +7,7 @@ export const prerender = false;
 
 // ── Config de remitentes/destinatario (sale de src/config/site.mjs) ──
 const OWNER_EMAIL = BRAND.email;                         // a quién le llega el aviso
-const FROM_NOTIFY = `Web ${BRAND.name} <${BRAND.email}>`; // remitente del aviso
+const FROM_NOTIFY = `Web ${BRAND.name} <${BRAND.notifySender}>`; // remitente del aviso (no es info@: ver site.mjs)
 const FROM_REPLY  = `${BRAND.name} <${BRAND.email}>`;     // remitente de la auto-respuesta
 
 // ── Marca (para el diseño de los emails) ──

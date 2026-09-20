@@ -8,7 +8,8 @@ Lista viva de lo que falta. Tacha (o borra) cada punto al resolverlo.
 - [ ] **Testimonios reales** de ayuntamientos y promotores → `src/pages/index.astro`, sección `#testimonios`. **Oculta** (`SHOW_TESTIMONIALS = false`): sustituir los 3 huecos "Pendiente" y poner `true`.
 - [x] **Indexación**: la web NO se indexa por defecto (noindex + robots Disallow). En el despliegue final con dominio, poner `PUBLIC_INDEXABLE=true` en Vercel.
 - [ ] **Datos legales del titular** (nombre/razón social, NIF, domicilio) en `src/pages/terminos.astro` y `src/pages/privacidad.astro`. Solo se ha cambiado el nombre de marca.
-- [ ] **Resend**: verificar el dominio `blacksunprods.com` y poner `RESEND_API_KEY` (el formulario no envía sin esto).
+- [x] **Resend** (20/09/2026): dominio `blacksunprods.com` verificado (DKIM `resend._domainkey` + `send` como CNAME a `send.forge.rmta.net`, que aporta SPF y MX de rebotes) y `RESEND_API_KEY` puesta en Vercel. Probado en producción: el formulario devuelve 200 y Resend acepta los dos emails.
+- [ ] **El aviso al dueño no llega a `info@blacksunprods.com`** (la auto-respuesta al cliente sí). El aviso se manda de `info@` a `info@`: revisar en Resend → Emails si sale como *Delivered* o *Bounced*, y si existe el buzón en Hostinger. Si es el patrón auto-enviado, cambiar el `from` del aviso en `src/pages/api/contacto.ts` (`FROM_NOTIFY`) a otro buzón del dominio.
 - [x] **Proyecto nuevo en Vercel** + dominios `blacksunprods.com` y `www.blacksunprods.com` + DNS. No enlazar al proyecto de Ascndr.
 
 ## Contenido
@@ -27,5 +28,11 @@ Lista viva de lo que falta. Tacha (o borra) cada punto al resolverlo.
 ## Configuración
 
 - [ ] `.env` propio con claves nuevas (Resend, Telegram, Anthropic, Airtable, GA4…). No reutilizar las de Ascndr.
-- [ ] Airtable: la tabla de leads necesita los campos nuevos del formulario (ver `.env.example`).
-- [ ] Analítica (GTM/GA4) y Search Console propios.
+- [ ] Airtable: la tabla de leads necesita los campos nuevos del formulario (ver `.env.example`). **Las tres variables existen en Vercel pero la función avisa de que están sin configurar** (probablemente creadas vacías): el lead de prueba del 20/09/2026 no se registró.
+- [ ] Telegram: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` y `TELEGRAM_WEBHOOK_SECRET` no existen en Vercel, así que no hay aviso instantáneo ni botón de dossier. Ojo: `TELEGRAM_CHAT_ID` se compara con `cq.from.id`, o sea que tiene que ser tu ID de usuario, no el de un grupo.
+- [x] Analítica y Search Console propios (19/09/2026):
+  - GA4 propio de Black Sun Prods (`G-Y98ESLJ2CQ`) cargado directamente desde la web (`PUBLIC_GA4_ID`). Comprobado en Tiempo real. **No añadirlo también en GTM** (duplicaría las visitas).
+  - GTM (`GTM-M93M6G6C`) instalado pero con el contenedor vacío: listo para Meta Pixel u otras etiquetas.
+  - Search Console: propiedad de dominio verificada por DNS (Hostinger) y sitemap `https://www.blacksunprods.com/sitemap-index.xml` enviado. La home ya está indexada.
+- [ ] Search Console: indexación solicitada el 19/09/2026 para ayuntamientos, sonido-e-iluminacion, proyectos, halloween-fest, conclave-x-la-caseta, bendito-castigo y contacto. Revisar hacia el 03/10/2026 el informe "Páginas".
+- [ ] `PUBLIC_META_PIXEL_ID` y `PUBLIC_GSC_VERIFICATION` en Vercel están vacías: rellenar el píxel solo si se hacen anuncios en Meta; la de GSC no hace falta (verificado por DNS).
