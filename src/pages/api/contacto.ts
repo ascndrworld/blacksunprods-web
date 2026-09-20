@@ -6,7 +6,8 @@ import { clientTypeLabel, type Lead } from "../../lib/dossier";
 export const prerender = false;
 
 // ── Config de remitentes/destinatario (sale de src/config/site.mjs) ──
-const OWNER_EMAIL = BRAND.email;                         // a quién le llega el aviso
+const OWNER_EMAIL = BRAND.email;                         // firma y reply_to de la auto-respuesta
+const NOTIFY_TO   = BRAND.notifyTo;                      // a quién le llega el aviso (ver site.mjs)
 const FROM_NOTIFY = `Web ${BRAND.name} <${BRAND.notifySender}>`; // remitente del aviso (no es info@: ver site.mjs)
 const FROM_REPLY  = `${BRAND.name} <${BRAND.email}>`;     // remitente de la auto-respuesta
 
@@ -290,7 +291,7 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     await sendEmail({
       from: FROM_NOTIFY,
-      to: [OWNER_EMAIL],
+      to: NOTIFY_TO,
       reply_to: email,
       subject: `Nuevo contacto: ${name}${tipo ? ` · ${tipo}` : ""}`,
       html: notifyHtml,

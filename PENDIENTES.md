@@ -28,7 +28,7 @@ Lista viva de lo que falta. Tacha (o borra) cada punto al resolverlo.
 ## Configuración
 
 - [ ] `.env` propio con claves nuevas (Resend, Telegram, Anthropic, Airtable, GA4…). No reutilizar las de Ascndr.
-- [ ] Airtable: la tabla de leads necesita los campos nuevos del formulario (ver `.env.example`). **Las tres variables existen en Vercel pero la función avisa de que están sin configurar** (probablemente creadas vacías): el lead de prueba del 20/09/2026 no se registró.
+- [x] Airtable (20/09/2026): tabla `Leads` creada en la base `appiqSAGUmJ5pcyvg` con los 10 campos que escribe `contacto.ts`. `Fecha` es **texto** a propósito (el formulario admite "agosto 2027"); `Estado` y `Fuente` llevan opciones de más para gestionar el lead a mano. Variables puestas en Vercel y probado en producción: el lead entra. Pendiente de nada salvo renombrar la base ("Untitled Base") y borrar la tabla de ejemplo "Table 1", que la API no permite.
 - [ ] Telegram: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` y `TELEGRAM_WEBHOOK_SECRET` no existen en Vercel, así que no hay aviso instantáneo ni botón de dossier. Ojo: `TELEGRAM_CHAT_ID` se compara con `cq.from.id`, o sea que tiene que ser tu ID de usuario, no el de un grupo.
 - [x] Analítica y Search Console propios (19/09/2026):
   - GA4 propio de Black Sun Prods (`G-Y98ESLJ2CQ`) cargado directamente desde la web (`PUBLIC_GA4_ID`). Comprobado en Tiempo real. **No añadirlo también en GTM** (duplicaría las visitas).

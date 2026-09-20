@@ -52,6 +52,14 @@ export const SITE = {
    * salen por reply_to (van al cliente) y los rebotes los recoge Resend.
    */
   notifySender: "web@blacksunprods.com",
+  /**
+   * Destinatarios del aviso de nuevo contacto. Van los dos a propósito:
+   * info@ deja el registro en el buzón de la marca, y el Gmail personal
+   * garantiza el aviso inmediato en el móvil sin depender de la recogida
+   * POP de Hostinger, que no arrastra lo que su filtro aparta como spam.
+   * Un lead perdido cuesta dinero: la redundancia sale barata.
+   */
+  notifyTo: ["info@blacksunprods.com", "franmadi10@gmail.com"],
   /** Teléfono en formato E.164 (para Schema.org y el enlace tel:). */
   phone: "+34600000000",
   /** Solo dígitos con prefijo de país, para el enlace de WhatsApp. */
