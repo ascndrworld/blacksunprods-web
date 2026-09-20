@@ -9,7 +9,11 @@ Lista viva de lo que falta. Tacha (o borra) cada punto al resolverlo.
 - [x] **Indexación**: la web NO se indexa por defecto (noindex + robots Disallow). En el despliegue final con dominio, poner `PUBLIC_INDEXABLE=true` en Vercel.
 - [ ] **Datos legales del titular** (nombre/razón social, NIF, domicilio) en `src/pages/terminos.astro` y `src/pages/privacidad.astro`. Solo se ha cambiado el nombre de marca.
 - [x] **Resend** (20/09/2026): dominio `blacksunprods.com` verificado (DKIM `resend._domainkey` + `send` como CNAME a `send.forge.rmta.net`, que aporta SPF y MX de rebotes) y `RESEND_API_KEY` puesta en Vercel. Probado en producción: el formulario devuelve 200 y Resend acepta los dos emails.
-- [ ] **El aviso al dueño no llega a `info@blacksunprods.com`** (la auto-respuesta al cliente sí). El aviso se manda de `info@` a `info@`: revisar en Resend → Emails si sale como *Delivered* o *Bounced*, y si existe el buzón en Hostinger. Si es el patrón auto-enviado, cambiar el `from` del aviso en `src/pages/api/contacto.ts` (`FROM_NOTIFY`) a otro buzón del dominio.
+- [x] **Aviso de lead** (20/09/2026): llega. El aviso sale de `web@blacksunprods.com` y va a las dos direcciones de `notifyTo` (`site.mjs`). Comprobado: entra en el Gmail personal en segundos.
+- [x] **Hostinger marcaba el aviso como spam** (20/09/2026): resuelto con un filtro en webmail (remitente `web@blacksunprods.com` → Bandeja de entrada). Comprobado: ya entra bien.
+  - No era culpa de Resend ni del código: DKIM y DMARC pasan y Gmail lo aceptaba sin problema. Era el filtro de Hostinger, que desconfía de un correo con remitente `@blacksunprods.com` llegado desde fuera.
+  - Detalle que costó ver: `info@` se lee por recogida POP desde Gmail, y esa recogida **solo trae la bandeja de entrada del servidor, nunca su carpeta de spam**. Por eso Resend decía *Delivered* y aun así no aparecía nada en el móvil.
+- [ ] **Mejora opcional del SPF**: añadir Resend al SPF de la raíz para que los filtros que miran el dominio del remitente (y no solo DMARC) lo vean autorizado. El registro tendría que quedar `v=spf1 include:_spf.mail.hostinger.com include:send.blacksunprods.com ~all` — editando el TXT que ya existe, NUNCA añadiendo un segundo SPF. Se intentó el 20/09/2026 y el cambio no llegó a publicarse en los autoritativos de Hostinger. No urge: con el filtro de webmail el correo ya llega.
 - [x] **Proyecto nuevo en Vercel** + dominios `blacksunprods.com` y `www.blacksunprods.com` + DNS. No enlazar al proyecto de Ascndr.
 
 ## Contenido
