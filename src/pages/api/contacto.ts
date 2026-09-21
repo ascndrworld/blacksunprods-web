@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { SITE as BRAND, absUrl } from "../../config/site.mjs";
+import { SITE as BRAND, absUrl, hasWhatsapp, hasPhone, phoneLabel } from "../../config/site.mjs";
 import { clientTypeLabel, type Lead } from "../../lib/dossier";
 
 // Endpoint bajo demanda (serverless en Vercel); el resto del sitio sigue estático.
@@ -16,6 +16,14 @@ const SITE = BRAND.url;
 const BAND = absUrl(BRAND.emailBanner); // logo sobre banda (imagen: Gmail no la recolorea)
 const IG   = BRAND.instagram;
 const IG_LABEL = IG.replace(/^https?:\/\/(www\.)?/, "");
+
+// ── Vía urgente para la auto-respuesta ──
+// El email que recibe el cliente decía "menos de 24 horas" y no daba
+// ninguna forma de contactar: un técnico de ayuntamiento con el pliego
+// cerrando esta semana se quedaba esperando sin saber que podía escribir.
+// Solo aparece si hay número real (ver los guards de site.mjs).
+const URGENT_WA   = hasWhatsapp() ? `https://wa.me/${BRAND.whatsapp}` : "";
+const URGENT_TEL  = hasPhone() ? phoneLabel() : "";
 
 const RESEND_API_KEY =
   import.meta.env.RESEND_API_KEY ??
@@ -304,6 +312,7 @@ export const POST: APIRoute = async ({ request }) => {
   const autoHtml = shell(`
     <h1 style="margin:0 0 22px;font-size:28px;font-weight:800;letter-spacing:-0.5px;color:#141414;">Gracias, ${esc(name)}</h1>
     <p style="margin:0 0 16px;font-size:16px;line-height:1.65;color:#4a4744;">Hemos recibido tu mensaje y lo estamos revisando. Te responderemos personalmente en <strong style="color:#141414;">menos de 24 horas</strong>.</p>
+    ${URGENT_TEL ? `<p style="margin:0 0 16px;font-size:16px;line-height:1.65;color:#4a4744;">Si te corre prisa, ${URGENT_WA ? `escr&iacute;benos por <a href="${URGENT_WA}" style="color:#141414;text-decoration:underline;">WhatsApp</a> o ll&aacute;manos` : "ll&aacute;manos"} al <a href="tel:${esc(BRAND.phone)}" style="color:#141414;text-decoration:underline;white-space:nowrap;">${esc(URGENT_TEL)}</a>.</p>` : ""}
     <p style="margin:30px 0 0;font-size:15px;line-height:1.6;color:#4a4744;">Un saludo,<br><strong style="color:#141414;">${BRAND.ownerName}</strong></p>`);
 
   // Versiones en texto plano (alternativa al HTML: mejora entregabilidad y accesibilidad).
@@ -333,6 +342,14 @@ export const POST: APIRoute = async ({ request }) => {
     `Gracias, ${name}`,
     "",
     "Hemos recibido tu mensaje y lo estamos revisando. Te responderemos personalmente en menos de 24 horas.",
+    ...(URGENT_TEL
+      ? [
+          "",
+          URGENT_WA
+            ? `Si te corre prisa, escr\u00edbenos por WhatsApp o ll\u00e1manos al ${URGENT_TEL}.`
+            : `Si te corre prisa, ll\u00e1manos al ${URGENT_TEL}.`,
+        ]
+      : []),
     "",
     "Un saludo,",
     BRAND.ownerName,
