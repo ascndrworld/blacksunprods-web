@@ -25,9 +25,10 @@ const capacities = ["Menos de 300", "300–700", "700–1.500", "Más de 1.500",
     <h1 class="ct-title">hablemos de<br/>tu evento</h1>
     <p class="ct-sub">Cuéntanos qué evento tienes en mente, o solo qué técnica necesitas. Te respondemos en menos de 24h.</p>
     <p class="ct-direct">
-      ¿Prefieres escribir directo? <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
-      {hasWhatsapp() && (<> <span class="ct-direct-sep">·</span> <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener">WhatsApp</a></>)}
-      {hasPhone() && (<> <span class="ct-direct-sep">·</span> <a href={`tel:${SITE.phone}`}>{phoneLabel()}</a></>)}
+      <span class="ct-direct-label">¿Prefieres escribir directo?</span>
+      <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      {hasWhatsapp() && (<span class="ct-direct-item"><span class="ct-direct-sep">·</span> <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener">WhatsApp</a></span>)}
+      {hasPhone() && (<span class="ct-direct-item"><span class="ct-direct-sep">·</span> <a href={`tel:${SITE.phone}`}>{phoneLabel()}</a></span>)}
     </p>
   </section>
 
@@ -401,8 +402,14 @@ const capacities = ["Menos de 300", "300–700", "700–1.500", "Más de 1.500",
     text-decoration: underline;
     text-underline-offset: 3px;
   }
+  /* La etiqueta va en su propia línea para que los tres canales quepan
+     juntos abajo: así el salto es una decisión y no depende del ancho. */
+  .ct-direct-label { display: block; margin-bottom: 5px; }
+  /* Cada "· enlace" viaja entero: ninguna línea empieza ni acaba en un
+     separador suelto si el texto llega a partirse en pantallas estrechas. */
+  .ct-direct-item { white-space: nowrap; }
   .ct-direct-sep {
-    margin: 0 2px;
+    margin-right: 2px;
     opacity: 0.45;
   }
 
