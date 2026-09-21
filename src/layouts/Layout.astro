@@ -2,7 +2,7 @@
 import Header from "../components/Header.astro";
 import Analytics from "../components/Analytics.astro";
 import CookieConsent from "../components/CookieConsent.astro";
-import { SITE, absUrl, hasWhatsapp } from "../config/site.mjs";
+import { SITE, absUrl, hasPhone } from "../config/site.mjs";
 const GTM_ID = import.meta.env.PUBLIC_GTM_ID;
 // Seguro por defecto: la web NO se indexa salvo que PUBLIC_INDEXABLE=true
 // (activarlo solo en el despliegue final con dominio propio).
@@ -86,7 +86,7 @@ const {
     "logo": absUrl(SITE.logo),
     "image": ogImage,
     "email": SITE.email,
-    "telephone": hasWhatsapp() ? SITE.phone : undefined,
+    "telephone": hasPhone() ? SITE.phone : undefined,
     "priceRange": SITE.business.priceRange,
     "address": {
       "@type": "PostalAddress",
@@ -101,7 +101,15 @@ const {
     },
     "areaServed": SITE.business.areaServed,
     "serviceType": SITE.business.serviceType,
-    "sameAs": [SITE.instagram]
+    "sameAs": [SITE.instagram],
+    "contactPoint": hasPhone() ? {
+      "@type": "ContactPoint",
+      "contactType": "sales",
+      "telephone": SITE.phone,
+      "email": SITE.email,
+      "areaServed": SITE.business.areaServed,
+      "availableLanguage": ["es"]
+    } : undefined
   })} />
 
   <!-- ── Fuentes ── -->

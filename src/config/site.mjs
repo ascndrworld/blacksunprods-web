@@ -61,9 +61,9 @@ export const SITE = {
    */
   notifyTo: ["info@blacksunprods.com", "franmadi10@gmail.com"],
   /** Teléfono en formato E.164 (para Schema.org y el enlace tel:). */
-  phone: "+34600000000",
+  phone: "+34634434864",
   /** Solo dígitos con prefijo de país, para el enlace de WhatsApp. */
-  whatsapp: "34600000000",
+  whatsapp: "34634434864",
   /** Nombre de quien firma los emails automáticos. */
   ownerName: "Francisco José",
 
@@ -126,10 +126,28 @@ export const SITE = {
   },
 };
 
-/** Clave de localStorage del consentimiento de cookies (genérica a propósito). */
-/** Número de WhatsApp de ejemplo: mientras siga este valor, el botón no se muestra. */
+/** Números de ejemplo: mientras sigan estos valores, no se muestra nada. */
 export const WHATSAPP_PLACEHOLDER = "34600000000";
+export const PHONE_PLACEHOLDER = "+34600000000";
 export const hasWhatsapp = () => Boolean(SITE.whatsapp) && SITE.whatsapp !== WHATSAPP_PLACEHOLDER;
+/**
+ * Va aparte de `hasWhatsapp` a propósito: son dos canales distintos y
+ * pueden no coincidir (una fija no tiene WhatsApp, y un WhatsApp Business
+ * puede no querer llamadas). Atar el teléfono al WhatsApp haría desaparecer
+ * uno al quitar el otro.
+ */
+export const hasPhone = () => Boolean(SITE.phone) && SITE.phone !== PHONE_PLACEHOLDER;
+
+/**
+ * El teléfono tal y como se lee en pantalla: "+34634434864" → "634 43 48 64".
+ * Se calcula en vez de guardarse como segundo campo para que no puedan
+ * acabar diciendo números distintos. Si no es un móvil español, se muestra
+ * el E.164 tal cual, que siempre es correcto aunque sea menos bonito.
+ */
+export const phoneLabel = () => {
+  const es = SITE.phone.match(/^\+34(\d{3})(\d{2})(\d{2})(\d{2})$/);
+  return es ? `${es[1]} ${es[2]} ${es[3]} ${es[4]}` : SITE.phone;
+};
 
 /**
  * ¿Hay datos de titular suficientes para publicar el bloque legal?
