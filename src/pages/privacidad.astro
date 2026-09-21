@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import SiteFooter from "../components/SiteFooter.astro";
-import { LEGAL_UPDATED } from "../config/site.mjs";
+import SITE, { LEGAL_UPDATED, hasLegalOwner } from "../config/site.mjs";
 ---
 <Layout
   title="Política de Privacidad | Black Sun Prods"
@@ -20,7 +20,16 @@ import { LEGAL_UPDATED } from "../config/site.mjs";
     <section class="legal-section">
       <h2>Información básica</h2>
       <table class="legal-table">
-        <tr><th scope="row">Responsable</th><td>Black Sun Prods</td></tr>
+        <tr><th scope="row">Responsable</th><td>
+          {hasLegalOwner() ? (
+            <>
+              {SITE.owner.legalName}, que opera bajo el nombre comercial {SITE.name}<br/>
+              NIF: {SITE.owner.taxId}<br/>
+              {SITE.owner.address}<br/>
+              <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+            </>
+          ) : SITE.name}
+        </td></tr>
         <tr><th scope="row">Finalidad</th><td><ul>
           <li>Prestación de servicios de producción de eventos</li>
           <li>Gestión de usuarios del sitio web</li>

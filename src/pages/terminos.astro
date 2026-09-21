@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import SiteFooter from "../components/SiteFooter.astro";
-import { LEGAL_UPDATED } from "../config/site.mjs";
+import SITE, { LEGAL_UPDATED, hasLegalOwner } from "../config/site.mjs";
 ---
 <Layout
   title="Términos y Condiciones | Black Sun Prods"
@@ -20,6 +20,17 @@ import { LEGAL_UPDATED } from "../config/site.mjs";
     <section class="legal-section">
       <h2>1. Información general</h2>
       <p>El presente sitio web es titularidad de Black Sun Prods. El acceso y uso de este sitio implica la aceptación de los presentes términos en su totalidad.</p>
+      {hasLegalOwner() && (
+        <table class="legal-table">
+          <tr><th scope="row">Titular</th><td>{SITE.owner.legalName}</td></tr>
+          <tr><th scope="row">NIF</th><td>{SITE.owner.taxId}</td></tr>
+          <tr><th scope="row">Domicilio</th><td>{SITE.owner.address}</td></tr>
+          {SITE.owner.registry && (
+            <tr><th scope="row">Registro Mercantil</th><td>{SITE.owner.registry}</td></tr>
+          )}
+          <tr><th scope="row">Correo electrónico</th><td><a href={`mailto:${SITE.email}`}>{SITE.email}</a></td></tr>
+        </table>
+      )}
     </section>
 
     <section class="legal-section">

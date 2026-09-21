@@ -67,6 +67,30 @@ export const SITE = {
   /** Nombre de quien firma los emails automáticos. */
   ownerName: "Francisco José",
 
+  // ── Titular (LSSI art. 10 y responsable del RGPD) ──────────
+  /**
+   * Datos identificativos que la ley obliga a publicar en /terminos
+   * y /privacidad. Mientras falte cualquiera de los tres primeros, el
+   * bloque de identificación NO se muestra: publicar un dato inventado
+   * es peor que no publicarlo, porque la identificación del titular es
+   * justo lo que la LSSI exige que sea cierto y comprobable.
+   * Se rellenan los tres de golpe (ver `hasLegalOwner`).
+   */
+  owner: {
+    /** Nombre y apellidos si es autónomo; denominación social completa si es sociedad. */
+    legalName: "",
+    /** NIF (persona física) o CIF (sociedad). */
+    taxId: "",
+    /** Domicilio completo: vía y número, código postal, localidad y provincia. */
+    address: "",
+    /**
+     * Solo sociedades: datos de inscripción en el Registro Mercantil
+     * ("Registro Mercantil de Jaén, tomo X, folio Y, hoja Z"). Un
+     * autónomo no se inscribe, así que se queda vacío y no se imprime.
+     */
+    registry: "",
+  },
+
   // ── Redes ──────────────────────────────────────────────────
   instagram: "https://www.instagram.com/blacksunprods",
 
@@ -106,6 +130,13 @@ export const SITE = {
 /** Número de WhatsApp de ejemplo: mientras siga este valor, el botón no se muestra. */
 export const WHATSAPP_PLACEHOLDER = "34600000000";
 export const hasWhatsapp = () => Boolean(SITE.whatsapp) && SITE.whatsapp !== WHATSAPP_PLACEHOLDER;
+
+/**
+ * ¿Hay datos de titular suficientes para publicar el bloque legal?
+ * Exige los tres obligatorios; `registry` es opcional a propósito.
+ */
+export const hasLegalOwner = () =>
+  Boolean(SITE.owner.legalName && SITE.owner.taxId && SITE.owner.address);
 
 export const CONSENT_KEY = "site_cookie_consent";
 

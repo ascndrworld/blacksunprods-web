@@ -4,10 +4,10 @@ Lista viva de lo que falta. Tacha (o borra) cada punto al resolverlo.
 
 ## Bloqueantes (no publicar sin esto)
 
-- [ ] **Teléfono / WhatsApp de empresa** → `src/config/site.mjs` (`phone`, `whatsapp`). Mientras siga el número de ejemplo `34600000000`, el botón de WhatsApp y el teléfono de Schema.org **no se muestran** (se activan solos al poner el número real).
+- [ ] **Teléfono / WhatsApp de empresa** → `src/config/site.mjs` (`phone`, `whatsapp`). Mientras siga el número de ejemplo `34600000000`, el botón de WhatsApp y el teléfono de Schema.org **no se muestran** (se activan solos al poner el número real). Cuenta doble: la LSSI exige un medio de contacto directo además del email.
 - [ ] **Testimonios reales** de ayuntamientos y promotores → `src/pages/index.astro`, sección `#testimonios`. **Oculta** (`SHOW_TESTIMONIALS = false`): sustituir los 3 huecos "Pendiente" y poner `true`.
 - [x] **Indexación**: la web NO se indexa por defecto (noindex + robots Disallow). En el despliegue final con dominio, poner `PUBLIC_INDEXABLE=true` en Vercel.
-- [ ] **Datos legales del titular** (nombre/razón social, NIF, domicilio) en `src/pages/terminos.astro` y `src/pages/privacidad.astro`. Solo se ha cambiado el nombre de marca.
+- [ ] **Datos legales del titular**: falta el dato, no el código. Rellenar `owner` en `src/config/site.mjs` (`legalName`, `taxId`, `address`, y `registry` solo si es sociedad) y los bloques de identificación aparecen solos en `/terminos` (tabla del punto 1, LSSI art. 10) y `/privacidad` (fila «Responsable»). Mientras falte cualquiera de los tres primeros no se muestra nada: es preferible callar que publicar un dato inventado. También hay que poner `phone` para cumplir el «medio de comunicación directa» que pide la LSSI.
 - [x] **Resend** (20/09/2026): dominio `blacksunprods.com` verificado (DKIM `resend._domainkey` + `send` como CNAME a `send.forge.rmta.net`, que aporta SPF y MX de rebotes) y `RESEND_API_KEY` puesta en Vercel. Probado en producción: el formulario devuelve 200 y Resend acepta los dos emails.
 - [x] **Aviso de lead** (20/09/2026): llega. El aviso sale de `web@blacksunprods.com` y va a las dos direcciones de `notifyTo` (`site.mjs`). Comprobado: entra en el Gmail personal en segundos.
 - [x] **Hostinger marcaba el aviso como spam** (20/09/2026): resuelto con un filtro en webmail (remitente `web@blacksunprods.com` → Bandeja de entrada). Comprobado: ya entra bien.
