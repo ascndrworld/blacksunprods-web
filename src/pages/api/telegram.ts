@@ -38,8 +38,8 @@ async function tg(method: string, payload: Record<string, unknown>) {
 const noKeyboard = { inline_keyboard: [] as unknown[] };
 
 // El texto del aviso (parse_mode HTML) llega aquí ya SIN etiquetas, por líneas:
-//   👤 Nombre / ✉️ email / 🏢 tipo de cliente / 🎪 evento / 📍 municipio o recinto /
-//   📅 fecha / 👥 aforo / 📝 Consulta\n…
+//   👤 Nombre / ✉️ email / 📞 teléfono / 🏢 tipo de cliente / 🎪 evento /
+//   📍 municipio o recinto / 📅 fecha / 👥 aforo / 📝 Consulta\n…
 function pick(lines: string[], emoji: string): string {
   const line = lines.find((l) => l.trimStart().startsWith(emoji));
   return line ? line.slice(line.indexOf(emoji) + emoji.length).trim() : "";
@@ -55,6 +55,7 @@ function parseLead(text: string): Lead {
   return {
     name: val("👤"),
     email: val("✉️"),
+    phone: val("📞"),
     clientType: val("🏢"), // llega como etiqueta legible; clientTypeLabel() la deja igual
     eventType: val("🎪"),
     location: val("📍"),

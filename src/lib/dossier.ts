@@ -14,6 +14,12 @@ const WHO = `${SITE.name}, ${SITE.tagline.toLowerCase()} de ${SITE.business.city
 export interface Lead {
   name: string;
   email: string;
+  /**
+   * Opcional en el formulario. NO se incluye en el prompt del dossier
+   * (ver leadLines): un número no ayuda a investigar a un cliente en la
+   * web y no hay razón para mandárselo al modelo.
+   */
+  phone: string;
   clientType: string; // valor del formulario: ayuntamiento, sala, promotor, marca, privado
   eventType: string;
   location: string;   // municipio o recinto

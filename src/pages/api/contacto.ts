@@ -58,6 +58,26 @@ function isValidEmail(v: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 }
 
+/**
+ * Pasa el teléfono que escribió el cliente a los dígitos que quiere wa.me
+ * (prefijo de país incluido, sin "+" ni espacios).
+ *
+ * Devuelve "" cuando no puede estar seguro, y entonces el aviso no pinta
+ * el enlace de WhatsApp: un enlace a un número equivocado es peor que no
+ * tener enlace, porque acabas escribiéndole a un desconocido.
+ */
+function waDigits(raw: string): string {
+  const d = String(raw).replace(/\D/g, "");
+  if (!d) return "";
+  // 00 34 ... → 34 ...
+  const n = d.startsWith("00") ? d.slice(2) : d;
+  // Nueve dígitos y empieza por 6/7/8/9: móvil o fijo español sin prefijo.
+  if (/^[6789]\d{8}$/.test(n)) return "34" + n;
+  // Ya trae prefijo de país (España u otro): se usa tal cual.
+  if (n.length >= 11 && n.length <= 15) return n;
+  return "";
+}
+
 // "Plantilla" base de los emails: cabecera (banda con logo, imagen) + cuerpo claro + pie.
 // El cuerpo es claro a propósito: Gmail recolorea fondos pero NO imágenes, así que la
 // banda negra con el logo crema se ve siempre bien, y el resto sobrevive al modo oscuro.
@@ -162,27 +182,59 @@ async function createLead(lead: Lead): Promise<string | null> {
   try {
     // El nombre de la tabla puede llevar espacios o acentos: hay que escaparlo.
     const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE)}`;
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${AIRTABLE_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fields: {
-          Nombre: lead.name,
-          Email: lead.email,
-          "Tipo de cliente": clientTypeLabel(lead.clientType),
-          "Tipo de evento": lead.eventType,
-          "Municipio/Recinto": lead.location,
-          Fecha: lead.date,
-          Aforo: lead.capacity,
-          Consulta: lead.consulta,
-          Estado: "Nuevo",
-          Fuente: "Web",
+
+    const fields: Record<string, string> = {
+      Nombre: lead.name,
+      Email: lead.email,
+      "Tipo de cliente": clientTypeLabel(lead.clientType),
+      "Tipo de evento": lead.eventType,
+      "Municipio/Recinto": lead.location,
+      Fecha: lead.date,
+      Aforo: lead.capacity,
+      Consulta: lead.consulta,
+      Estado: "Nuevo",
+      Fuente: "Web",
+    };
+    // Solo se manda si el cliente lo dejó: así un lead sin teléfono entra
+    // igual aunque la columna todavía no exista en la tabla.
+    if (lead.phone) fields["Teléfono"] = lead.phone;
+
+    const send = (f: Record<string, string>) =>
+      fetch(url, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${AIRTABLE_TOKEN}`,
+          "Content-Type": "application/json",
         },
-      }),
-    });
+        body: JSON.stringify({ fields: f }),
+      });
+
+    let res = await send(fields);
+
+    // Airtable rechaza el registro entero si menciona una columna que no
+    // existe. Antes que perder el lead, se reintenta sin esa columna: el
+    // dato se pierde, el cliente no. Pasa al añadir un campo aquí y
+    // olvidarse de crearlo en la tabla.
+    if (!res.ok && res.status === 422) {
+      const body = await res.text().catch(() => "");
+      // Se busca sobre el mensaje ya parseado: en el JSON crudo las comillas
+      // que rodean el nombre del campo vienen escapadas y no casan.
+      let message = body;
+      try {
+        message = JSON.parse(body)?.error?.message ?? body;
+      } catch {}
+      const unknown = message.match(/Unknown field name:\s*"?([^"]+)"?/)?.[1]?.trim();
+      if (unknown && unknown in fields) {
+        console.warn(
+          `Airtable no tiene la columna "${unknown}": se reintenta sin ella. Créala en la tabla para no perder ese dato.`
+        );
+        delete fields[unknown];
+        res = await send(fields);
+      } else {
+        console.warn(`Lead no registrado en Airtable — 422: ${body}`);
+        return null;
+      }
+    }
 
     if (!res.ok) {
       const detail = await res.text().catch(() => "");
@@ -215,6 +267,7 @@ export const POST: APIRoute = async ({ request }) => {
   const lead: Lead = {
     name: str(data.name),
     email: str(data.email),
+    phone: str(data.phone, 40),
     clientType: str(data.clientType, 40),
     eventType: str(data.eventType),
     location: str(data.location),
@@ -238,6 +291,7 @@ export const POST: APIRoute = async ({ request }) => {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       ${field("Nombre", esc(name))}
       ${field("Email", `<a href="mailto:${esc(email)}" style="color:#141414;text-decoration:underline;">${esc(email)}</a>`)}
+      ${lead.phone ? field("Teléfono", `<a href="tel:${esc(waDigits(lead.phone) ? "+" + waDigits(lead.phone) : lead.phone)}" style="color:#141414;text-decoration:underline;">${esc(lead.phone)}</a>${waDigits(lead.phone) ? ` · <a href="https://wa.me/${waDigits(lead.phone)}" style="color:#141414;text-decoration:underline;">WhatsApp</a>` : ""}`) : ""}
       ${field("Quién es", esc(tipo) || "No indicado")}
       ${field("Tipo de evento", esc(lead.eventType) || "No indicado")}
       ${field("Municipio o recinto", esc(lead.location) || "No indicado")}
@@ -260,6 +314,7 @@ export const POST: APIRoute = async ({ request }) => {
     "",
     `Nombre: ${name}`,
     `Email: ${email}`,
+    `Teléfono: ${lead.phone || "No indicado"}`,
     `Quién es: ${tipo || "No indicado"}`,
     `Tipo de evento: ${lead.eventType || "No indicado"}`,
     `Municipio o recinto: ${lead.location || "No indicado"}`,
@@ -327,6 +382,7 @@ export const POST: APIRoute = async ({ request }) => {
     "",
     `👤 <b>${esc(name)}</b>`,
     `✉️ ${esc(email)}`,
+    `📞 ${esc(lead.phone) || "—"}`,
     `🏢 ${esc(tipo) || "—"}`,
     `🎪 ${esc(lead.eventType) || "—"}`,
     `📍 ${esc(lead.location) || "—"}`,

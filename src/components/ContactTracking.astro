@@ -1,0 +1,54 @@
+---
+/*
+ * ContactTracking.astro — mide los contactos que NO pasan por el formulario.
+ *
+ * El formulario deja rastro en Airtable, pero un clic en WhatsApp, en el
+ * teléfono o en el correo se va de la web sin dejar ninguno: sin esto no
+ * hay forma de saber qué páginas traen esos contactos ni cuántos son.
+ *
+ * Va por delegación en el documento, no enlace a enlace, para que valga
+ * en todas las páginas y siga valiendo para los enlaces que se añadan
+ * después sin tener que acordarse de instrumentarlos.
+ *
+ * El consentimiento lo gobierna Consent Mode desde Analytics.astro: aquí
+ * solo se empuja el evento y gtag decide si puede usar cookies o no.
+ */
+const GA4_ID = import.meta.env.PUBLIC_GA4_ID;
+const GTM_ID = import.meta.env.PUBLIC_GTM_ID;
+const ENABLED = Boolean(GA4_ID || GTM_ID);
+---
+{ENABLED && (
+<script is:inline>
+  (function () {
+    // Cada canal se reconoce por el propio href, así que no hace falta
+    // marcar los enlaces con clases ni atributos para que cuenten.
+    function methodOf(href) {
+      if (!href) return null;
+      if (href.indexOf('wa.me/') !== -1 || href.indexOf('api.whatsapp.com') !== -1) return 'whatsapp';
+      if (href.indexOf('tel:') === 0) return 'phone';
+      if (href.indexOf('mailto:') === 0) return 'email';
+      return null;
+    }
+
+    document.addEventListener('click', function (e) {
+      var link = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+      if (!link) return;
+
+      var method = methodOf(link.getAttribute('href'));
+      if (!method) return;
+
+      if (typeof window.gtag !== 'function') return;
+
+      window.gtag('event', 'contact_click', {
+        // Qué canal usó: es la dimensión que hace útil el informe.
+        method: method,
+        // Desde qué página, para saber qué landing trae los contactos.
+        page_path: window.location.pathname,
+        // Dónde estaba el enlace (footer, hero…), por si dos de la misma
+        // página rinden distinto.
+        link_text: (link.textContent || '').trim().slice(0, 60)
+      });
+    }, true); // en captura: así cuenta aunque el enlace abra otra pestaña
+  })();
+</script>
+)}

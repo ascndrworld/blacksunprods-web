@@ -39,9 +39,15 @@ const capacities = ["Menos de 300", "300–700", "700–1.500", "Más de 1.500",
         <input id="ctNombre" name="nombre" type="text" autocomplete="name" required/>
       </div>
 
-      <div class="ct-field">
-        <label for="ctEmail">Email</label>
-        <input id="ctEmail" name="email" type="email" autocomplete="email" required/>
+      <div class="ct-row">
+        <div class="ct-field">
+          <label for="ctEmail">Email</label>
+          <input id="ctEmail" name="email" type="email" autocomplete="email" required/>
+        </div>
+        <div class="ct-field">
+          <label for="ctTelefono">Teléfono <span class="ct-opt">opcional</span></label>
+          <input id="ctTelefono" name="telefono" type="tel" autocomplete="tel" inputmode="tel" placeholder="Llamada o WhatsApp"/>
+        </div>
       </div>
 
       <div class="ct-field">
@@ -133,6 +139,7 @@ const capacities = ["Menos de 300", "300–700", "700–1.500", "Más de 1.500",
 
       const nombre   = document.getElementById('ctNombre').value.trim();
       const email    = document.getElementById('ctEmail').value.trim();
+      const telefono = document.getElementById('ctTelefono').value.trim();
       const tipo     = document.getElementById('ctTipo').value;
       const evento   = document.getElementById('ctEvento').value.trim();
       const lugar    = document.getElementById('ctLugar').value.trim();
@@ -156,6 +163,7 @@ const capacities = ["Menos de 300", "300–700", "700–1.500", "Más de 1.500",
           body: JSON.stringify({
             name: nombre,
             email: email,
+            phone: telefono,
             clientType: tipo,
             eventType: evento,
             location: lugar,
@@ -166,6 +174,16 @@ const capacities = ["Menos de 300", "300–700", "700–1.500", "Más de 1.500",
           })
         });
         if (!res.ok) throw new Error('Envío rechazado (' + res.status + ')');
+
+        // El lead del formulario también se mide, si no los clics de
+        // WhatsApp no se pueden comparar con nada.
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'generate_lead', {
+            method: 'form',
+            page_path: window.location.pathname,
+            client_type: tipo || 'no indicado'
+          });
+        }
 
         form.hidden = true;
         success.hidden = false;
