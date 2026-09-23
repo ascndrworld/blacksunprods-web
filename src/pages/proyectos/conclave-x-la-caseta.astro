@@ -53,6 +53,8 @@ const canonical = absUrl("/proyectos/conclave-x-la-caseta");
 <main class="cx">
   <section class="cx-hero">
     <img class="cx-hero-img" src="/images/navidad/portada.webp" alt="Vista desde la cabina del DJ: la caseta municipal de Los Villares llena de público en una de las noches de Navidad" width="1800" height="2400" fetchpriority="high"/>
+    {/* Vídeo vertical: solo en móvil, donde el formato encaja. Lo carga el script de abajo. */}
+    <video class="cx-hero-video" muted loop playsinline preload="none" poster="/images/navidad/portada.webp" width="720" height="1280" aria-hidden="true" data-src="/videos/conclave-nochevieja.mp4" data-src-ligero="/videos/conclave-nochevieja-ligero.mp4"></video>
     <div class="cx-hero-overlay" aria-hidden="true"></div>
     <p class="cx-cat">Organización y producción</p>
     <h1 class="cx-title">Nochebuena<br/>&amp; Nochevieja</h1>
@@ -102,7 +104,8 @@ const canonical = absUrl("/proyectos/conclave-x-la-caseta");
   /* Foto vertical: se encuadra por la pista y el público (mitad de la imagen) */
   .cx-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 45%; }
   .cx-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.15) 40%, rgba(0,0,0,.85) 100%); }
-  .cx-hero > :not(.cx-hero-img):not(.cx-hero-overlay) { position: relative; }
+  .cx-hero-video { display: none; }
+  .cx-hero > :not(.cx-hero-img):not(.cx-hero-video):not(.cx-hero-overlay) { position: relative; }
   .cx-cat { font-size: 11px; letter-spacing: .32em; text-transform: uppercase; color: rgba(243, 243, 240,.8); margin: 0 0 22px; }
   .cx-title { font-size: clamp(52px, 8.4vw, 120px); font-weight: 800; letter-spacing: -.05em; line-height: .88; margin: 0 0 32px; }
   .cx-desc { font-size: clamp(16px, 1.4vw, 20px); line-height: 1.6; color: rgba(243, 243, 240,.85); max-width: 52ch; margin: 0; }
@@ -128,6 +131,12 @@ const canonical = absUrl("/proyectos/conclave-x-la-caseta");
   .cx-btn:hover { background: transparent; color: #F3F3F0; }
   .cx-back { font-size: 12px; letter-spacing: .28em; text-transform: uppercase; color: rgba(243, 243, 240,.7); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
 
+  /* Móvil: manda el vídeo vertical y la foto pasa a ser solo su cartel */
+  @media (max-width: 768px) {
+    .cx-hero-video { display: block; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .cx-hero-img { display: none; }
+  }
+
   @media (max-width: 900px) {
     .cx-facts { grid-template-columns: 1fr; }
     .cx-facts li { border-left: none; border-top: 1px solid rgba(243, 243, 240,.12); padding: 28px 20px; }
@@ -135,5 +144,34 @@ const canonical = absUrl("/proyectos/conclave-x-la-caseta");
     .cx-study { grid-template-columns: 1fr; }
   }
 </style>
+
+<script is:inline>
+  (function () {
+    var v = document.querySelector(".cx-hero-video");
+    if (!v) return;
+    if (!window.matchMedia("(max-width: 768px)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    // Con ahorro de datos o red lenta, la copia ligera
+    var red = navigator.connection || {};
+    var lenta = red.saveData === true || /^(slow-)?2g$/.test(red.effectiveType || "");
+    v.src = lenta ? v.dataset.srcLigero : v.dataset.src;
+    v.load();
+
+    function intenta() {
+      var p = v.play();
+      if (p) p.catch(function () {});
+    }
+    intenta();
+    v.addEventListener("canplay", intenta);
+    // iOS con ahorro de batería bloquea el autoplay: arranca al primer gesto
+    ["touchstart", "click", "scroll"].forEach(function (ev) {
+      document.addEventListener(ev, function reintenta() {
+        if (v.paused) intenta();
+        document.removeEventListener(ev, reintenta);
+      }, { passive: true });
+    });
+  })();
+</script>
 
 </Layout>
