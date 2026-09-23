@@ -2263,6 +2263,9 @@
   .hs-services-text { font-size: 16px; }
   /* Móvil: una sola columna full-width, un proyecto debajo de otro (estilo Somos) */
   .hs-works { grid-template-columns: 1fr; }
+  /* En columna, Cónclave va antes que Bendito Castigo */
+  .hs-works .hs-work-item:nth-child(2) { order: 3; }
+  .hs-works .hs-work-item:nth-child(3) { order: 2; }
   .hs-work-item { aspect-ratio: 16/9; }
   /* Overlay oculto por defecto; aparece al tocar/deslizar el dedo por la tarjeta (estilo Somos) */
   .hs-work-overlay {
