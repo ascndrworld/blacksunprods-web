@@ -25,6 +25,31 @@ const identidad = [
   ogImageAlt="Público al atardecer en un beach club, con la luna de Bendito Castigo sobre la cabina del DJ"
 >
 
+<Fragment slot="head">
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Inicio", "item": absUrl("/") },
+          { "@type": "ListItem", "position": 2, "name": "Proyectos", "item": absUrl("/proyectos") },
+          { "@type": "ListItem", "position": 3, "name": "Bendito Castigo", "item": absUrl("/proyectos/bendito-castigo") }
+        ]
+      },
+      {
+        "@type": "CreativeWork",
+        "name": "Bendito Castigo — Concepto musical propio",
+        "description": "Concepto musical propio de Black Sun Prods: reguetón y latin house en formato beach club y open air en verano, y clubbing en sala en invierno.",
+        "url": absUrl("/proyectos/bendito-castigo"),
+        "creator": { "@type": "Organization", "name": SITE.name, "url": SITE.url },
+        "keywords": ["concepto musical", "reguetón", "latin house", "beach club", "Jaén"],
+        "inLanguage": "es-ES"
+      }
+    ]
+  })} />
+</Fragment>
+
 <main class="bc">
   <section class="bc-hero">
     <img class="bc-hero-img" src="/images/bendito-castigo/portada-beach-club-atardecer.webp" alt="Público al atardecer en un beach club entre palmeras, con la luna de Bendito Castigo iluminada sobre la cabina del DJ" width="1672" height="941" fetchpriority="high"/>

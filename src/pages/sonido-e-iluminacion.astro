@@ -1,4 +1,33 @@
 ---
+
+// Preguntas de quien solo quiere el equipo técnico.
+// REVISAR con Francisco: son compromisos comerciales.
+const faq = [
+  {
+    q: "¿Puedo alquilar solo el sonido, o solo la iluminación?",
+    a: "Sí. Puedes contratar el rider de sonido, el de iluminación o los dos. Dinos qué acto es y dónde, y te decimos qué equipo hace falta.",
+  },
+  {
+    q: "¿Va con técnico durante el evento?",
+    a: "Sí. No dejamos el equipo montado y nos vamos: operamos el sonido y la luz durante el acto, que es lo que hace que suene y se vea como tiene que sonar y verse.",
+  },
+  {
+    q: "¿El montaje y el desmontaje están incluidos?",
+    a: "Sí, el servicio va de principio a fin: montaje, pruebas, operación en directo y desmontaje.",
+  },
+  {
+    q: "¿Para qué tipo de actos?",
+    a: "Entregas de premios, teatros, galas, actos institucionales, eventos de empresa, conciertos y fiestas. No hace falta que sea un evento musical.",
+  },
+  {
+    q: "¿Hace falta que produzcáis vosotros el evento?",
+    a: "No. Esto es un servicio aparte: tú llevas el acto y nosotros ponemos y operamos la técnica. Si además quieres que produzcamos el evento entero, también lo hacemos.",
+  },
+  {
+    q: "¿Qué necesitáis para dar un presupuesto?",
+    a: "Qué evento es, la fecha, el sitio y para cuánta gente. Con eso ya podemos decirte qué equipo encaja y cuánto cuesta.",
+  },
+];
 import Layout from "../layouts/Layout.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { SITE, absUrl } from "../config/site.mjs";
@@ -56,6 +85,39 @@ const pasos = [
   description="Alquiler y operación de rider técnico de sonido e iluminación en Jaén y Andalucía: entregas de premios, teatros, galas, actos institucionales y eventos de empresa. Solo la técnica, sin producir el evento."
   canonical={absUrl("/sonido-e-iluminacion")}
 >
+
+<Fragment slot="head">
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Inicio", "item": absUrl("/") },
+          { "@type": "ListItem", "position": 2, "name": "Sonido e iluminación", "item": absUrl("/sonido-e-iluminacion") }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": faq.map((item) => ({
+          "@type": "Question",
+          "name": item.q,
+          "acceptedAnswer": { "@type": "Answer", "text": item.a }
+        }))
+      },
+      {
+        "@type": "Service",
+        "name": "Alquiler de sonido e iluminación",
+        "serviceType": "Alquiler y operación de equipo técnico para eventos",
+        "description": "Alquiler y operación del rider de sonido, iluminación o ambos en Jaén y Andalucía, con montaje, operación en directo y desmontaje: entregas de premios, teatros, galas, actos institucionales y eventos de empresa.",
+        "url": absUrl("/sonido-e-iluminacion"),
+        "provider": { "@type": "LocalBusiness", "name": SITE.name, "url": SITE.url },
+        "areaServed": SITE.business.areaServed.map((a) => ({ "@type": "AdministrativeArea", "name": a })),
+        "inLanguage": "es-ES"
+      }
+    ]
+  })} />
+</Fragment>
 
 <main class="st">
 
@@ -131,13 +193,30 @@ const pasos = [
   </section>
 
   <section class="st-proof">
-    <img src="/images/halloween-fest/publico-disfrazado-pista.webp" alt="Público durante un evento producido por Black Sun Prods" loading="lazy"/>
+    <img src="/images/halloween-fest/publico-disfrazado-pista.webp" alt="Público durante un evento producido por Black Sun Prods" width="1333" height="2000" loading="lazy"/>
     <div class="st-proof-text">
       <span class="st-kicker">Y SI QUIERES MÁS</span>
       <h2 class="st-h2">También el evento entero</h2>
-      <p>Si lo que necesitas no es solo el equipo sino el evento completo —concepto, artistas, seguridad, ticketing y operación— ese es nuestro trabajo de siempre.</p>
+      <p>Si lo que necesitas no es solo el equipo sino el evento completo —concepto, artistas, seguridad, ticketing y operación— ese es nuestro trabajo de siempre: lo hacemos para <a href="/ayuntamientos">ayuntamientos</a>, salas y marcas, y puedes verlo en <a href="/proyectos">nuestros proyectos</a>.</p>
       <a class="st-link" href="/#servicios">Ver qué producimos →</a>
     </div>
+  </section>
+
+  <section class="st-section" aria-labelledby="stFaqTitle">
+    <div class="st-head">
+      <span class="st-kicker">DUDAS FRECUENTES</span>
+      <h2 class="st-h2" id="stFaqTitle">Lo que suelen preguntarnos</h2>
+    </div>
+    <ul class="st-faq">
+      {faq.map((item) => (
+        <li data-reveal>
+          <details>
+            <summary>{item.q}</summary>
+            <p>{item.a}</p>
+          </details>
+        </li>
+      ))}
+    </ul>
   </section>
 
   <section class="st-cta">
@@ -206,8 +285,17 @@ const pasos = [
   .st-proof img { width: 100%; height: 100%; min-height: 420px; object-fit: cover; display: block; }
   .st-proof-text { padding: clamp(48px, 6vw, 96px) clamp(20px, 5vw, 88px); display: flex; flex-direction: column; justify-content: center; }
   .st-proof-text p { font-size: 16px; line-height: 1.7; color: rgba(243, 243, 240,.65); margin: 20px 0 28px; max-width: 46ch; }
+  .st-proof-text p a, .st-cta p a { color: #F3F3F0; text-decoration: underline; text-underline-offset: 3px; }
   .st-link { color: #F3F3F0; font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; align-self: flex-start; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
 
+  .st-faq { list-style: none; margin: clamp(32px, 4vw, 56px) 0 0; padding: 0; border-top: 1px solid rgba(243, 243, 240,.12); }
+  .st-faq li { border-bottom: 1px solid rgba(243, 243, 240,.12); }
+  .st-faq summary { cursor: pointer; list-style: none; padding: 22px 36px 22px 0; font-size: clamp(16px, 1.5vw, 20px); font-weight: 600; position: relative; }
+  .st-faq summary::-webkit-details-marker { display: none; }
+  .st-faq summary::after { content: ""; position: absolute; right: 6px; top: 50%; width: 14px; height: 2px; background: rgba(243, 243, 240,.7); transform: translateY(-50%); }
+  .st-faq summary::before { content: ""; position: absolute; right: 12px; top: 50%; width: 2px; height: 14px; background: rgba(243, 243, 240,.7); transform: translateY(-50%); transition: opacity .2s; }
+  .st-faq details[open] summary::before { opacity: 0; }
+  .st-faq p { font-size: 16px; line-height: 1.7; color: rgba(243, 243, 240,.65); margin: 0 0 24px; max-width: 62ch; }
   .st-cta { text-align: center; padding: clamp(88px, 11vw, 150px) 20px; border-top: 1px solid rgba(243, 243, 240,.1); }
   .st-cta h2 { font-size: clamp(34px, 6vw, 80px); font-weight: 800; letter-spacing: -.04em; line-height: .98; margin: 0 0 24px; }
   .st-cta p { font-size: 17px; line-height: 1.5; color: rgba(243, 243, 240,.6); margin: 0 auto 40px; max-width: 44ch; }

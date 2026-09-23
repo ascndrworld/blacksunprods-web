@@ -42,6 +42,37 @@ const projects = [
   canonical={absUrl("/proyectos")}
 >
 
+<Fragment slot="head">
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Inicio", "item": absUrl("/") },
+          { "@type": "ListItem", "position": 2, "name": "Proyectos", "item": absUrl("/proyectos") }
+        ]
+      },
+      {
+        "@type": "CollectionPage",
+        "name": "Proyectos de Black Sun Prods",
+        "description": "Eventos producidos y conceptos propios de Black Sun Prods en Jaén y Andalucía.",
+        "url": absUrl("/proyectos"),
+        "inLanguage": "es-ES",
+        "mainEntity": {
+          "@type": "ItemList",
+          "itemListElement": projects.map((p, i) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "name": p.name,
+            "url": absUrl(p.href)
+          }))
+        }
+      }
+    ]
+  })} />
+</Fragment>
+
 <section class="pj-head">
   <p class="pj-eyebrow">NUESTRA EXPERIENCIA</p>
   <h1 class="pj-title">Proyectos</h1>
@@ -52,7 +83,7 @@ const projects = [
   {projects.map((p, i) => (
     <a class="tp-item" href={p.href}>
       {p.image
-        ? <img class="tp-img" src={p.image} alt={p.alt} fetchpriority={i === 0 ? "high" : undefined} loading={i === 0 ? undefined : "lazy"}/>
+        ? <img class="tp-img" src={p.image} alt={p.alt} width={p.imageSize?.[0]} height={p.imageSize?.[1]} fetchpriority={i === 0 ? "high" : undefined} loading={i === 0 ? undefined : "lazy"}/>
         : <div class="tp-img tp-concept"><img src={p.logo} alt={p.alt} width={p.logoSize[0]} height={p.logoSize[1]} loading={i === 0 ? undefined : "lazy"}/></div>}
       <div class="tp-hover">
         <span class="tp-hover-cat">{p.cat}</span>
@@ -65,6 +96,7 @@ const projects = [
 <div class="tp-cta">
   <p>¿Tienes un evento en mente?</p>
   <a href="/contacto">Hablemos de tu evento ›</a>
+  <p class="tp-cta-links">Producimos <a href="/ayuntamientos">eventos para ayuntamientos</a> y alquilamos <a href="/sonido-e-iluminacion">sonido e iluminación</a> por separado.</p>
 </div>
 
 <SiteFooter />
@@ -100,6 +132,9 @@ const projects = [
 
   .tp-cta { background: #000; padding: 130px 40px 60px; text-align: center; font-family: "Montserrat", sans-serif; border-top: 1px solid rgba(255,255,255,.06); }
   .tp-cta p { font-size: 16px; color: rgba(255,255,255,.5); margin: 0 0 20px; }
+  .tp-cta-links { font-size: 15px; color: rgba(255,255,255,.5); margin: 28px 0 0; }
+  .tp-cta-links a { font-size: inherit; font-weight: 400; letter-spacing: normal; text-transform: none; color: #F3F3F0; border: none; padding: 0; text-decoration: underline; text-underline-offset: 3px; }
+  .tp-cta-links a:hover { background: none; color: rgba(255,255,255,.7); }
   .tp-cta a { font-size: 13px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: #F3F3F0; text-decoration: none; border: 1.5px solid rgba(255,255,255,.5); padding: 12px 28px; transition: background .2s, color .2s; }
   .tp-cta a:hover { background: #F3F3F0; color: #000; }
 

@@ -1,4 +1,33 @@
 ---
+
+// Preguntas que salen en la primera llamada de una concejalía.
+// REVISAR con Francisco antes de darlas por buenas: son compromisos comerciales.
+const faq = [
+  {
+    q: "¿Os encargáis de todo o solo de una parte?",
+    a: "De las dos formas. En producción cerrada llevamos el evento completo —concepto, artistas, técnica, seguridad, ticketing y operación— y el ayuntamiento habla con una sola persona. En colaborativa nos ocupamos de lo que haga falta y nos coordinamos con los proveedores que ya tenga el municipio.",
+  },
+  {
+    q: "¿Trabajáis con los proveedores que ya tiene el ayuntamiento?",
+    a: "Sí. Si ya hay empresa de sonido, seguridad o barra, los coordinamos dentro de la producción. No es requisito cambiar de proveedores para trabajar con nosotros.",
+  },
+  {
+    q: "¿Quién gestiona permisos, seguros y seguridad?",
+    a: "Lo coordinamos nosotros dentro de la producción: planificamos permisos, seguridad y control de accesos con el ayuntamiento y con los proveedores, y repartimos por escrito qué asume cada parte antes de firmar.",
+  },
+  {
+    q: "¿En qué zona trabajáis?",
+    a: "Jaén y el resto de Andalucía. Para fechas fuera de la provincia lo vemos según el montaje y los desplazamientos.",
+  },
+  {
+    q: "¿Con cuánta antelación hay que hablar?",
+    a: "Cuanto antes mejor, sobre todo para fiestas patronales y fechas señaladas: la disponibilidad de artistas y de equipo técnico se cierra con meses de margen. Aun así, cuéntanos la fecha aunque esté cerca y te decimos si es viable.",
+  },
+  {
+    q: "¿Podéis encargaros solo del sonido y la iluminación?",
+    a: "Sí. Alquilamos y operamos el rider técnico sin producir el evento entero, con montaje, operación en directo y desmontaje.",
+  },
+];
 import Layout from "../layouts/Layout.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { SITE, absUrl } from "../config/site.mjs";
@@ -33,6 +62,40 @@ const pasos = [
   description="Productora de eventos para ayuntamientos de Jaén y Andalucía: fiestas patronales, Halloween, carnavales, festivales y programación cultural. Un único interlocutor de la idea al directo."
   canonical={absUrl("/ayuntamientos")}
 >
+
+<Fragment slot="head">
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Inicio", "item": absUrl("/") },
+          { "@type": "ListItem", "position": 2, "name": "Ayuntamientos", "item": absUrl("/ayuntamientos") }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": faq.map((item) => ({
+          "@type": "Question",
+          "name": item.q,
+          "acceptedAnswer": { "@type": "Answer", "text": item.a }
+        }))
+      },
+      {
+        "@type": "Service",
+        "name": "Producción de eventos para ayuntamientos",
+        "serviceType": "Producción de eventos municipales",
+        "description": "Diseño, producción y ejecución de fiestas patronales, Halloween, carnavales, festivales y programación cultural para ayuntamientos de Jaén y Andalucía, con una sola dirección de principio a fin.",
+        "url": absUrl("/ayuntamientos"),
+        "provider": { "@type": "LocalBusiness", "name": SITE.name, "url": SITE.url },
+        "areaServed": SITE.business.areaServed.map((a) => ({ "@type": "AdministrativeArea", "name": a })),
+        "audience": { "@type": "Audience", "audienceType": "Ayuntamientos y entidades públicas" },
+        "inLanguage": "es-ES"
+      }
+    ]
+  })} />
+</Fragment>
 
 <main class="ay">
 
@@ -94,18 +157,35 @@ const pasos = [
   </section>
 
   <section class="ay-proof">
-    <img src="/images/halloween-fest/publico-disfrazado-pista.webp" alt="Público disfrazado en Halloween Fest" loading="lazy"/>
+    <img src="/images/halloween-fest/publico-disfrazado-pista.webp" alt="Público disfrazado en Halloween Fest" width="1333" height="2000" loading="lazy"/>
     <div class="ay-proof-text">
       <span class="ay-kicker">EXPERIENCIA</span>
       <h2 class="ay-h2">Halloween Fest</h2>
-      <p>4 ediciones entre 2022 y 2025 y 600–700 asistentes de media por noche. Artistas, técnica, seguridad, ticketing, accesos y operación completa.</p>
+      <p>4 ediciones entre 2022 y 2025 y 600–700 asistentes de media por noche. Artistas, técnica, seguridad, ticketing, accesos y operación completa. También producimos las <a href="/proyectos/conclave-x-la-caseta">noches de Nochebuena y Nochevieja en la caseta municipal</a> de Los Villares.</p>
       <a class="ay-link" href="/proyectos/halloween-fest">Ver el caso →</a>
     </div>
   </section>
 
+  <section class="ay-section ay-section--line" aria-labelledby="ayFaqTitle">
+    <div class="ay-head">
+      <span class="ay-kicker">DUDAS FRECUENTES</span>
+      <h2 class="ay-h2" id="ayFaqTitle">Lo que suelen preguntarnos</h2>
+    </div>
+    <ul class="ay-faq">
+      {faq.map((item) => (
+        <li data-reveal>
+          <details>
+            <summary>{item.q}</summary>
+            <p>{item.a}</p>
+          </details>
+        </li>
+      ))}
+    </ul>
+  </section>
+
   <section class="ay-cta">
     <h2>¿Preparamos una propuesta<br/>para tu municipio?</h2>
-    <p>Cuéntanos qué fiestas o fechas tenéis en mente. Te respondemos en menos de 24h.</p>
+    <p>Cuéntanos qué fiestas o fechas tenéis en mente. Te respondemos en menos de 24h. Si solo necesitáis la parte técnica, también <a href="/sonido-e-iluminacion">alquilamos y operamos el rider de sonido e iluminación</a>.</p>
     <a class="ay-btn ay-btn--solid" href="/contacto?tipo=ayuntamiento">Pedir propuesta</a>
   </section>
 
@@ -158,8 +238,18 @@ const pasos = [
   .ay-proof-text p { font-size: 16px; line-height: 1.7; color: rgba(243, 243, 240,.65); margin: 20px 0 28px; max-width: 46ch; }
   .ay-link { color: #F3F3F0; font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; align-self: flex-start; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
 
+  .ay-faq { list-style: none; margin: clamp(32px, 4vw, 56px) 0 0; padding: 0; border-top: 1px solid rgba(243, 243, 240,.12); }
+  .ay-faq li { border-bottom: 1px solid rgba(243, 243, 240,.12); }
+  .ay-faq summary { cursor: pointer; list-style: none; padding: 22px 36px 22px 0; font-size: clamp(16px, 1.5vw, 20px); font-weight: 600; position: relative; }
+  .ay-faq summary::-webkit-details-marker { display: none; }
+  /* La cruz gira a "−" al abrir: sin JS y sin depender de un emoji */
+  .ay-faq summary::after { content: ""; position: absolute; right: 6px; top: 50%; width: 14px; height: 2px; background: rgba(243, 243, 240,.7); transform: translateY(-50%); }
+  .ay-faq summary::before { content: ""; position: absolute; right: 12px; top: 50%; width: 2px; height: 14px; background: rgba(243, 243, 240,.7); transform: translateY(-50%); transition: opacity .2s; }
+  .ay-faq details[open] summary::before { opacity: 0; }
+  .ay-faq p { font-size: 16px; line-height: 1.7; color: rgba(243, 243, 240,.65); margin: 0 0 24px; max-width: 62ch; }
   .ay-cta { text-align: center; padding: clamp(88px, 11vw, 150px) 20px; border-top: 1px solid rgba(243, 243, 240,.1); }
   .ay-cta h2 { font-size: clamp(34px, 6vw, 80px); font-weight: 800; letter-spacing: -.04em; line-height: .98; margin: 0 0 24px; }
+  .ay-proof-text p a, .ay-cta p a { color: #F3F3F0; text-decoration: underline; text-underline-offset: 3px; }
   .ay-cta p { font-size: 17px; line-height: 1.5; color: rgba(243, 243, 240,.6); margin: 0 auto 40px; max-width: 44ch; }
 
   @media (max-width: 1024px) {

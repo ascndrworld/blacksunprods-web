@@ -17,14 +17,14 @@ const coordinado = [
 
 // Galería: foto + texto alternativo. Las anchas (wide) ocupan toda la fila.
 const gallery = [
-  { src: "escenario-truss-pantalla-led.webp", alt: "Escenario con truss, iluminación y pantalla en Halloween Fest", wide: true },
-  { src: "publico-cabezas-moviles.webp", alt: "Público y cabezas móviles durante la noche de Halloween Fest" },
-  { src: "publico-disfrazado-pista.webp", alt: "Asistentes disfrazados en la pista de Halloween Fest" },
-  { src: "dj-en-cabina.webp", alt: "DJ en cabina durante Halloween Fest" },
-  { src: "artista-en-directo.webp", alt: "Artista actuando en directo en Halloween Fest" },
-  { src: "equipo-produccion-artistas.webp", alt: "Equipo de producción y artistas de Halloween Fest", wide: true },
-  { src: "publico-disfraces.webp", alt: "Público disfrazado en Halloween Fest" },
-  { src: "asistentes-noche.webp", alt: "Asistentes en Halloween Fest" },
+  { src: "escenario-truss-pantalla-led.webp", w: 1443, h: 2000, alt: "Escenario con truss, iluminación y pantalla en Halloween Fest", wide: true },
+  { src: "publico-cabezas-moviles.webp", w: 1333, h: 2000, alt: "Público y cabezas móviles durante la noche de Halloween Fest" },
+  { src: "publico-disfrazado-pista.webp", w: 1333, h: 2000, alt: "Asistentes disfrazados en la pista de Halloween Fest" },
+  { src: "dj-en-cabina.webp", w: 1600, h: 2000, alt: "DJ en cabina durante Halloween Fest" },
+  { src: "artista-en-directo.webp", w: 1333, h: 2000, alt: "Artista actuando en directo en Halloween Fest" },
+  { src: "equipo-produccion-artistas.webp", w: 2000, h: 1333, alt: "Equipo de producción y artistas de Halloween Fest", wide: true },
+  { src: "publico-disfraces.webp", w: 1333, h: 2000, alt: "Público disfrazado en Halloween Fest" },
+  { src: "asistentes-noche.webp", w: 1333, h: 2000, alt: "Asistentes en Halloween Fest" },
 ];
 
 const canonical = absUrl("/proyectos/halloween-fest");
@@ -72,7 +72,7 @@ const ogImage = absUrl("/images/halloween-fest/publico-halloween-fest-los-villar
     <picture>
       {/* La apaisada solo en PC: en vertical se recortaría y perdería la pista */}
       <source media="(min-width: 769px)" srcset="/images/halloween-fest/portada-dj-cabina.webp 1x, /images/halloween-fest/portada-dj-cabina-2x.webp 2x" width="1672" height="941"/>
-      <img class="hf-header-img" src="/images/halloween-fest/portada-dj-cabina-vertical.webp" alt="DJ al micrófono en la cabina de Halloween Fest, con la pista iluminada al fondo" fetchpriority="high"/>
+      <img class="hf-header-img" width="1852" height="2000" src="/images/halloween-fest/portada-dj-cabina-vertical.webp" alt="DJ al micrófono en la cabina de Halloween Fest, con la pista iluminada al fondo" fetchpriority="high"/>
     </picture>
     <div class="hf-header-overlay" aria-hidden="true"></div>
     <div class="hf-titleblock">
@@ -106,13 +106,13 @@ const ogImage = absUrl("/images/halloween-fest/publico-halloween-fest-los-villar
       </ul>
 
       <h2>El resultado</h2>
-      <p>Un evento consolidado, con comunidad propia y cuatro ediciones consecutivas. Es la base de experiencia con la que hoy producimos para ayuntamientos, salas y promotores.</p>
+      <p>Un evento consolidado, con comunidad propia y cuatro ediciones consecutivas. Es la base de experiencia con la que hoy producimos <a href="/ayuntamientos">eventos para ayuntamientos</a>, salas y promotores.</p>
     </div>
   </section>
 
   <section class="hf-gallery" aria-label="Galería de Halloween Fest">
     {gallery.map((g) => (
-      <img class:list={["hf-gallery-img", { "is-wide": g.wide }]} src={`/images/halloween-fest/${g.src}`} alt={g.alt} loading="lazy"/>
+      <img class:list={["hf-gallery-img", { "is-wide": g.wide }]} src={`/images/halloween-fest/${g.src}`} alt={g.alt} width={g.w} height={g.h} loading="lazy"/>
     ))}
   </section>
 
@@ -122,8 +122,8 @@ const ogImage = absUrl("/images/halloween-fest/publico-halloween-fest-los-villar
       <p>Carteles de cada edición, entradas y pulseras de acceso: la parte visible de una producción que también controla quién entra y cuándo.</p>
     </div>
     <div class="hf-identity-grid">
-      <img src="/images/halloween-fest/pulsera-acceso.webp" alt="Pulsera de acceso de Halloween Fest" loading="lazy"/>
-      <img src="/images/halloween-fest/entradas.webp" alt="Entradas de Halloween Fest" loading="lazy"/>
+      <img src="/images/halloween-fest/pulsera-acceso.webp" alt="Pulsera de acceso de Halloween Fest" width="2000" height="1333" loading="lazy"/>
+      <img src="/images/halloween-fest/entradas.webp" alt="Entradas de Halloween Fest" width="2000" height="1333" loading="lazy"/>
     </div>
   </section>
 
@@ -169,6 +169,7 @@ const ogImage = absUrl("/images/halloween-fest/publico-halloween-fest-los-villar
   .hf-study-col > h2:first-child { margin-top: 0; }
   .hf-study p { font-size: 16px; line-height: 1.75; color: rgba(243, 243, 240,.68); margin: 0; }
   .hf-study strong { color: #F3F3F0; font-weight: 600; }
+  .hf-study p a { color: #F3F3F0; text-decoration: underline; text-underline-offset: 3px; }
   .hf-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
   .hf-tags li { font-size: 14px; padding: 9px 15px; border: 1px solid rgba(243, 243, 240,.2); border-radius: 999px; }
 
