@@ -69,7 +69,11 @@ const ogImage = absUrl("/images/halloween-fest/hw3-07.webp");
 <main class="hf">
 
   <section class="hf-header">
-    <img class="hf-header-img" src="/images/halloween-fest/portada-fotografia.webp" alt="DJ con maquillaje de Halloween animando a la pista desde la cabina en Halloween Fest" fetchpriority="high"/>
+    <picture>
+      {/* La apaisada solo en PC: en vertical se recortaría y perdería la pista */}
+      <source media="(min-width: 769px)" srcset="/images/halloween-fest/portada-desktop.webp 1x, /images/halloween-fest/portada-desktop-2x.webp 2x" width="1672" height="941"/>
+      <img class="hf-header-img" src="/images/halloween-fest/portada-fotografia.webp" alt="DJ al micrófono en la cabina de Halloween Fest, con la pista iluminada al fondo" fetchpriority="high"/>
+    </picture>
     <div class="hf-header-overlay" aria-hidden="true"></div>
     <div class="hf-titleblock">
       <p class="hf-cat">Caso destacado · Producción de evento</p>
@@ -147,11 +151,12 @@ const ogImage = absUrl("/images/halloween-fest/hw3-07.webp");
   .hf-header { position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden; }
   /* Foto vertical: se encuadra por la cara del DJ (parte alta) */
   .hf-header-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 12%; }
+  @media (min-width: 769px) { .hf-header-img { object-position: center center; } }
   .hf-header-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.15) 40%, rgba(0,0,0,.85) 100%); }
   .hf-titleblock { position: absolute; left: clamp(20px, 5vw, 88px); right: 20px; bottom: clamp(32px, 7vh, 72px); max-width: 760px; }
   .hf-cat { font-size: 11px; letter-spacing: .32em; text-transform: uppercase; color: rgba(243, 243, 240,.8); margin: 0 0 18px; }
   .hf-title { font-size: clamp(52px, 8.4vw, 120px); font-weight: 800; letter-spacing: -.04em; line-height: .9; margin: 0 0 24px; }
-  .hf-desc { font-size: clamp(15px, 1.3vw, 18px); line-height: 1.6; color: rgba(243, 243, 240,.85); max-width: 54ch; margin: 0; }
+  .hf-desc { font-size: clamp(16px, 1.4vw, 20px); line-height: 1.6; color: rgba(243, 243, 240,.85); max-width: 52ch; margin: 0; }
 
   .hf-facts { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid rgba(243, 243, 240,.1); }
   .hf-facts li { display: flex; flex-direction: column; gap: 8px; padding: clamp(28px, 3.5vw, 48px) clamp(20px, 2.5vw, 40px); border-left: 1px solid rgba(243, 243, 240,.1); }
