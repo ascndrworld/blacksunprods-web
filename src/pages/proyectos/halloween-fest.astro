@@ -181,7 +181,9 @@ const ogImage = absUrl("/images/halloween-fest/publico-halloween-fest-los-villar
   .hf-identity h2 { font-size: clamp(22px, 2.2vw, 30px); font-weight: 800; letter-spacing: -.02em; margin: 0 0 16px; }
   .hf-identity p { font-size: 16px; line-height: 1.75; color: rgba(243, 243, 240,.68); margin: 0; }
   .hf-identity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .hf-identity-grid img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+  /* height:auto es obligatorio: con los atributos width/height del HTML el navegador
+     fija el alto real y entonces ignora el aspect-ratio */
+  .hf-identity-grid img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; display: block; }
 
   .hf-ig { text-align: center; padding: clamp(48px, 6vw, 80px) 20px; border-top: 1px solid rgba(243, 243, 240,.1); border-bottom: 1px solid rgba(243, 243, 240,.1); }
   .hf-ig p { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: rgba(243, 243, 240,.5); margin: 0 0 14px; }
