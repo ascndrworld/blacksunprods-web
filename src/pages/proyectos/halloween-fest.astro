@@ -17,18 +17,18 @@ const coordinado = [
 
 // Galería: foto + texto alternativo. Las anchas (wide) ocupan toda la fila.
 const gallery = [
-  { src: "hw3-12.webp", alt: "Escenario con truss, iluminación y pantalla en Halloween Fest", wide: true },
-  { src: "hw3-03.webp", alt: "Público y cabezas móviles durante la noche de Halloween Fest" },
-  { src: "hw3-04.webp", alt: "Asistentes disfrazados en la pista de Halloween Fest" },
-  { src: "hw3-13.webp", alt: "DJ en cabina durante Halloween Fest" },
-  { src: "hw3-09.webp", alt: "Artista actuando en directo en Halloween Fest" },
-  { src: "hw3-01.webp", alt: "Equipo de producción y artistas de Halloween Fest", wide: true },
-  { src: "hw3-11.webp", alt: "Público disfrazado en Halloween Fest" },
-  { src: "hw3-10.webp", alt: "Asistentes en Halloween Fest" },
+  { src: "escenario-truss-pantalla-led.webp", alt: "Escenario con truss, iluminación y pantalla en Halloween Fest", wide: true },
+  { src: "publico-cabezas-moviles.webp", alt: "Público y cabezas móviles durante la noche de Halloween Fest" },
+  { src: "publico-disfrazado-pista.webp", alt: "Asistentes disfrazados en la pista de Halloween Fest" },
+  { src: "dj-en-cabina.webp", alt: "DJ en cabina durante Halloween Fest" },
+  { src: "artista-en-directo.webp", alt: "Artista actuando en directo en Halloween Fest" },
+  { src: "equipo-produccion-artistas.webp", alt: "Equipo de producción y artistas de Halloween Fest", wide: true },
+  { src: "publico-disfraces.webp", alt: "Público disfrazado en Halloween Fest" },
+  { src: "asistentes-noche.webp", alt: "Asistentes en Halloween Fest" },
 ];
 
 const canonical = absUrl("/proyectos/halloween-fest");
-const ogImage = absUrl("/images/halloween-fest/hw3-07.webp");
+const ogImage = absUrl("/images/halloween-fest/publico-halloween-fest-los-villares.webp");
 ---
 
 <Layout
@@ -71,8 +71,8 @@ const ogImage = absUrl("/images/halloween-fest/hw3-07.webp");
   <section class="hf-header">
     <picture>
       {/* La apaisada solo en PC: en vertical se recortaría y perdería la pista */}
-      <source media="(min-width: 769px)" srcset="/images/halloween-fest/portada-desktop.webp 1x, /images/halloween-fest/portada-desktop-2x.webp 2x" width="1672" height="941"/>
-      <img class="hf-header-img" src="/images/halloween-fest/portada-fotografia.webp" alt="DJ al micrófono en la cabina de Halloween Fest, con la pista iluminada al fondo" fetchpriority="high"/>
+      <source media="(min-width: 769px)" srcset="/images/halloween-fest/portada-dj-cabina.webp 1x, /images/halloween-fest/portada-dj-cabina-2x.webp 2x" width="1672" height="941"/>
+      <img class="hf-header-img" src="/images/halloween-fest/portada-dj-cabina-vertical.webp" alt="DJ al micrófono en la cabina de Halloween Fest, con la pista iluminada al fondo" fetchpriority="high"/>
     </picture>
     <div class="hf-header-overlay" aria-hidden="true"></div>
     <div class="hf-titleblock">
@@ -122,8 +122,8 @@ const ogImage = absUrl("/images/halloween-fest/hw3-07.webp");
       <p>Carteles de cada edición, entradas y pulseras de acceso: la parte visible de una producción que también controla quién entra y cuándo.</p>
     </div>
     <div class="hf-identity-grid">
-      <img src="/images/halloween-fest/pulsera-portada.webp" alt="Pulsera de acceso de Halloween Fest" loading="lazy"/>
-      <img src="/images/halloween-fest/tickets.webp" alt="Entradas de Halloween Fest" loading="lazy"/>
+      <img src="/images/halloween-fest/pulsera-acceso.webp" alt="Pulsera de acceso de Halloween Fest" loading="lazy"/>
+      <img src="/images/halloween-fest/entradas.webp" alt="Entradas de Halloween Fest" loading="lazy"/>
     </div>
   </section>
 
