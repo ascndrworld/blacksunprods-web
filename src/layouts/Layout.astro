@@ -102,7 +102,7 @@ const {
     },
     "areaServed": SITE.business.areaServed,
     "serviceType": SITE.business.serviceType,
-    "sameAs": [SITE.instagram],
+    "sameAs": [SITE.instagram, SITE.googleBusiness].filter(Boolean),
     "contactPoint": hasPhone() ? {
       "@type": "ContactPoint",
       "contactType": "sales",

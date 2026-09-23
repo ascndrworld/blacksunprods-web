@@ -93,6 +93,12 @@ export const SITE = {
 
   // ── Redes ──────────────────────────────────────────────────
   instagram: "https://www.instagram.com/blacksunprods",
+  /**
+   * Perfil de empresa en Google. Va en el `sameAs` del LocalBusiness: es la
+   * señal con la que Google ata la ficha y la web como la misma empresa.
+   * Vacío mientras no exista, para no publicar un enlace muerto.
+   */
+  googleBusiness: "https://www.google.com/search?kgmid=/g/11nw759d3l",
 
   // ── Marca visual ───────────────────────────────────────────
   /** Logo del header (PNG con transparencia). */
