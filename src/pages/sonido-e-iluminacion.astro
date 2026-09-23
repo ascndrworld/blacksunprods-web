@@ -60,49 +60,7 @@ const pasos = [
 <main class="st">
 
   <section class="st-hero">
-    <!-- Vídeo de fondo: muted + playsinline para que el autoplay funcione en móvil -->
-    <video
-      class="st-hero-img"
-      id="stHeroVideo"
-      muted
-      autoplay
-      loop
-      playsinline
-      webkit-playsinline="true"
-      preload="auto"
-      disablepictureinpicture
-      disableremoteplayback
-      aria-hidden="true"
-      poster="/video/sonido-e-iluminacion/poster.webp"
-      src="/video/sonido-e-iluminacion/montaje.mp4"></video>
-    <script is:inline>
-      (function() {
-        var v = document.getElementById('stHeroVideo');
-        if (!v) return;
-        v.muted = true;
-        v.defaultMuted = true;
-        v.playsInline = true;
-        function tryPlay() {
-          if (!v.paused) return;
-          try {
-            var p = v.play();
-            if (p && p.catch) p.catch(function() { /* bloqueado: reintentamos en el siguiente gesto */ });
-          } catch (e) {}
-        }
-        if (v.readyState >= 2) tryPlay();
-        v.addEventListener('loadeddata', tryPlay);
-        v.addEventListener('canplay', tryPlay);
-        // Igual que en la home: si el navegador bloquea el autoplay, cualquier gesto lo reintenta.
-        var GESTURES = ['touchend', 'click', 'keydown', 'scroll', 'wheel'];
-        function resume() { tryPlay(); }
-        GESTURES.forEach(function(e){ window.addEventListener(e, resume, { passive: true }); });
-        v.addEventListener('playing', function() {
-          GESTURES.forEach(function(e){ window.removeEventListener(e, resume); });
-        });
-        document.addEventListener('visibilitychange', function() { if (!document.hidden) tryPlay(); });
-        window.addEventListener('pageshow', tryPlay);
-      })();
-    </script>
+    <img class="st-hero-img" src="/images/sonido-e-iluminacion/portada.webp" alt="Line array, truss con cabezas móviles y técnicos montando el escenario de un recinto antes del evento" width="1672" height="941" fetchpriority="high"/>
     <div class="st-hero-overlay" aria-hidden="true"></div>
     <div class="st-hero-content">
       <p class="st-eyebrow">SONIDO E ILUMINACIÓN · JAÉN Y ANDALUCÍA</p>
@@ -197,13 +155,8 @@ const pasos = [
 
   /* svh y no dvh: con dvh la foto se reescala en móvil cada vez que la barra del navegador aparece o se oculta al deslizar */
   .st-hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: flex-end; overflow: hidden; }
-  /* Vídeo vertical: se encuadra por el escenario y los equipos (mitad de la imagen) */
+  /* El lado izquierdo de la foto es oscuro y deja sitio al titular */
   .st-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 50%; pointer-events: none; }
-  /* Oculta el botón nativo de play (iOS/Safari lo muestra si bloquea el autoplay) */
-  .st-hero-img::-webkit-media-controls,
-  .st-hero-img::-webkit-media-controls-panel,
-  .st-hero-img::-webkit-media-controls-overlay-play-button,
-  .st-hero-img::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; opacity: 0 !important; }
   .st-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.35) 40%, rgba(0,0,0,.9) 100%); }
   /* padding-top que reserve el alto del header: si el titular crece, el hero
      crece con él (min-height, no height) en vez de meterse bajo el logo. */
@@ -267,6 +220,8 @@ const pasos = [
     .st-steps { grid-template-columns: repeat(2, 1fr); row-gap: 40px; }
   }
   @media (max-width: 768px) {
+    /* En vertical se encuadra por el escenario, no por el negro de la izquierda */
+    .st-hero-img { object-position: 68% center; }
     .st-proof { grid-template-columns: 1fr; }
     .st-proof img { min-height: 280px; aspect-ratio: 4 / 3; }
   }
