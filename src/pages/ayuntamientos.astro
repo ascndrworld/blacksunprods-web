@@ -37,7 +37,7 @@ const pasos = [
 <main class="ay">
 
   <section class="ay-hero">
-    <img class="ay-hero-img" src="/images/halloween-fest/hw3-12.webp" alt="Escenario con iluminación y público durante un evento producido por Black Sun Prods" fetchpriority="high"/>
+    <img class="ay-hero-img" src="/images/ayuntamientos/portada.webp" alt="Escenario con banderolas, cabina y público en una caseta municipal durante un evento producido por Black Sun Prods" width="1672" height="941" fetchpriority="high"/>
     <div class="ay-hero-overlay" aria-hidden="true"></div>
     <div class="ay-hero-content">
       <p class="ay-eyebrow">AYUNTAMIENTOS · JAÉN Y ANDALUCÍA</p>
@@ -119,7 +119,8 @@ const pasos = [
   /* svh y no dvh: con dvh la foto se reescala en móvil cada vez que la barra del navegador aparece o se oculta al deslizar */
   .ay-hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: flex-end; overflow: hidden; }
   .ay-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .ay-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.35) 40%, rgba(0,0,0,.9) 100%); }
+  /* Doble degradado: el lateral sostiene el texto, que aquí cae sobre la pared iluminada */
+  .ay-hero-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,.45) 42%, rgba(0,0,0,0) 72%), linear-gradient(180deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,.3) 40%, rgba(0,0,0,.9) 100%); }
   .ay-hero-content { position: relative; padding: 0 clamp(20px, 5vw, 88px) clamp(48px, 9vh, 96px); max-width: 900px; }
   .ay-eyebrow { font-size: 11px; letter-spacing: .3em; color: rgba(243, 243, 240,.75); margin: 0 0 22px; }
   .ay-title { font-size: clamp(44px, 6.7vw, 96px); font-weight: 800; letter-spacing: -.045em; line-height: .92; margin: 0 0 28px; }
@@ -168,6 +169,8 @@ const pasos = [
     .ay-steps { grid-template-columns: repeat(2, 1fr); row-gap: 40px; }
   }
   @media (max-width: 768px) {
+    /* La foto ya tiene el escenario centrado: en vertical se encuadra por él */
+    .ay-hero-img { object-position: center center; }
     .ay-modes, .ay-proof { grid-template-columns: 1fr; }
     .ay-proof img { min-height: 280px; aspect-ratio: 4 / 3; }
   }
