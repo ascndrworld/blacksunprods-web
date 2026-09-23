@@ -31,7 +31,7 @@ const identidad = [
     <div class="bc-hero-overlay" aria-hidden="true"></div>
     <div class="bc-hero-text">
       <p class="bc-cat">Concepto propio · En desarrollo</p>
-      <h1 class="bc-title">bendito<br/>castigo</h1>
+      <h1 class="bc-title">Bendito Castigo</h1>
       <p class="bc-desc">Un concepto musical con identidad lifestyle y comercial, pensado para funcionar todo el año: open air en verano, club en invierno.</p>
     </div>
   </section>
@@ -112,6 +112,8 @@ const identidad = [
   .bc-back { font-size: 12px; letter-spacing: .28em; text-transform: uppercase; color: rgba(243, 243, 240,.7); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
 
   @media (max-width: 768px) {
+    /* El nombre va en una línea: el cuerpo se ajusta al ancho de la pantalla */
+    .bc-title { font-size: clamp(30px, 10.5vw, 52px); }
     /* En vertical se encuadra por la cabina del DJ y la luna */
     .bc-hero-img { object-position: 96% center; }
     .bc-grid { grid-template-columns: 1fr; }
@@ -123,3 +125,5 @@ const identidad = [
 </style>
 
 </Layout>
+
+
