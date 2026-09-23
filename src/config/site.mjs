@@ -111,7 +111,9 @@ export const SITE = {
     latitude: 37.7796,
     longitude: -3.7849,
     priceRange: "€€",
-    areaServed: ["Jaén", "Andalucía", "España"],
+    // Sin "España": de momento no se cubren desplazamientos largos y el schema
+    // no debe prometer una zona que no se sirve.
+    areaServed: ["Jaén", "Andalucía"],
     serviceType: [
       "Producción de eventos",
       "Eventos para ayuntamientos",

@@ -93,10 +93,25 @@ const projects = [
   ))}
 </div>
 
+<section class="tp-also" aria-labelledby="tpAlsoTitle">
+  <h2 class="tp-also-title" id="tpAlsoTitle">Y además</h2>
+  <div class="tp-also-grid">
+    <a class="tp-also-card" href="/ayuntamientos">
+      <span class="tp-also-kicker">Ayuntamientos</span>
+      <p>Fiestas patronales, festivales y programación cultural, producidas de principio a fin.</p>
+      <span class="tp-also-arrow" aria-hidden="true">→</span>
+    </a>
+    <a class="tp-also-card" href="/sonido-e-iluminacion">
+      <span class="tp-also-kicker">Sonido e iluminación</span>
+      <p>Alquilamos y operamos el rider técnico, sin necesidad de producir el evento entero.</p>
+      <span class="tp-also-arrow" aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+
 <div class="tp-cta">
-  <p>¿Tienes un evento en mente?</p>
-  <a href="/contacto">Hablemos de tu evento ›</a>
-  <p class="tp-cta-links">Producimos <a href="/ayuntamientos">eventos para ayuntamientos</a> y alquilamos <a href="/sonido-e-iluminacion">sonido e iluminación</a> por separado.</p>
+  <h2 class="tp-cta-title">¿hablamos de<br/>tu evento?</h2>
+  <a href="/contacto">Cuéntanos la fecha ›</a>
 </div>
 
 <SiteFooter />
@@ -130,19 +145,30 @@ const projects = [
     .tp-item:nth-child(3) .tp-concept img { width: 28%; }
   }
 
-  .tp-cta { background: #000; padding: 130px 40px 60px; text-align: center; font-family: "Montserrat", sans-serif; border-top: 1px solid rgba(255,255,255,.06); }
-  .tp-cta p { font-size: 16px; color: rgba(255,255,255,.5); margin: 0 0 20px; }
-  .tp-cta-links { font-size: 15px; color: rgba(255,255,255,.5); margin: 28px 0 0; }
-  .tp-cta-links a { font-size: inherit; font-weight: 400; letter-spacing: normal; text-transform: none; color: #F3F3F0; border: none; padding: 0; text-decoration: underline; text-underline-offset: 3px; }
-  .tp-cta-links a:hover { background: none; color: rgba(255,255,255,.7); }
-  .tp-cta a { font-size: 13px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: #F3F3F0; text-decoration: none; border: 1.5px solid rgba(255,255,255,.5); padding: 12px 28px; transition: background .2s, color .2s; }
-  .tp-cta a:hover { background: #F3F3F0; color: #000; }
+  /* Dos servicios que no son "proyectos" pero salen de aquí */
+  .tp-also { background: #000; font-family: "Montserrat", sans-serif; padding: clamp(72px, 9vw, 120px) clamp(20px, 5vw, 88px) 0; border-top: 1px solid rgba(255,255,255,.06); }
+  .tp-also-title { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: rgba(243, 243, 240,.5); font-weight: 500; margin: 0 0 clamp(24px, 3vw, 40px); }
+  .tp-also-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 1.5vw, 20px); }
+  .tp-also-card { position: relative; display: block; text-decoration: none; color: inherit; border: 1px solid rgba(243, 243, 240,.14); padding: clamp(28px, 3.5vw, 44px); transition: background .25s, border-color .25s; }
+  .tp-also-card:hover { background: rgba(243, 243, 240,.04); border-color: rgba(243, 243, 240,.3); }
+  .tp-also-kicker { display: block; font-size: clamp(20px, 2.2vw, 28px); font-weight: 800; letter-spacing: -.02em; color: #F3F3F0; margin-bottom: 14px; }
+  .tp-also-card p { font-size: 15px; line-height: 1.7; color: rgba(243, 243, 240,.6); margin: 0 0 32px; max-width: 34ch; }
+  .tp-also-arrow { font-size: 20px; color: rgba(243, 243, 240,.5); transition: transform .25s, color .25s; display: inline-block; }
+  .tp-also-card:hover .tp-also-arrow { transform: translateX(6px); color: #F3F3F0; }
+
+  .tp-cta { background: #000; padding: clamp(80px, 10vw, 130px) 40px 60px; text-align: center; font-family: "Montserrat", sans-serif; }
+  .tp-cta-title { font-size: clamp(34px, 6vw, 80px); font-weight: 800; letter-spacing: -.04em; line-height: .98; margin: 0 0 36px; }
+  /* El botón, con `>` y en bloque: si es inline su padding no levanta la línea
+     y lo que venga debajo se le monta encima. */
+  .tp-cta > a { display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: #F3F3F0; text-decoration: none; border: 1.5px solid rgba(255,255,255,.5); padding: 12px 28px; transition: background .2s, color .2s; }
+  .tp-cta > a:hover { background: #F3F3F0; color: #000; }
 
   @media (max-width: 768px) {
     .pj-head { padding-top: 120px; }
     .tp-grid { grid-template-columns: 1fr; }
     .tp-hover { opacity: 1; background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,.75) 100%); }
     .tp-hover-title { font-size: 26px; }
+    .tp-also-grid { grid-template-columns: 1fr; }
     .tp-cta { padding: 64px 24px 40px; }
   }
 </style>
