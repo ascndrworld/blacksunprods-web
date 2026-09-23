@@ -91,7 +91,7 @@ const SHOW_TESTIMONIALS = false;
 
   <!-- HERO: titular en español + firma en inglés -->
   <div class="home-hero-content">
-    <h1 class="home-hero-title">del concepto<br/>a la multitud.</h1>
+    <h1 class="home-hero-title">Del concepto<br/>a la multitud.</h1>
     <p class="home-hero-sub">from concept to crowd.</p>
     <a class="home-hero-btn" href="/proyectos">VER PROYECTOS</a>
   </div>
@@ -112,7 +112,7 @@ const SHOW_TESTIMONIALS = false;
 
   <!-- ════ INTRO ════ -->
   <section class="hs-services">
-    <h2 class="hs-services-title" data-reveal>producimos<br/>tu evento</h2>
+    <h2 class="hs-services-title" data-reveal>Producimos<br/>tu evento</h2>
     <p class="hs-services-text" data-reveal>Dirigimos, organizamos y ejecutamos eventos en directo: desde la primera idea hasta la última persona que sale del recinto.</p>
     <p class="hs-services-text" data-reveal>Coordinamos artistas, técnica, seguridad, ticketing y equipo bajo una sola dirección. Y cuando solo hace falta la técnica, montamos el rider de sonido e iluminación: una entrega de premios, un teatro, una gala.</p>
     <a class="hs-services-btn" href="/contacto" data-reveal>HABLEMOS DE TU EVENTO</a>
@@ -121,7 +121,7 @@ const SHOW_TESTIMONIALS = false;
   <!-- ════ PROYECTOS ════ -->
   <div class="works-head" data-reveal>
     <span class="svc-eyebrow">NUESTRA EXPERIENCIA</span>
-    <h2 class="svc-title">proyectos</h2>
+    <h2 class="svc-title">Proyectos</h2>
   </div>
   <section class="hs-works">
     <a class="hs-work-item" href="/proyectos/halloween-fest" data-reveal>
@@ -157,7 +157,7 @@ const SHOW_TESTIMONIALS = false;
   <section class="svc" id="servicios">
     <div class="svc-head">
       <span class="svc-eyebrow">QUÉ PRODUCIMOS</span>
-      <h2 class="svc-title">servicios</h2>
+      <h2 class="svc-title">Servicios</h2>
     </div>
     <ul class="svc-rows">
       <li class="svc-row">
@@ -227,7 +227,7 @@ const SHOW_TESTIMONIALS = false;
   <section class="coord" aria-labelledby="coordTitle">
     <div class="coord-head" data-reveal>
       <span class="svc-eyebrow">QUÉ COORDINAMOS</span>
-      <h2 class="svc-title" id="coordTitle">un único interlocutor</h2>
+      <h2 class="svc-title" id="coordTitle">Un único interlocutor</h2>
       <p class="coord-text">Trabajamos con una red de proveedores especializados. Tú hablas con una persona; nosotros dirigimos al resto.</p>
     </div>
     <ul class="coord-list" data-reveal>
@@ -239,7 +239,7 @@ const SHOW_TESTIMONIALS = false;
   <section class="aud" id="para-quien">
     <div class="aud-head" data-reveal>
       <span class="svc-eyebrow">PARA QUIÉN</span>
-      <h2 class="svc-title">con quién trabajamos</h2>
+      <h2 class="svc-title">Con quién trabajamos</h2>
     </div>
     <div class="aud-grid">
       <a class="aud-card" href="/ayuntamientos" data-reveal>
@@ -275,7 +275,7 @@ const SHOW_TESTIMONIALS = false;
       <div class="proc-sticky">
         <div class="proc-head">
           <span class="proc-eyebrow">FROM CONCEPT TO CROWD</span>
-          <h2 class="proc-title">el proceso</h2>
+          <h2 class="proc-title">El proceso</h2>
         </div>
         <div class="proc-viewport">
           <ol class="proc-track">
@@ -336,7 +336,7 @@ const SHOW_TESTIMONIALS = false;
   <section class="tst" id="testimonios">
     <div class="tst-head" data-reveal>
       <span class="svc-eyebrow">lo que dicen</span>
-      <h2 class="svc-title">testimonios</h2>
+      <h2 class="svc-title">Testimonios</h2>
     </div>
     <div class="tst-grid">
       <figure class="tst-item tst-item--pending">
@@ -367,7 +367,7 @@ const SHOW_TESTIMONIALS = false;
 
   <!-- ════ CTA DE CIERRE ════ -->
   <section class="cta" id="empecemos">
-    <h2 class="cta-title" data-reveal>¿convertimos tu visión<br/>en realidad?</h2>
+    <h2 class="cta-title" data-reveal>Tú pon la fecha.<br/>Nosotros, la noche.</h2>
     <p class="cta-text" data-reveal>Cuéntanos qué evento tienes en mente. Te respondemos en menos de 24h.</p>
     <a class="cta-btn" href="/contacto" data-reveal>HABLEMOS DE TU EVENTO</a>
   </section>
@@ -687,7 +687,6 @@ img, video {
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.02em;
-  text-transform: lowercase;
   margin: 0;
 }
 
@@ -931,11 +930,11 @@ img, video {
   border-top: 1px solid rgba(243, 243, 240, 0.08);
 }
 .cta-title {
-  font-size: clamp(40px, 8vw, 96px);
+  /* "nosotros, la noche." es larga: el cuerpo baja en pantallas estrechas para que no parta */
+  font-size: clamp(28px, 8.6vw, 96px);
   font-weight: 800;
   line-height: 0.95;
   letter-spacing: -3px;
-  text-transform: lowercase;
   margin: 0 0 24px;
 }
 .cta-text {
@@ -1282,6 +1281,8 @@ img, video {
 </script>
 
 </Layout>
+
+
 
 
 
