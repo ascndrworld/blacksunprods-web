@@ -21,14 +21,20 @@ const identidad = [
   title={`Bendito Castigo — Concepto propio · ${SITE.name}`}
   description="Bendito Castigo, concepto musical propio de Black Sun Prods: reguetón antiguo y latin house en formato beach club y open air en verano, y clubbing en invierno."
   canonical={absUrl("/proyectos/bendito-castigo")}
+  ogImage={absUrl("/images/bendito-castigo/portada.webp")}
+  ogImageAlt="Público al atardecer en un beach club, con la luna de Bendito Castigo sobre la cabina del DJ"
 >
 
 <main class="bc">
   <section class="bc-hero">
-    <img class="bc-logo" src="/images/bendito-castigo/isologo.webp" alt="" width="736" height="611"/>
-    <p class="bc-cat">Concepto propio · En desarrollo</p>
-    <h1 class="bc-title">bendito<br/>castigo</h1>
-    <p class="bc-desc">Un concepto musical con identidad lifestyle y comercial, pensado para funcionar todo el año: open air en verano, club en invierno.</p>
+    <img class="bc-hero-img" src="/images/bendito-castigo/portada.webp" alt="Público al atardecer en un beach club entre palmeras, con la luna de Bendito Castigo iluminada sobre la cabina del DJ" width="1672" height="941" fetchpriority="high"/>
+    <div class="bc-hero-overlay" aria-hidden="true"></div>
+    <div class="bc-hero-text">
+      <img class="bc-logo" src="/images/bendito-castigo/isologo.webp" alt="" width="736" height="611"/>
+      <p class="bc-cat">Concepto propio · En desarrollo</p>
+      <h1 class="bc-title">bendito<br/>castigo</h1>
+      <p class="bc-desc">Un concepto musical con identidad lifestyle y comercial, pensado para funcionar todo el año: open air en verano, club en invierno.</p>
+    </div>
   </section>
 
   <section class="bc-grid">
@@ -69,10 +75,14 @@ const identidad = [
 
 <style>
   .bc { background: #000; color: #F3F3F0; font-family: "Montserrat", sans-serif; }
-  .bc-hero { min-height: 80vh; min-height: 80dvh; display: flex; flex-direction: column; justify-content: flex-end; padding: 160px clamp(20px, 5vw, 88px) clamp(56px, 8vw, 110px); }
-  .bc-cat { font-size: 11px; letter-spacing: .32em; text-transform: uppercase; color: rgba(243, 243, 240,.55); margin: 0 0 22px; }
-  .bc-title { font-size: clamp(52px, 8.4vw, 120px); font-weight: 800; font-style: italic; letter-spacing: -.05em; line-height: .85; margin: 0 0 32px; }
-  .bc-desc { font-size: clamp(16px, 1.4vw, 20px); line-height: 1.6; color: rgba(243, 243, 240,.7); max-width: 52ch; margin: 0; }
+  .bc-hero { position: relative; overflow: hidden; min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; justify-content: flex-end; padding: 160px clamp(20px, 5vw, 88px) clamp(56px, 8vw, 110px); }
+  /* Foto apaisada: el lado izquierdo ya es negro y deja respirar al título */
+  .bc-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 45%; }
+  .bc-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,.1) 35%, rgba(0,0,0,.75) 100%); }
+  .bc-hero-text { position: relative; }
+  .bc-cat { font-size: 11px; letter-spacing: .32em; text-transform: uppercase; color: rgba(243, 243, 240,.8); margin: 0 0 22px; }
+  .bc-title { font-size: clamp(52px, 8.4vw, 120px); font-weight: 800; letter-spacing: -.05em; line-height: .85; margin: 0 0 32px; }
+  .bc-desc { font-size: clamp(16px, 1.4vw, 20px); line-height: 1.6; color: rgba(243, 243, 240,.85); max-width: 52ch; margin: 0; }
 
   .bc-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid rgba(243, 243, 240,.12); border-bottom: 1px solid rgba(243, 243, 240,.12); }
   .bc-block { padding: clamp(32px, 4vw, 56px) clamp(20px, 3vw, 48px); border-left: 1px solid rgba(243, 243, 240,.12); }
@@ -103,6 +113,8 @@ const identidad = [
   .bc-back { font-size: 12px; letter-spacing: .28em; text-transform: uppercase; color: rgba(243, 243, 240,.7); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
 
   @media (max-width: 768px) {
+    /* En vertical se encuadra por la cabina y la luna, no por el negro de la izquierda */
+    .bc-hero-img { object-position: 72% center; }
     .bc-grid { grid-template-columns: 1fr; }
     .bc-block, .bc-block:first-child { border-left: none; padding: 32px 20px; }
     .bc-block + .bc-block { border-top: 1px solid rgba(243, 243, 240,.12); }
