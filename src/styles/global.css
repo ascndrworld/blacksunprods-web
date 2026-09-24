@@ -1,7 +1,29 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&display=swap');
+
+/* ── Helvetica Neue (carpeta helvetica-neue-5) en WOFF2, recortada a latín. Pendiente: licencia web. ── */
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueUltraLight.woff2") format("woff2"); font-weight: 100; font-style: normal; font-display: swap; }
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueThin.woff2") format("woff2"); font-weight: 200; font-style: normal; font-display: swap; }
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueLight.woff2") format("woff2"); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueRoman.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueMedium.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueBold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueBold.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueHeavy.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueBlack.woff2") format("woff2"); font-weight: 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueUltraLightItalic.woff2") format("woff2"); font-weight: 100; font-style: italic; font-display: swap; }
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueThinItalic.woff2") format("woff2"); font-weight: 200; font-style: italic; font-display: swap; }
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueLightItalic.woff2") format("woff2"); font-weight: 300; font-style: italic; font-display: swap; }
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueItalic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueMediumItalic.woff2") format("woff2"); font-weight: 500; font-style: italic; font-display: swap; }
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueBoldItalic.woff2") format("woff2"); font-weight: 600; font-style: italic; font-display: swap; }
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueBoldItalic.woff2") format("woff2"); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueHeavyItalic.woff2") format("woff2"); font-weight: 800; font-style: italic; font-display: swap; }
+@font-face { font-family: "BSP Helvetica"; src: url("/fonts/helvetica-neue/HelveticaNeueBlackItalic.woff2") format("woff2"); font-weight: 900; font-style: italic; font-display: swap; }
+
 
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    /* Los controles de formulario no heredan la fuente por defecto */
+    button, input, select, textarea { font-family: inherit; }
     :root {
       --bg:       #000000;
       --ink:      #F3F3F0;
@@ -14,7 +36,7 @@
     html, body {
       background: var(--bg);
       color: var(--ink);
-      font-family: "Montserrat", sans-serif;
+      font-family: "BSP Helvetica", sans-serif;
       font-weight: 400;
       /* clip (no hidden): evita scroll horizontal sin convertir el body
          en un scroll-container — así scrollea el documento de forma
@@ -413,7 +435,7 @@
     .pill-input {
       position: absolute; left: 22px; right: 44px;
       background: transparent; border: none; outline: none;
-      color: var(--ink); font-family: "Montserrat", sans-serif;
+      color: var(--ink); font-family: "BSP Helvetica", sans-serif;
       font-size: 13px; font-weight: 300; letter-spacing: 0.05em;
       text-align: center;
       opacity: 0; pointer-events: none;
@@ -499,7 +521,7 @@
     .drawer-close {
       display:inline-flex; align-items:center; gap:10px;
       background:transparent; border:none; cursor:pointer;
-      color:#b8b8b8; font-family:"Montserrat",sans-serif;
+      color:#b8b8b8; font-family:"BSP Helvetica",sans-serif;
       font-size:13px; font-weight:300; letter-spacing:.02em;
       margin-bottom: 44px;
       padding: 0;
@@ -556,7 +578,7 @@
       border: none;
       outline: none;
       color: var(--ink);
-      font-family: "Montserrat", sans-serif;
+      font-family: "BSP Helvetica", sans-serif;
       font-size: 14px;
       font-weight: 300;
       font-style: italic;
@@ -613,7 +635,7 @@
       min-width: 0;
       background: transparent; border: none;
       padding: 16px 18px 16px 0;
-      color: var(--ink); font-family: "Montserrat", sans-serif;
+      color: var(--ink); font-family: "BSP Helvetica", sans-serif;
       font-size: 14px; font-weight: 300;
       outline: none;
       -webkit-appearance: none;
@@ -629,7 +651,7 @@
       border: 1px solid #333;
       color: var(--ink);
       border-radius: 10px;
-      font-family: "Montserrat", sans-serif;
+      font-family: "BSP Helvetica", sans-serif;
       font-size: 11px;
       font-weight: 400;
       letter-spacing: .32em;
@@ -728,7 +750,7 @@
     .modal-back {
       display:inline-flex; align-items:center; gap:10px;
       background:transparent; border:none; cursor:pointer;
-      color:#b8b8b8; font-family:"Montserrat",sans-serif;
+      color:#b8b8b8; font-family:"BSP Helvetica",sans-serif;
       font-size:13px; font-weight:300; letter-spacing:.02em;
       margin-bottom: 44px;
       padding: 0;
@@ -789,7 +811,7 @@
       min-width: 0;
       background: transparent; border: none; outline: none;
       color: var(--ink);
-      font-family: "Montserrat", sans-serif;
+      font-family: "BSP Helvetica", sans-serif;
       font-size: 14px; font-weight: 300;
       padding: 16px 18px 16px 0;
       border-radius: 0;
@@ -806,7 +828,7 @@
       border: 1px solid #333;
       color: var(--ink);
       border-radius: 10px;
-      font-family: "Montserrat", sans-serif;
+      font-family: "BSP Helvetica", sans-serif;
       font-size: 11px; font-weight: 400;
       letter-spacing: .32em;
       text-transform: uppercase;
@@ -896,7 +918,7 @@
     }
 
     /* ════ PÁGINAS LEGALES (términos / privacidad) ════ */
-    .legal { background:#000; color:var(--ink); font-family:"Montserrat",sans-serif; }
+    .legal { background:#000; color:var(--ink); font-family:"BSP Helvetica",sans-serif; }
     .legal-wrap {
       max-width:760px; margin:0 auto;
       padding:clamp(140px, 18vh, 190px) clamp(20px, 5vw, 40px) clamp(72px, 9vw, 120px);
@@ -933,7 +955,7 @@
       display:inline-flex; align-items:center; gap:8px;
       font-size:9px; font-weight:400; letter-spacing:.2em; color:#555;
       text-transform:uppercase; cursor:pointer; margin-bottom:48px;
-      background:none; border:none; font-family:"Montserrat",sans-serif;
+      background:none; border:none; font-family:"BSP Helvetica",sans-serif;
       text-decoration:none;
       transition:color .25s;
     }
@@ -1110,7 +1132,7 @@
       background: transparent;
       border: 1px solid #2a2a2a;
       color: #9a9a9a;
-      font-family: "Montserrat", sans-serif;
+      font-family: "BSP Helvetica", sans-serif;
       font-size: 9px;
       font-weight: 400;
       letter-spacing: .22em;
@@ -1326,7 +1348,7 @@
       border: none;
       padding: 14px 28px;
       border-radius: 999px;
-      font-family: "Montserrat", sans-serif;
+      font-family: "BSP Helvetica", sans-serif;
       font-size: 10px;
       font-weight: 500;
       letter-spacing: .24em;
@@ -1790,13 +1812,13 @@
 
 /* H1 — exacto Somos: 90px/800/Montserrat/letter-spacing:-4px/line-height:94px */
 .home-hero-title {
-  font-family: "Montserrat", sans-serif !important;
+  font-family: "BSP Helvetica", sans-serif !important;
   font-size: 90px !important;
   font-weight: 800 !important;
   line-height: 94px !important;
   color: #F3F3F0 !important;
   letter-spacing: -4px !important;
-  text-transform: none !important;
+  text-transform: uppercase !important;
   margin: 0 0 24px !important;
   text-align: left !important;
 }
@@ -1806,7 +1828,7 @@
   display: inline-block !important;
   border: 2px solid #F3F3F0 !important;
   color: #F3F3F0 !important;
-  font-family: "Montserrat", sans-serif !important;
+  font-family: "BSP Helvetica", sans-serif !important;
   font-size: 15px !important;
   font-weight: 600 !important;
   letter-spacing: 0.12em !important;
@@ -2041,7 +2063,7 @@
 }
 
 .hs-services-title {
-  font-family: "Montserrat", sans-serif;
+  font-family: "BSP Helvetica", sans-serif;
   font-size: 90px;
   font-weight: 800;
   color: #F3F3F0;
@@ -2051,7 +2073,7 @@
 }
 
 .hs-services-text {
-  font-family: "Montserrat", sans-serif;
+  font-family: "BSP Helvetica", sans-serif;
   font-size: 20px;
   font-weight: 400;
   color: #F3F3F0;
@@ -2065,7 +2087,7 @@
   margin-top: 32px;
   border: 2px solid #F3F3F0;
   color: #F3F3F0;
-  font-family: "Montserrat", sans-serif;
+  font-family: "BSP Helvetica", sans-serif;
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.15em;
@@ -2126,7 +2148,7 @@
 .hs-work-item.is-touch-active .hs-work-overlay { opacity: 1; }
 
 .hs-work-cat {
-  font-family: "Montserrat", sans-serif;
+  font-family: "BSP Helvetica", sans-serif;
   font-size: 11px;
   font-weight: 500;
   color: rgba(255,255,255,0.7);
@@ -2137,7 +2159,7 @@
 }
 
 .hs-work-name {
-  font-family: "Montserrat", sans-serif;
+  font-family: "BSP Helvetica", sans-serif;
   font-size: 32px;
   font-weight: 800;
   color: #F3F3F0;
@@ -2213,7 +2235,7 @@
 .hs-footer-ig-label,
 .hs-footer-contact-item span {
   display: block;
-  font-family: "Montserrat", sans-serif;
+  font-family: "BSP Helvetica", sans-serif;
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -2228,7 +2250,7 @@
   justify-content: center;
 }
 .hs-footer-nav a {
-  font-family: "Montserrat", sans-serif;
+  font-family: "BSP Helvetica", sans-serif;
   font-size: 12px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -2240,7 +2262,7 @@
 .hs-footer-nav span { color: rgba(255,255,255,0.2); font-size: 12px; }
 
 .hs-footer-copy {
-  font-family: "Montserrat", sans-serif;
+  font-family: "BSP Helvetica", sans-serif;
   font-size: 11px;
   letter-spacing: 0.12em;
   color: rgba(255,255,255,0.18);
@@ -2301,7 +2323,7 @@
 .cs-study {
   background: #000;
   color: rgba(255,255,255,0.85);
-  font-family: "Montserrat", sans-serif;
+  font-family: "BSP Helvetica", sans-serif;
   padding: 90px max(24px, calc((100% - 760px) / 2)) 20px;
 }
 .cs-study h2 {
@@ -2331,4 +2353,16 @@
   .cs-study { padding: 60px max(20px, calc((100% - 760px) / 2)) 14px; }
   .cs-study p, .cs-study ul { font-size: 15px; }
   .cs-study h2 { margin: 36px 0 14px; }
+}
+
+/* Hero en PC: contenido abajo, alineado a la izquierda (en móvil sigue abajo-derecha) */
+@media (min-width: 769px) {
+  .home-hero-content {
+    justify-content: flex-end !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+    padding: 0 clamp(24px, 5vw, 88px) 120px !important;
+  }
+  .home-hero-title { text-align: left !important; }
+  .home-hero-sub { text-align: left; }
 }

@@ -433,7 +433,7 @@ img, video {
 
 /* ════ HERO — firma en inglés bajo el titular ════ */
 .home-hero-sub {
-  font-family: "Montserrat", sans-serif;
+  font-family: "BSP Helvetica", sans-serif;
   font-size: clamp(14px, 1.5vw, 20px);
   font-weight: 500;
   letter-spacing: 0.22em;
@@ -449,7 +449,7 @@ img, video {
 .stats {
   background: #000;
   color: #F3F3F0;
-  font-family: "Montserrat", sans-serif;
+  font-family: "BSP Helvetica", sans-serif;
   border-top: 1px solid rgba(243, 243, 240, 0.08);
   border-bottom: 1px solid rgba(243, 243, 240, 0.08);
 }
@@ -529,7 +529,7 @@ img, video {
 .coord {
   background: #000;
   color: #F3F3F0;
-  font-family: "Montserrat", sans-serif;
+  font-family: "BSP Helvetica", sans-serif;
   padding: clamp(24px, 3vw, 44px) 10px clamp(56px, 7vw, 96px);
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
@@ -585,7 +585,7 @@ img, video {
 .aud {
   background: #000;
   color: #F3F3F0;
-  font-family: "Montserrat", sans-serif;
+  font-family: "BSP Helvetica", sans-serif;
   padding: clamp(56px, 7vw, 96px) 10px clamp(24px, 3vw, 40px);
   border-top: 1px solid rgba(243, 243, 240, 0.08);
 }
@@ -661,7 +661,7 @@ img, video {
 .svc, .proc, .cta, .works-head {
   background: #000;
   color: #F3F3F0;
-  font-family: "Montserrat", sans-serif;
+  font-family: "BSP Helvetica", sans-serif;
 }
 /* Servicios va tras el mosaico de proyectos (a sangre): mismo aire que la cabecera de proyectos */
 .svc  { padding: clamp(48px, 6vw, 88px) 0 clamp(44px, 5vw, 72px); }
@@ -963,7 +963,7 @@ img, video {
 .tst {
   background: #000;
   color: #F3F3F0;
-  font-family: "Montserrat", sans-serif;
+  font-family: "BSP Helvetica", sans-serif;
   padding: clamp(72px, 9vw, 120px) 10px;
 }
 .tst-head { margin: 0 0 clamp(40px, 5vw, 64px); text-align: left; }
@@ -1074,6 +1074,41 @@ img, video {
   .svc-head, .svc-row { padding-inline: 24px; }
   .proc-sticky .proc-head, .proc-panel { padding-inline: 24px; }
 }
+
+/* ── RITMO VERTICAL ÚNICO ──
+   Mismo hueco entre todas las secciones (solo padding superior; el inferior
+   a 0 para que no se sumen dos) y mismo hueco entre cada cabecera y su
+   contenido. El cierre (.cta) conserva su aire propio a propósito. */
+.hs-services, .works-head, .svc, .coord, .aud, .proc {
+  padding-top: clamp(56px, 7vw, 100px);
+  padding-bottom: 0;
+}
+.proc { padding-bottom: clamp(56px, 7vw, 100px); }
+.works-head { padding-bottom: clamp(28px, 4vw, 48px); }
+.svc-head, .aud-head { margin-bottom: clamp(28px, 4vw, 48px); }
+@media (max-width: 768px) {
+  .proc-sticky .proc-head { margin-bottom: clamp(28px, 4vw, 48px); }
+}
+
+/* ── "Producimos tu evento": alineado a la izquierda, con el mismo margen
+   lateral que el resto de secciones ── */
+.hs-services {
+  text-align: left;
+  padding-inline: clamp(24px, 5vw, 88px);
+}
+.hs-services-text { margin-left: 0; margin-right: 0; }
+/* En PC el texto llega hasta donde acaba "Jaén" en la franja de cifras:
+   inicio de la 4.ª columna (~74,3vw) + su padding + ancho de "Jaén" (que deja
+   de crecer a 56px), menos el margen lateral de la sección */
+@media (min-width: 769px) {
+  .hs-services-text {
+    max-width: calc(74.3vw + clamp(20px, 2.5vw, 40px) + min(7.7vw, 126px) - clamp(24px, 5vw, 88px));
+  }
+}
+
+/* El número del proceso sobresalía de su caja (interlineado 0.8) y el visor
+   con overflow lo recortaba por arriba, sobre todo en móvil. */
+.proc-num { line-height: 1; }
 </style>
 
 <!-- ── Estilos de los marcadores (botones creados por JS → fuera del scope de Astro) ── -->
