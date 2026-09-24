@@ -112,7 +112,7 @@ const SHOW_TESTIMONIALS = false;
 
   <!-- ════ INTRO ════ -->
   <section class="hs-services">
-    <h2 class="hs-services-title" data-reveal>Producimos<br/>tu evento</h2>
+    <h2 class="hs-services-title" data-reveal>Producimos tu evento</h2>
     <p class="hs-services-text" data-reveal>Dirigimos, organizamos y ejecutamos eventos en directo: desde la primera idea hasta la última persona que sale del recinto.</p>
     <p class="hs-services-text" data-reveal>Coordinamos artistas, técnica, seguridad, ticketing y equipo bajo una sola dirección. Y cuando solo hace falta la técnica, montamos el rider de sonido e iluminación: una entrega de premios, un teatro, una gala.</p>
     <a class="hs-services-btn" href="#servicios" data-reveal>VER QUÉ PRODUCIMOS</a>
@@ -1109,6 +1109,20 @@ img, video {
 /* El número del proceso sobresalía de su caja (interlineado 0.8) y el visor
    con overflow lo recortaba por arriba, sobre todo en móvil. */
 .proc-num { line-height: 1; }
+
+/* "Producimos tu evento": en una línea y con la misma escala que el resto de
+   títulos de sección (Proyectos, Servicios…), no con la del hero.
+   Doble clase para ganar a las reglas de global.css en sus media queries. */
+.hs-services .hs-services-title {
+  font-size: clamp(30px, 4.2vw, 60px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: clamp(24px, 3vw, 40px);
+}
+/* Móviles estrechos (<380px): se reduce con la pantalla para no partirse */
+@media (max-width: 380px) {
+  .hs-services .hs-services-title { font-size: 7.6vw; }
+}
 </style>
 
 <!-- ── Estilos de los marcadores (botones creados por JS → fuera del scope de Astro) ── -->
