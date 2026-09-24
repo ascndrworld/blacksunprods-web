@@ -1,5 +1,5 @@
 ---
-import { SITE } from "../config/site.mjs";
+import { SITE, hasWhatsapp } from "../config/site.mjs";
 // Footer compacto para páginas interiores (fichas de proyecto, ayuntamientos…).
 const year = new Date().getFullYear();
 ---
@@ -15,6 +15,10 @@ const year = new Date().getFullYear();
     <span class="sf-sep">·</span>
     <a href="/contacto">Contacto</a>
     <span class="sf-sep">·</span>
+    {hasWhatsapp() && (<>
+      <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener">WhatsApp</a>
+      <span class="sf-sep">·</span>
+    </>)}
     <a href={SITE.instagram} target="_blank" rel="noopener">Instagram</a>
   </div>
   <div class="sf-links sf-legal">
