@@ -5,6 +5,12 @@
       "has": [{ "type": "host", "value": "^blacksunprods\\.com$" }],
       "destination": "https://www.blacksunprods.com/:path*",
       "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "^halloweenfest\\.blacksunprods\\.com$" }],
+      "destination": "/countdown",
+      "permanent": false
     }
   ]
 }

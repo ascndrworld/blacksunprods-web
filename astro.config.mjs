@@ -17,6 +17,8 @@ export default defineConfig({
   }),
   integrations: [
     sitemap({
+      // Landing secreta del teaser de Halloween Fest V: solo se llega por QR.
+      filter: (page) => !new URL(page).pathname.startsWith('/countdown'),
       changefreq: 'monthly',
       priority: 0.7,
       lastmod: new Date(),
