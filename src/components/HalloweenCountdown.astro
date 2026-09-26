@@ -35,7 +35,11 @@ const TAGLINE = "The game begins";
 const IMG = "/images/halloween-v";
 
 const BG = "grabado";
-const ogImage = absUrl(`${IMG}/${BG}-horizontal.webp`);
+// Vista previa al compartir: sin rastro de la V (se reserva para el final).
+const SHARE_TITLE = "Halloween Fest";
+const SHARE_DESC = "La cuenta atrás ha comenzado.";
+const SHARE_URL = "https://halloweenfest.blacksunprods.com/countdown";
+const ogImage = absUrl(`${IMG}/og-countdown.jpg`);
 
 const GROUPS = [
   { u: "d", label: "Days" },
@@ -49,8 +53,8 @@ const GROUPS = [
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>V</title>
-  <meta name="description" content="Halloween Fest V."/>
+  <title>{SHARE_TITLE}</title>
+  <meta name="description" content={SHARE_DESC}/>
   <meta name="robots" content="noindex, nofollow, noarchive"/>
   <meta name="theme-color" content="#000000"/>
   <meta name="color-scheme" content="dark"/>
@@ -59,10 +63,18 @@ const GROUPS = [
   <meta name="format-detection" content="telephone=no"/>
 
   <meta property="og:type" content="website"/>
-  <meta property="og:title" content="V"/>
-  <meta property="og:description" content="Halloween Fest V."/>
+  <meta property="og:title" content={SHARE_TITLE}/>
+  <meta property="og:description" content={SHARE_DESC}/>
+  <meta property="og:url" content={SHARE_URL}/>
   <meta property="og:image" content={ogImage}/>
+  <meta property="og:image:type" content="image/jpeg"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:image:alt" content="Un reloj de acero oxidado cuelga de cadenas en una nave oscura"/>
   <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content={SHARE_TITLE}/>
+  <meta name="twitter:description" content={SHARE_DESC}/>
+  <meta name="twitter:image" content={ogImage}/>
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3"/>
 
