@@ -8,6 +8,9 @@
  * Página independiente a propósito: NO usa Layout (sin header, footer,
  * banner de cookies ni logos de Black Sun Prods).
  *
+ * Reloj: una caja de acero colgada de cadenas, integrada en la escena, con
+ * los números arañados en su placa frontal (dibujados en vivo con SVG).
+ *
  * Fondo: la ambientación oficial de la edición (public/images/halloween-v).
  * La versión apaisada es la misma escena ampliada por los lados, con el
  * original encajado a resolución completa en el centro. La V latente es la
@@ -31,34 +34,9 @@ const DEV = import.meta.env.DEV;
 const TAGLINE = "The game begins";
 const IMG = "/images/halloween-v";
 
-// Dos relojes posibles sobre la misma escena:
-//  · "led": marcador LED de 7 segmentos tras el cristal de la caja.
-//  · "grabado": sin cristal; los números van arañados en una placa de acero.
-export interface Props { reloj?: "led" | "grabado" }
-const { reloj = "led" } = Astro.props;
-const RELOJ = reloj;
-const BG = reloj === "grabado" ? "grabado" : "ambiente";
+const BG = "grabado";
 const ogImage = absUrl(`${IMG}/${BG}-horizontal.webp`);
 
-// Dígito LED de 7 segmentos (a–g), dibujado en SVG: sin fuentes ni librerías.
-// Rejilla de 60×100; cada segmento es un hexágono alargado como en los
-// marcadores de gimnasio.
-const T = 9;   // grosor del segmento
-const G = 2.2; // separación entre segmentos
-const L = 6, R = 54, TOP = 6, MID = 50, BOT = 94;
-const h = (y: number, x1: number, x2: number) =>
-  `${x1},${y} ${x1 + T / 2},${y - T / 2} ${x2 - T / 2},${y - T / 2} ${x2},${y} ${x2 - T / 2},${y + T / 2} ${x1 + T / 2},${y + T / 2}`;
-const v = (x: number, y1: number, y2: number) =>
-  `${x},${y1} ${x + T / 2},${y1 + T / 2} ${x + T / 2},${y2 - T / 2} ${x},${y2} ${x - T / 2},${y2 - T / 2} ${x - T / 2},${y1 + T / 2}`;
-const SEGMENTS = [
-  ["a", h(TOP, L + G, R - G)],
-  ["b", v(R, TOP + G, MID - G)],
-  ["c", v(R, MID + G, BOT - G)],
-  ["d", h(BOT, L + G, R - G)],
-  ["e", v(L, MID + G, BOT - G)],
-  ["f", v(L, TOP + G, MID - G)],
-  ["g", h(MID, L + G, R - G)],
-];
 const GROUPS = [
   { u: "d", label: "Days" },
   { u: "h", label: "Hours" },
@@ -89,9 +67,8 @@ const GROUPS = [
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3"/>
 
   <!-- Si ya pasó la fecha, se entra directamente en el estado final (sin parpadeo del contador). -->
-  <script is:inline define:vars={{ TARGET, DEV, RELOJ }}>
+  <script is:inline define:vars={{ TARGET, DEV }}>
     window.__cdTarget = TARGET;
-    window.__reloj = RELOJ;
     if (DEV) {
       var demo = parseInt(new URLSearchParams(location.search).get("demo"), 10);
       if (demo >= 0) window.__cdTarget = Date.now() + demo * 1000;
@@ -117,7 +94,7 @@ const GROUPS = [
          proporción que la imagen, así que los porcentajes de .screen caen
          siempre sobre el cristal, se recorte como se recorte la escena. -->
     <div class="bg">
-      <div class:list={["scene", `scene--${reloj}`]}>
+      <div class="scene">
         <picture aria-hidden="true">
           <source media="(min-aspect-ratio: 1/1)" srcset={`${IMG}/${BG}-horizontal.webp`} width="1958" height="1402"/>
           <img class="scene-img" src={`${IMG}/${BG}-vertical.webp`} width="1122" height="1402" alt="" fetchpriority="high" decoding="async"/>
@@ -129,21 +106,15 @@ const GROUPS = [
 
         <!-- ── Cuenta atrás: dígitos LED sobre el cristal del reloj ── -->
         <div class="screen">
-          <div class:list={["led", `led--${reloj}`]} role="timer" aria-label="Cuenta atrás">
+          <div class="led led--grabado" role="timer" aria-label="Cuenta atrás">
             <div class="led-face">
               {GROUPS.map((g, i) => (
                 <Fragment>
-                  {i > 0 && (reloj === "grabado"
-                    ? <svg class="scr-colon" viewBox="0 0 20 100" aria-hidden="true" data-colon={i}></svg>
-                    : <span class="led-colon" aria-hidden="true"><i></i><i></i></span>)}
+                  {i > 0 && <svg class="scr-colon" viewBox="0 0 20 100" aria-hidden="true"></svg>}
                   <div class="led-group">
                     <div class="led-digits" data-u={g.u}>
-                      {[0, 1].map(() => reloj === "grabado" ? (
+                      {[0, 1].map(() => (
                         <svg class="led-digit scr-digit" viewBox="-6 -6 72 112" aria-hidden="true"></svg>
-                      ) : (
-                        <svg class="led-digit" viewBox="0 0 60 100" aria-hidden="true">
-                          {SEGMENTS.map(([id, pts]) => <polygon class={`s s-${id}`} points={pts}/>)}
-                        </svg>
                       ))}
                     </div>
                     <span class="led-label" aria-hidden="true">{g.label}</span>
@@ -156,14 +127,12 @@ const GROUPS = [
         </div>
 
       </div>
-      {reloj === "grabado" && (
-        <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true">
           <filter id="rasgado" x="-10%" y="-30%" width="120%" height="160%">
             <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7"/>
             <feDisplacementMap in="SourceGraphic" scale="2.4"/>
           </filter>
         </svg>
-      )}
       <div class="bg-smoke bg-smoke--a" aria-hidden="true"></div>
       <div class="bg-smoke bg-smoke--b" aria-hidden="true"></div>
       <div class="bg-vignette" aria-hidden="true"></div>
@@ -221,19 +190,16 @@ const GROUPS = [
       var root = document.documentElement;
       var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      // Segmentos encendidos por cifra.
-      var MAP = ["abcdef", "bc", "abdeg", "abcdg", "bcfg", "acdfg", "acdefg", "abc", "abcdefg", "abcdfg"];
       var units = {};
       var slot = 0;
       [].forEach.call(document.querySelectorAll(".led-digits"), function (el) {
         units[el.getAttribute("data-u")] = [].map.call(el.querySelectorAll(".led-digit"), function (svg) {
-          return { svg: svg, segs: svg.querySelectorAll(".s"), val: -1, slot: slot++ };
+          return { svg: svg, val: -1, slot: slot++ };
         });
       });
       var sr = document.querySelector("[data-sr]");
-      var GRABADO = window.__reloj === "grabado";
 
-      // ── Reloj grabado: cada cifra son trazos arañados en el acero. El
+      // ── Cada cifra son trazos arañados en el acero. El
       // esqueleto de cada número se recorre con 2–3 surcos paralelos,
       // irregulares y afilados en las puntas. La semilla depende de la
       // posición y la cifra, así que un mismo número nunca se repite igual
@@ -298,27 +264,18 @@ const GROUPS = [
         });
         svg.innerHTML = '<g class="sc-sh">' + sh + '</g><g class="sc-ed">' + ed + '</g><g class="sc-co">' + co + '</g>';
       }
-      if (GRABADO) {
-        [].forEach.call(document.querySelectorAll(".scr-colon"), function (svg, i) {
-          carve(svg, [[[9, 30], [11, 40]], [[8, 62], [10, 72]]], 900 + i);
-        });
-      }
+      [].forEach.call(document.querySelectorAll(".scr-colon"), function (svg, i) {
+        carve(svg, [[[9, 30], [11, 40]], [[8, 62], [10, 72]]], 900 + i);
+      });
 
       function paint(d, n) {
         if (d.val === n) return;
         var first = d.val === -1;
         d.val = n;
-        if (GRABADO) {
-          carve(d.svg, SK[n], d.slot * 131 + n * 17 + 5);
-          // El surco recién tallado brilla un instante
-          if (!first && !reduce) {
-            d.svg.classList.remove("fresh"); void d.svg.getBoundingClientRect(); d.svg.classList.add("fresh");
-          }
-          return;
-        }
-        var on = MAP[n];
-        for (var i = 0; i < d.segs.length; i++) {
-          d.segs[i].classList.toggle("on", on.indexOf("abcdefg".charAt(i)) !== -1);
+        carve(d.svg, SK[n], d.slot * 131 + n * 17 + 5);
+        // El surco recién tallado brilla un instante
+        if (!first && !reduce) {
+          d.svg.classList.remove("fresh"); void d.svg.getBoundingClientRect(); d.svg.classList.add("fresh");
         }
       }
 
@@ -450,23 +407,6 @@ const GROUPS = [
           }, 4500 + Math.random() * 4500);
         })();
       }
-
-      // ── Dígitos que fallan: cada pocos segundos uno se apaga un instante.
-      (function flicker() {
-        setTimeout(function () {
-          var all = document.querySelectorAll(".led-digit");
-          var d = all[Math.floor(Math.random() * all.length)];
-          if (d && !reduce && root.getAttribute("data-state") === "count") {
-            d.classList.add("dying");
-            setTimeout(function () { d.classList.remove("dying"); }, 70 + Math.random() * 180);
-            if (Math.random() < 0.4) setTimeout(function () {
-              d.classList.add("dying");
-              setTimeout(function () { d.classList.remove("dying"); }, 60);
-            }, 260);
-          }
-          flicker();
-        }, 2500 + Math.random() * 4500);
-      })();
 
       function render(ms) {
         var t = Math.max(0, Math.floor(ms / 1000));
@@ -626,7 +566,7 @@ const GROUPS = [
     /* desplazamiento para que la caja del reloj (no la imagen) quede centrada */
     --cx: -52.27%;
     --zoom: 1.5;
-    --gx: 33.333%; --gy: 46.006%; --gw: 37.611%; --gh: 7.632%;
+    --gx: 33.155%; --gy: 45.506%; --gw: 38.324%; --gh: 8.488%;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -640,7 +580,7 @@ const GROUPS = [
     .scene {
       --cx: -50%;
       --zoom: 1.358;
-      --gx: 39.224%; --gw: 21.553%;
+      --gx: 39.122%; --gw: 21.961%;
       width: max(100cqw, 100cqh * 1958 / 1402, 100cqw * var(--zoom));
       aspect-ratio: 1958 / 1402;
     }
@@ -665,7 +605,7 @@ const GROUPS = [
   }
   @keyframes vbreath { from { opacity: 0.04; } to { opacity: 0.1; } }
 
-  /* Cristal del reloj: se oscurece el de la foto y encima van los LED */
+  /* Placa frontal de la caja: aquí se arañan los números */
   .screen {
     position: absolute;
     left: var(--gx);
@@ -675,24 +615,6 @@ const GROUPS = [
     container-type: size;
     display: grid;
     place-items: center;
-    background: radial-gradient(ellipse at 50% 40%, rgba(12, 4, 3, 0.8), rgba(2, 1, 1, 0.92));
-    border-radius: 2px;
-    box-shadow:
-      inset 0 2px 6px rgba(0, 0, 0, 0.95),
-      inset 0 0 0 1px rgba(0, 0, 0, 0.7),
-      0 0 14px rgba(200, 20, 10, 0.22);
-    overflow: hidden;
-  }
-  /* Suciedad y reflejo del cristal, por encima de los dígitos */
-  .screen::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(165deg, rgba(255, 230, 215, 0.07) 0%, transparent 40%),
-      url("/images/halloween-v/cristal-sucio.webp") center / cover;
-    opacity: 0.6;
-    pointer-events: none;
   }
 
   /* Humo: textura propia repetible (humo.webp) que se desplaza en bucle */
@@ -744,11 +666,10 @@ const GROUPS = [
   }
 
 
-  /* ── Dígitos LED ───────────────────────────────────── */
+  /* ── Números arañados ──────────────────────────────── */
   .led {
-    /* Ancho de un dígito, relativo al cristal (.screen es el contenedor) */
+    /* Ancho de una cifra, relativo a la placa (.screen es el contenedor) */
     --dw: min(100cqw / 11.2, 100cqh / 2.55);
-    --red: #D8190D;
     position: relative;
     transition: opacity 0.5s ease, filter 0.5s ease;
   }
@@ -756,17 +677,8 @@ const GROUPS = [
     display: flex;
     align-items: flex-start;
     gap: calc(var(--dw) * 0.16);
-    /* Resplandor de los LED, aplicado una sola vez al conjunto */
-    filter: drop-shadow(0 0 calc(var(--dw) * 0.07) rgba(210, 25, 12, 0.85)) drop-shadow(0 0 calc(var(--dw) * 0.3) rgba(180, 15, 8, 0.4));
-    /* Tensión inestable: caídas de brillo muy de vez en cuando */
-    animation: mains 13s steps(1, end) infinite;
-  }
-  @keyframes mains {
-    0%, 71%, 72.6%, 74%, 100% { opacity: 1; }
-    71.4% { opacity: 0.35; }
-    71.9% { opacity: 0.85; }
-    72.2% { opacity: 0.15; }
-    73.2% { opacity: 0.7; }
+    /* Las ranuras sangran luz roja sobre el metal */
+    filter: drop-shadow(0 0 calc(var(--dw) * 0.05) rgba(255, 40, 20, 0.55)) drop-shadow(0 0 calc(var(--dw) * 0.28) rgba(160, 10, 5, 0.5));
   }
   .led-group {
     display: flex;
@@ -781,49 +693,19 @@ const GROUPS = [
     height: calc(var(--dw) * 5 / 3);
     overflow: visible;
   }
-  .s { fill: rgba(150, 25, 18, 0.1); transition: fill 0.08s linear; }
-  .s.on { fill: var(--red); }
-  /* Un dígito que falla un instante (lo decide el script al azar) */
-  .led-digit.dying .s.on { fill: rgba(216, 25, 13, 0.22); }
-
-  .led-colon {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: calc(var(--dw) * 0.46);
-    height: calc(var(--dw) * 5 / 3);
-    padding: 0 calc(var(--dw) * 0.04);
-  }
-  .led-colon i {
-    display: block;
-    width: calc(var(--dw) * 0.15);
-    height: calc(var(--dw) * 0.15);
-    background: var(--red);
-  }
   .led-label {
     font-size: max(6.5px, calc(var(--dw) * 0.21));
-    font-weight: 500;
+    font-weight: 700;
     line-height: 1;
-    letter-spacing: 0.2em;
-    text-indent: 0.2em; /* compensa el tracking para centrar bajo los dígitos */
+    letter-spacing: 0.26em;
+    text-indent: 0.26em; /* compensa el tracking para centrar bajo las cifras */
     text-transform: uppercase;
-    color: rgba(210, 40, 28, 0.6);
+    color: #B8AA9E;
+    text-shadow: 0 0 0.45em rgba(255, 40, 20, 0.7);
     white-space: nowrap;
+    filter: url(#rasgado);
   }
 
-  /* ── Reloj grabado: números arañados en la placa de acero ── */
-  /* La placa de esta variante es algo mayor que el cristal del LED */
-  .scene--grabado { --gx: 33.155%; --gy: 45.506%; --gw: 38.324%; --gh: 8.488%; }
-  @media (min-aspect-ratio: 1/1) {
-    .scene--grabado { --gx: 39.122%; --gw: 21.961%; }
-  }
-  .scene--grabado .screen { background: none; box-shadow: none; overflow: visible; }
-  .scene--grabado .screen::after { display: none; }
-  .led--grabado .led-face {
-    animation: none;
-    /* Las ranuras sangran luz roja sobre el metal */
-    filter: drop-shadow(0 0 calc(var(--dw) * 0.05) rgba(255, 40, 20, 0.55)) drop-shadow(0 0 calc(var(--dw) * 0.28) rgba(160, 10, 5, 0.5));
-  }
   .scr-digit, .scr-colon { overflow: visible; }
   .scr-colon {
     display: block;
@@ -839,14 +721,6 @@ const GROUPS = [
   @keyframes fresh {
     from { filter: brightness(2.6) drop-shadow(0 0 3px #FF3A1A); }
     to { filter: none; }
-  }
-  .led--grabado .led-label {
-    font-weight: 700;
-    letter-spacing: 0.26em;
-    text-indent: 0.26em;
-    color: #B8AA9E;
-    text-shadow: 0 0 0.45em rgba(255, 40, 20, 0.7);
-    filter: url(#rasgado);
   }
 
   @keyframes gate {
@@ -1156,7 +1030,6 @@ const GROUPS = [
 
   /* surge: el reloj se sobrecarga y la señal se rompe */
   :global([data-state="surge"]) .scene { animation: jolt 0.7s steps(1, end) both; }
-  :global([data-state="surge"]) .led:not(.led--grabado) .s { fill: var(--red); }
   :global([data-state="surge"]) .led-face { animation: surge-face 0.7s steps(1, end) both; }
   :global([data-state="surge"]) .led--grabado :global(.sc-co) { fill: #FFF3EE; }
   :global([data-state="surge"]) .led--grabado :global(.sc-ed) { fill: #FFD2C4; }
