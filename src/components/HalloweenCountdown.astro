@@ -139,12 +139,6 @@ const GROUPS = [
         </div>
 
       </div>
-      <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-          <filter id="rasgado" x="-10%" y="-30%" width="120%" height="160%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7"/>
-            <feDisplacementMap in="SourceGraphic" scale="2.4"/>
-          </filter>
-        </svg>
       <div class="bg-smoke bg-smoke--a" aria-hidden="true"></div>
       <div class="bg-smoke bg-smoke--b" aria-hidden="true"></div>
       <div class="bg-vignette" aria-hidden="true"></div>
@@ -195,12 +189,19 @@ const GROUPS = [
 
     <!-- ── Salida a la web: un EJECT de vídeo, discreto pero pulsable ── -->
     <a class="eject" href="https://www.blacksunprods.com/" aria-label="Ir a la web de Black Sun Prods">
-      <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.2 11.2 7.4H.8Z"/><rect x=".8" y="9" width="10.4" height="1.9"/></svg>
       <span>blacksunprods.com</span>
     </a>
 
     <div class="grain" aria-hidden="true"></div>
   </main>
+
+  <!-- Filtro de bordes rasgados (etiquetas del reloj y botón EJECT) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="rasgado" x="-10%" y="-30%" width="120%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="2.4"/>
+    </filter>
+  </svg>
 
   <script is:inline>
     (function () {
@@ -775,6 +776,8 @@ const GROUPS = [
   }
 
   /* ── EJECT: enlace a la web ────────────────────────── */
+  /* Rótulo rasgado en rojo sangre que parpadea como un fluorescente que
+     se muere y da tirones de señal. Discreto, pero con área de toque de 44 px. */
   .eject {
     position: absolute;
     left: 50%;
@@ -783,38 +786,64 @@ const GROUPS = [
     z-index: 10;
     display: inline-flex;
     align-items: center;
-    gap: 0.7em;
-    /* área de toque de al menos 44 px aunque se vea pequeño */
     min-height: 44px;
     padding: 0 18px;
-    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-    font-size: clamp(0.62rem, 2.6vw, 0.78rem);
+    font-family: "BSP Helvetica", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: clamp(0.66rem, 2.8vw, 0.82rem);
     font-weight: 700;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.32em;
+    text-indent: 0.32em;
     text-transform: uppercase;
     text-decoration: none;
-    color: #E6E1DA;
-    text-shadow: 1px 0 rgba(255, 0, 60, 0.6), -1px 0 rgba(0, 220, 255, 0.45);
-    opacity: 0.42;
+    color: #D22E1F;
+    text-shadow: 0 0 0.5em rgba(255, 30, 15, 0.55), 0 0 1.4em rgba(160, 0, 0, 0.45);
+    filter: url(#rasgado);
+    opacity: 0.72;
     -webkit-tap-highlight-color: transparent;
-    transition: opacity 0.35s ease, letter-spacing 0.35s ease;
-    animation: eject-in 1.2s ease-out 3.2s both;
+    transition: color 0.25s ease;
+    animation:
+      eject-in 1.4s ease-out 3.2s both,
+      eject-flicker 5.3s steps(1, end) 4.6s infinite,
+      eject-spasm 7.7s steps(1, end) 4.6s infinite;
   }
-  .eject svg { width: 0.95em; height: 0.95em; fill: currentColor; filter: drop-shadow(1px 0 rgba(255, 0, 60, 0.6)) drop-shadow(-1px 0 rgba(0, 220, 255, 0.45)); }
-  /* subrayado de cinta que parpadea, como el cursor de un menú de vídeo */
+  /* subrayado convertido en arañazo roto */
   .eject span { position: relative; }
   .eject span::after {
     content: "";
     position: absolute;
-    left: 0; right: 0.2em; bottom: -5px;
+    left: 0.32em; right: 0;
+    bottom: -6px;
     height: 1px;
-    background: currentColor;
-    opacity: 0.5;
-    animation: eject-blink 1.6s steps(1, end) infinite;
+    background: repeating-linear-gradient(90deg, currentColor 0 9px, transparent 9px 11px, currentColor 11px 15px, transparent 15px 17px, currentColor 17px 30px, transparent 30px 33px);
+    opacity: 0.7;
+    transform: rotate(-0.6deg);
   }
-  @keyframes eject-blink { 50% { opacity: 0; } }
-  @keyframes eject-in { from { opacity: 0; } to { opacity: 0.42; } }
-  .eject:hover, .eject:focus-visible, .eject:active { opacity: 0.95; letter-spacing: 0.26em; }
+  @keyframes eject-in { from { opacity: 0; } to { opacity: 0.72; } }
+  @keyframes eject-flicker {
+    0%, 100% { opacity: 0.72; }
+    11% { opacity: 0.15; } 12% { opacity: 0.72; } 13% { opacity: 0.25; } 14% { opacity: 0.8; }
+    46% { opacity: 0.35; } 47% { opacity: 0.72; }
+    73% { opacity: 0.06; } 75% { opacity: 0.6; } 76% { opacity: 0.12; } 78% { opacity: 0.72; }
+  }
+  @keyframes eject-spasm {
+    0%, 100% { transform: translateX(-50%); }
+    31% { transform: translateX(calc(-50% + 4px)) skewX(10deg); }
+    32% { transform: translateX(calc(-50% - 3px)) skewX(-6deg); }
+    33% { transform: translateX(-50%); }
+    84% { transform: translateX(calc(-50% - 5px)) scaleY(1.15); }
+    85% { transform: translateX(calc(-50% + 2px)); }
+    86% { transform: translateX(-50%); }
+  }
+  /* al acercarse se enciende y tiembla, como si no quisiera dejarte salir */
+  .eject:hover, .eject:focus-visible, .eject:active {
+    color: #FF3321;
+    animation: eject-tremble 0.14s steps(2, end) infinite;
+    opacity: 1;
+  }
+  @keyframes eject-tremble {
+    0% { transform: translate(calc(-50% + 1px), 0); opacity: 1; }
+    50% { transform: translate(calc(-50% - 1px), 1px); opacity: 0.85; }
+  }
   .eject:focus-visible { outline: 1px solid rgba(255, 60, 40, 0.8); outline-offset: 2px; }
   /* fuera durante la transición; en la pantalla final vuelve cuando ya está todo */
   :global([data-state="surge"]) .eject,
@@ -822,7 +851,12 @@ const GROUPS = [
   :global([data-state="nosignal"]) .eject,
   :global([data-state="glitch"]) .eject,
   :global([data-state="v"]) .eject { opacity: 0; pointer-events: none; animation: none; }
-  :global([data-anim][data-state="final"]) .eject { animation: eject-in 1.2s ease-out 4.5s both; }
+  :global([data-anim][data-state="final"]) .eject {
+    animation:
+      eject-in 1.4s ease-out 4.5s both,
+      eject-flicker 5.3s steps(1, end) 5.9s infinite,
+      eject-spasm 7.7s steps(1, end) 5.9s infinite;
+  }
   :global([data-exit]) .eject { opacity: 0; pointer-events: none; animation: none; }
   /* expulsión: la imagen se aplasta como un tubo que se apaga */
   :global([data-exit]) .bg,
