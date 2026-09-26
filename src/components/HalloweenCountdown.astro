@@ -193,6 +193,12 @@ const GROUPS = [
       <span class="osd-ns">NO SIGNAL</span>
     </div>
 
+    <!-- ── Salida a la web: un EJECT de vídeo, discreto pero pulsable ── -->
+    <a class="eject" href="https://www.blacksunprods.com/" aria-label="Ir a la web de Black Sun Prods">
+      <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.2 11.2 7.4H.8Z"/><rect x=".8" y="9" width="10.4" height="1.9"/></svg>
+      <span>blacksunprods.com</span>
+    </a>
+
     <div class="grain" aria-hidden="true"></div>
   </main>
 
@@ -483,7 +489,19 @@ const GROUPS = [
         if (!document.hidden && !ending) { clearTimeout(timer); tick(); }
       });
       window.addEventListener("pageshow", function (e) {
+        root.removeAttribute("data-exit");
         if (e.persisted && !ending) { clearTimeout(timer); tick(); }
+      });
+
+      // ── EJECT: la cinta se expulsa (estática + apagado de tubo) y luego
+      // se va a la web. Con Cmd/Ctrl o "reducir movimiento", enlace normal.
+      var eject = document.querySelector(".eject");
+      if (eject) eject.addEventListener("click", function (e) {
+        if (reduce || e.metaKey || e.ctrlKey || e.shiftKey) return;
+        e.preventDefault();
+        root.setAttribute("data-exit", "");
+        vhs.burst(650, 0.6);
+        setTimeout(function () { location.href = eject.href; }, 560);
       });
 
       // Contraste con la hora del servidor. La cabecera Date va en segundos,
@@ -755,6 +773,61 @@ const GROUPS = [
   @keyframes power-on {
     0% { opacity: 0; } 16% { opacity: 0.8; } 22% { opacity: 0; } 38% { opacity: 1; } 44% { opacity: 0.2; } 58%, 100% { opacity: 1; }
   }
+
+  /* ── EJECT: enlace a la web ────────────────────────── */
+  .eject {
+    position: absolute;
+    left: 50%;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + max(14px, 2.4vh));
+    transform: translateX(-50%);
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7em;
+    /* área de toque de al menos 44 px aunque se vea pequeño */
+    min-height: 44px;
+    padding: 0 18px;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: clamp(0.62rem, 2.6vw, 0.78rem);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #E6E1DA;
+    text-shadow: 1px 0 rgba(255, 0, 60, 0.6), -1px 0 rgba(0, 220, 255, 0.45);
+    opacity: 0.42;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity 0.35s ease, letter-spacing 0.35s ease;
+    animation: eject-in 1.2s ease-out 3.2s both;
+  }
+  .eject svg { width: 0.95em; height: 0.95em; fill: currentColor; filter: drop-shadow(1px 0 rgba(255, 0, 60, 0.6)) drop-shadow(-1px 0 rgba(0, 220, 255, 0.45)); }
+  /* subrayado de cinta que parpadea, como el cursor de un menú de vídeo */
+  .eject span { position: relative; }
+  .eject span::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0.2em; bottom: -5px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.5;
+    animation: eject-blink 1.6s steps(1, end) infinite;
+  }
+  @keyframes eject-blink { 50% { opacity: 0; } }
+  @keyframes eject-in { from { opacity: 0; } to { opacity: 0.42; } }
+  .eject:hover, .eject:focus-visible, .eject:active { opacity: 0.95; letter-spacing: 0.26em; }
+  .eject:focus-visible { outline: 1px solid rgba(255, 60, 40, 0.8); outline-offset: 2px; }
+  /* fuera durante la transición; en la pantalla final vuelve cuando ya está todo */
+  :global([data-state="surge"]) .eject,
+  :global([data-state="crt"]) .eject,
+  :global([data-state="nosignal"]) .eject,
+  :global([data-state="glitch"]) .eject,
+  :global([data-state="v"]) .eject { opacity: 0; pointer-events: none; animation: none; }
+  :global([data-anim][data-state="final"]) .eject { animation: eject-in 1.2s ease-out 4.5s both; }
+  :global([data-exit]) .eject { opacity: 0; pointer-events: none; animation: none; }
+  /* expulsión: la imagen se aplasta como un tubo que se apaga */
+  :global([data-exit]) .bg,
+  :global([data-exit]) .final { animation: crt-off 0.42s cubic-bezier(0.6, 0, 0.9, 0.4) 0.08s both; }
+  :global([data-exit]) .crt-dot { animation: crt-dot 0.5s ease-out 0.32s both; }
 
   /* ── Capas VHS ─────────────────────────────────────── */
   .vhs-noise, .vhs-scan, .osd, .crt-dot {
@@ -1234,6 +1307,7 @@ const GROUPS = [
     :global([data-state]) .l { animation: none !important; opacity: 1; }
     :global([data-state="final"]) .final-date { animation: none !important; opacity: 1; }
     :global([data-state]) .final-kicker { animation: none !important; opacity: 1; }
+    .eject { animation: none; }
     :global([data-state]) .final-rule { animation: none !important; transform: none; }
     :global([data-state="final"]) .final-glow { opacity: 1; }
   }
