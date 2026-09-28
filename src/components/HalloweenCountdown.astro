@@ -218,6 +218,26 @@ const GROUPS = [
       });
       var sr = document.querySelector("[data-sr]");
 
+      // ── Contadores propios (sin cookies): ver src/pages/api/cd.ts.
+      // El QR llega con ?src=qr (redirección en vercel.json); se quita de la
+      // barra de direcciones para que quien comparta el enlace no cuente como QR.
+      var params = new URLSearchParams(location.search);
+      var src = params.get("src") || "";
+      if (src) {
+        params.delete("src");
+        var qs = params.toString();
+        try { history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash); } catch (e) {}
+      }
+      function track(ev) {
+        try {
+          var body = JSON.stringify({ e: ev, src: src });
+          if (!(navigator.sendBeacon && navigator.sendBeacon("/api/cd", body))) {
+            fetch("/api/cd", { method: "POST", body: body, keepalive: true });
+          }
+        } catch (e) {}
+      }
+      track("view");
+
       // ── Cada cifra son trazos arañados en el acero. El
       // esqueleto de cada número se recorre con 2–3 surcos paralelos,
       // irregulares y afilados en las puntas. La semilla depende de la
@@ -451,6 +471,7 @@ const GROUPS = [
       function end() {
         if (ending) return;
         ending = true;
+        track("zero");
         clearTimeout(timer);
         render(0);
         root.removeAttribute("data-intro");
@@ -498,6 +519,7 @@ const GROUPS = [
       // se va a la web. Con Cmd/Ctrl o "reducir movimiento", enlace normal.
       var eject = document.querySelector(".eject");
       if (eject) eject.addEventListener("click", function (e) {
+        track("eject");
         if (reduce || e.metaKey || e.ctrlKey || e.shiftKey) return;
         e.preventDefault();
         root.setAttribute("data-exit", "");
