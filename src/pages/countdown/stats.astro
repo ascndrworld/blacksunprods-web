@@ -27,7 +27,9 @@ const ev = Object.keys(EVENTS) as CdEvent[];
 // "qr" y "directo" se muestran juntos: el QR apunta a la misma URL que se
 // comparte sin etiqueta, así que no se distinguen de verdad.
 const QR = "QR Directo";
-const group = (s: string) => (s === "qr" || s === "directo" ? QR : s);
+// Nombre en la tabla de las etiquetas ?src=… que no se muestran tal cual.
+const LABELS: Record<string, string> = { qr: QR, directo: QR, stories: "Historias" };
+const group = (s: string) => LABELS[s] ?? s;
 const sum = (c: Record<string, number>, e: string, src?: string) =>
   Object.entries(c).reduce((n, [k, v]) => {
     const [ke, ks] = k.split(":");
