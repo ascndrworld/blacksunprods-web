@@ -219,11 +219,13 @@ const GROUPS = [
       var sr = document.querySelector("[data-sr]");
 
       // ── Contadores propios (sin cookies): ver src/pages/api/cd.ts.
-      // El QR llega con ?src=qr (redirección en vercel.json); se quita de la
-      // barra de direcciones para que quien comparta el enlace no cuente como QR.
+      // El QR apunta a halloweenfest.blacksunprods.com/countdown: todo lo que
+      // entra por ese subdominio cuenta como QR (ya no pasa por la redirección
+      // de la raíz). ?src=… manda si viene, y se quita de la barra de
+      // direcciones para que quien comparta el enlace no arrastre la etiqueta.
       var params = new URLSearchParams(location.search);
-      var src = params.get("src") || "";
-      if (src) {
+      var src = params.get("src") || (/^halloweenfest\./.test(location.hostname) ? "qr" : "");
+      if (params.has("src")) {
         params.delete("src");
         var qs = params.toString();
         try { history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash); } catch (e) {}
