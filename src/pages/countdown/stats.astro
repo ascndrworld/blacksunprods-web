@@ -24,15 +24,19 @@ else {
 }
 
 const ev = Object.keys(EVENTS) as CdEvent[];
+// "qr" y "directo" se muestran juntos: el QR apunta a la misma URL que se
+// comparte sin etiqueta, así que no se distinguen de verdad.
+const QR = "QR Directo";
+const group = (s: string) => (s === "qr" || s === "directo" ? QR : s);
 const sum = (c: Record<string, number>, e: string, src?: string) =>
   Object.entries(c).reduce((n, [k, v]) => {
     const [ke, ks] = k.split(":");
-    return ke === e && (src === undefined || ks === src) ? n + v : n;
+    return ke === e && (src === undefined || group(ks) === src) ? n + v : n;
   }, 0);
 
 const totals: Record<string, number> = {};
 for (const d of days) for (const [k, v] of Object.entries(d.counts)) totals[k] = (totals[k] ?? 0) + v;
-const sources = [...new Set(Object.keys(totals).map((k) => k.split(":")[1]))]
+const sources = [...new Set(Object.keys(totals).map((k) => group(k.split(":")[1])))]
   .sort((a, b) => sum(totals, "view", b) - sum(totals, "view", a));
 const fmt = (n: number) => new Intl.NumberFormat("es-ES").format(n);
 const dayLabel = (d: string) => `${d.slice(8, 10)}/${d.slice(5, 7)}`;
@@ -67,12 +71,12 @@ const dayLabel = (d: string) => `${d.slice(8, 10)}/${d.slice(5, 7)}`;
 <body>
   <main>
     <h1>Halloween Fest V · /countdown</h1>
-    <p class="sub">Totales sin cookies. Los escaneos son las visitas con origen «qr». Los días van en hora de Madrid.</p>
+    <p class="sub">Totales sin cookies. «QR Directo» junta los escaneos y el enlace sin etiqueta. Los días van en hora de Madrid.</p>
 
     {error && <p class="err">{error}</p>}
 
     <div class="tiles">
-      <div class="tile acc"><b>{fmt(sum(totals, "view", "qr"))}</b><span>Escaneos del QR</span></div>
+      <div class="tile acc"><b>{fmt(sum(totals, "view", QR))}</b><span>QR Directo</span></div>
       {ev.map((e) => <div class="tile"><b>{fmt(sum(totals, e))}</b><span>{EVENTS[e]}</span></div>)}
     </div>
 
@@ -88,9 +92,9 @@ const dayLabel = (d: string) => `${d.slice(8, 10)}/${d.slice(5, 7)}`;
 
         <h2>Por día</h2>
         <div class="scroll"><table>
-          <thead><tr><th>Día</th><th>Escaneos QR</th>{ev.map((e) => <th>{EVENTS[e]}</th>)}</tr></thead>
+          <thead><tr><th>Día</th><th>QR Directo</th>{ev.map((e) => <th>{EVENTS[e]}</th>)}</tr></thead>
           <tbody>{days.map((d) => (
-            <tr><td>{dayLabel(d.day)}</td><td>{fmt(sum(d.counts, "view", "qr"))}</td>{ev.map((e) => <td>{fmt(sum(d.counts, e))}</td>)}</tr>
+            <tr><td>{dayLabel(d.day)}</td><td>{fmt(sum(d.counts, "view", QR))}</td>{ev.map((e) => <td>{fmt(sum(d.counts, e))}</td>)}</tr>
           ))}</tbody>
         </table></div>
       </Fragment>
