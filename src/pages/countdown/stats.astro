@@ -86,7 +86,7 @@ const dayLabel = (d: string) => `${d.slice(8, 10)}/${d.slice(5, 7)}`;
         <div class="scroll"><table>
           <thead><tr><th>Origen</th>{ev.map((e) => <th>{EVENTS[e]}</th>)}</tr></thead>
           <tbody>{sources.map((s) => (
-            <tr><td>{s}</td>{ev.map((e) => <td>{fmt(sum(totals, e, s))}</td>)}</tr>
+            <tr><td>{s.charAt(0).toUpperCase() + s.slice(1)}</td>{ev.map((e) => <td>{fmt(sum(totals, e, s))}</td>)}</tr>
           ))}</tbody>
         </table></div>
 
