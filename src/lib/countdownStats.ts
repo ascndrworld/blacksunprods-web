@@ -20,6 +20,7 @@ export const EVENTS = {
   view: "Visitas",
   eject: "Clics en EJECT (ir a la web)",
   zero: "Vieron llegar el cero en directo",
+  replay: "Vieron el cero en diferido",
 } as const;
 export type CdEvent = keyof typeof EVENTS;
 
