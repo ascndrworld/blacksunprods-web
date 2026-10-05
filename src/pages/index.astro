@@ -100,10 +100,10 @@ const SHOW_TESTIMONIALS = false;
     <a class="home-hero-btn" href="/proyectos">VER PROYECTOS</a>
   </div>
 
-  <!-- AVISO HALLOWEEN FEST V: tira fija en la base del vídeo, enlaza a la cuenta atrás -->
+  <!-- AVISO HALLOWEEN FEST V: tira fija en la base del vídeo, enlaza a la landing de venta -->
   <!-- div (no <a>) para poder anidar el enlace a Instagram: el enlace principal se estira con ::after -->
   <div class="hf5-strip">
-    <a class="hf5-strip-link" href="/countdown?src=web" aria-label="Halloween Fest V: entradas y cartel oficial de la 5ª edición, muy pronto.">
+    <a class="hf5-strip-link" href="/halloween-fest" aria-label="Halloween Fest V: entradas y cartel oficial de la 5ª edición, muy pronto.">
       <span class="hf5-strip-tag">HALLOWEEN FEST V</span>
       <span class="hf5-strip-text">Entradas y cartel oficial de la 5ª edición <strong>disponibles muy pronto</strong></span>
     </a>
@@ -540,7 +540,7 @@ img, video {
     text-align: center;
   }
   .hf5-strip-link { flex-wrap: wrap; justify-content: center; gap: 6px 12px; }
-  .hf5-strip-info { font-size: 11px; }
+  .hf5-strip-info { display: none; }
   .hf5-strip-tag { font-size: 10px; }
   .hf5-strip-text { font-size: 12px; flex-basis: 100%; }
 }
