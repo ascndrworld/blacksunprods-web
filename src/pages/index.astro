@@ -97,10 +97,14 @@ const SHOW_TESTIMONIALS = false;
   </div>
 
   <!-- AVISO HALLOWEEN FEST V: tira fija en la base del vídeo, enlaza a la cuenta atrás -->
-  <a class="hf5-strip" href="/countdown?src=web" aria-label="Halloween Fest V: entradas y cartel oficial de la 5ª edición, muy pronto.">
-    <span class="hf5-strip-tag">HALLOWEEN FEST V</span>
-    <span class="hf5-strip-text">Entradas y cartel oficial de la 5ª edición <strong>disponibles muy pronto</strong></span>
-  </a>
+  <!-- div (no <a>) para poder anidar el enlace a Instagram: el enlace principal se estira con ::after -->
+  <div class="hf5-strip">
+    <a class="hf5-strip-link" href="/countdown?src=web" aria-label="Halloween Fest V: entradas y cartel oficial de la 5ª edición, muy pronto.">
+      <span class="hf5-strip-tag">HALLOWEEN FEST V</span>
+      <span class="hf5-strip-text">Entradas y cartel oficial de la 5ª edición <strong>disponibles muy pronto</strong></span>
+    </a>
+    <span class="hf5-strip-info">+INFO: <a href="https://www.instagram.com/halloweenfestlv/" target="_blank" rel="noopener">@halloweenfestlv</a></span>
+  </div>
 
   </div><!-- /#home -->
 
@@ -472,6 +476,29 @@ img, video {
   box-shadow: 0 0 40px rgba(255, 90, 31, 0.45);
   animation: hf5Glow 2.4s ease-in-out infinite;
 }
+.hf5-strip-link {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  color: inherit;
+  text-decoration: none;
+}
+.hf5-strip-link::after { content: ""; position: absolute; inset: 0; }
+.hf5-strip-info {
+  position: relative;
+  z-index: 1;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.hf5-strip-info a {
+  color: inherit;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.hf5-strip-info a:hover { color: #fff; }
 .hf5-strip-tag {
   flex: none;
   padding: 4px 10px;
@@ -495,6 +522,8 @@ img, video {
     padding: 12px 16px;
     text-align: center;
   }
+  .hf5-strip-link { flex-wrap: wrap; justify-content: center; gap: 6px 12px; }
+  .hf5-strip-info { font-size: 11px; }
   .hf5-strip-tag { font-size: 10px; }
   .hf5-strip-text { font-size: 12px; flex-basis: 100%; }
 }
