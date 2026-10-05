@@ -1,0 +1,287 @@
+---
+/*
+ * /halloween-fest — Landing de venta de HALLOWEEN FEST V (5º aniversario).
+ *
+ * La venta la hace Fourvenues dentro de un iframe: el pago, las entradas y
+ * los correos de confirmación son suyos. El código se saca del panel:
+ *   pro.fourvenues.com → Ajustes → Venta pública → Configuración web → IFRAME
+ * (tema oscuro; como página de gracias, https://www.blacksunprods.com/halloween-fest?compra=ok).
+ * Se pega tal cual en FOURVENUES_EMBED. Mientras esté vacío, la sección de
+ * entradas muestra «Muy pronto» y remite a Instagram.
+ *
+ * Fourvenues no deja generar el iframe hasta completar los datos fiscales de
+ * la organización (el microsite sale bloqueado hasta entonces).
+ */
+import Layout from "../layouts/Layout.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { SITE, absUrl } from "../config/site.mjs";
+
+// ── MARCA: pegar aquí el script del iframe de Fourvenues ──────────────────
+const FOURVENUES_EMBED = ``;
+// Enlace directo al evento en Fourvenues (plan B si el iframe no carga).
+const FOURVENUES_URL = "";
+
+const EVENT = {
+  name: "Halloween Fest | V Aniversario",
+  // 31/10 ya es horario de invierno (CET, UTC+1; el cambio es el 25/10).
+  start: "2026-10-31T23:00:00+01:00",
+  end: "2026-11-01T06:00:00+01:00",
+  venue: "Caseta Municipal",
+  place: "Los Villares",
+  region: "Jaén",
+};
+const IMG = "/images/halloween-v";
+const INSTAGRAM_HF = "https://www.instagram.com/halloweenfestlv";
+
+const canonical = absUrl("/halloween-fest");
+const ogImage = absUrl(`${IMG}/og-countdown.jpg`);
+const onSale = FOURVENUES_EMBED.trim() !== "";
+
+const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${EVENT.venue} ${EVENT.place} ${EVENT.region}`)}`;
+
+// ── MARCA: datos pendientes de confirmar. Vacío = la tarjeta/sección no se muestra. ──
+/** Código de vestimenta (p. ej. "Disfraz obligatorio"). */
+const DRESS_CODE = "";
+/** Line-up: { name, img? } con img en /images/halloween-v/ (cuadrada). */
+const LINEUP: { name: string; img?: string }[] = [];
+
+const cards = [
+  { k: "Fecha", rows: [["", "Sábado 31 de octubre de 2026"]] },
+  { k: "Ubicación", rows: [["", `${EVENT.venue} ${EVENT.place} (${EVENT.region})`]], link: { href: mapsUrl, label: "Cómo llegar" } },
+  { k: "Horario", rows: [["", "23:00 – 6:00"]] },
+  ...(DRESS_CODE ? [{ k: "Código de vestimenta", rows: [["", DRESS_CODE]] }] : []),
+];
+
+// Solo preguntas con respuesta comprobada. Añadir edad mínima, taquilla, guardarropa,
+// aparcamiento… cuando estén confirmados (salen también en el FAQPage de Google).
+const faq = [
+  { q: "¿Dónde compro las entradas oficiales de Halloween Fest V?", a: "Aquí mismo, en esta página. La venta oficial se hace a través de Fourvenues: el pago es seguro y las entradas llegan al momento a tu correo." },
+  { q: "¿Cuándo y dónde es Halloween Fest V?", a: `El sábado 31 de octubre de 2026, de 23:00 a 06:00, en la ${EVENT.venue} de ${EVENT.place} (${EVENT.region}).` },
+  { q: "¿Cómo recibo mi entrada?", a: "Al terminar la compra te llega por correo electrónico. Puedes enseñarla en la puerta desde el móvil, no hace falta imprimirla." },
+  { q: "¿Qué es Halloween Fest?", a: "Es la fiesta de Halloween de Los Villares (Jaén), que se celebra desde 2022. Cuatro ediciones con una media de 600 personas por noche, y este año, en su quinto aniversario, la organiza Black Sun Prods." },
+];
+
+---
+
+<Layout
+  title={`Halloween Fest V · Entradas · ${SITE.name}`}
+  description="Halloween Fest cumple cinco años. Sábado 31 de octubre de 2026 en Los Villares (Jaén). Compra aquí tus entradas oficiales."
+  canonical={canonical}
+  ogImage={ogImage}
+  ogImageAlt="Halloween Fest V: un reloj de acero oxidado cuelga de cadenas en una nave oscura"
+>
+
+<Fragment slot="head">
+  <link rel="preload" as="image" href={`${IMG}/escena-v.webp`} media="(max-aspect-ratio: 1/1)"/>
+  <link rel="preload" as="image" href={`${IMG}/escena-v-horizontal.webp`} media="(min-aspect-ratio: 1/1)"/>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify([{
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": EVENT.name,
+    "startDate": EVENT.start,
+    "endDate": EVENT.end,
+    "eventStatus": "https://schema.org/EventScheduled",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "location": {
+      "@type": "Place",
+      "name": `${EVENT.venue} de ${EVENT.place}`,
+      "address": { "@type": "PostalAddress", "addressLocality": EVENT.place, "addressRegion": EVENT.region, "addressCountry": "ES" }
+    },
+    "image": [ogImage],
+    "url": canonical,
+    "organizer": { "@type": "Organization", "name": SITE.name, "url": SITE.url },
+    "offers": onSale ? { "@type": "Offer", "url": canonical, "availability": "https://schema.org/InStock", "priceCurrency": "EUR" } : undefined
+  }, {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faq.map((item) => ({ "@type": "Question", "name": item.q, "acceptedAnswer": { "@type": "Answer", "text": item.a } }))
+  }])} />
+</Fragment>
+
+<main class="hv">
+
+  <section class="hv-hero">
+    <picture aria-hidden="true">
+      <source media="(min-aspect-ratio: 1/1)" srcset={`${IMG}/escena-v-horizontal.webp`} width="1920" height="1074"/>
+      <img class="hv-hero-bg" src={`${IMG}/escena-v.webp`} width="1122" height="1402" alt="" fetchpriority="high"/>
+    </picture>
+    <div class="hv-hero-shade" aria-hidden="true"></div>
+    <div class="hv-hero-body">
+      <p class="hv-kicker">5º Aniversario</p>
+      <h1 class="hv-title">Halloween Fest<span class="hv-sr"> V</span></h1>
+      <p class="hv-tag">The game begins</p>
+      <p class="hv-date"><time datetime={EVENT.start}>31.10.2026</time> · {EVENT.place}</p>
+      <a class="hv-btn" href="#entradas">{onSale ? "Comprar entradas" : "Entradas muy pronto"}</a>
+    </div>
+  </section>
+
+  <ul class="hv-cards">
+    {cards.map((c) => (
+      <li data-reveal>
+        <span class="hv-card-k">{c.k}</span>
+        {c.rows.map(([label, value]) => (
+          <span class="hv-card-row">{label && <small>{label}</small>}<strong>{value}</strong></span>
+        ))}
+        {c.link && <a class="hv-card-link" href={c.link.href} target="_blank" rel="noopener">{c.link.label} →</a>}
+      </li>
+    ))}
+  </ul>
+
+  {LINEUP.length > 0 && (
+    <section class="hv-lineup" aria-labelledby="lineup-t">
+      <p class="hv-eyebrow">Line-up</p>
+      <h2 id="lineup-t">Artistas</h2>
+      <ul>
+        {LINEUP.map((a) => (
+          <li data-reveal>
+            {a.img && <img src={a.img} width="96" height="96" alt="" loading="lazy"/>}
+            <span>{a.name}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <section class="hv-tickets" id="entradas" aria-labelledby="entradas-t">
+    <p class="hv-eyebrow" data-reveal>Entradas oficiales</p>
+    <h2 id="entradas-t" data-reveal>Elige tu entrada</h2>
+    <p class="hv-ok" hidden data-ok>Compra completada. Te llegarán las entradas al correo que has indicado.</p>
+    {onSale ? (
+      <>
+        <p class="hv-note" data-reveal>Venta oficial. El pago se hace de forma segura con Fourvenues y las entradas llegan al momento por correo.</p>
+        <div class="hv-embed" set:html={FOURVENUES_EMBED} />
+        {FOURVENUES_URL && (
+          <p class="hv-alt">¿No se carga? <a href={FOURVENUES_URL} target="_blank" rel="noopener">Compra directamente en Fourvenues</a></p>
+        )}
+      </>
+    ) : (
+      <div class="hv-soon" data-reveal>
+        <p>La venta abre muy pronto. Síguenos para enterarte el primero.</p>
+        <a class="hv-btn hv-btn--ghost" href={INSTAGRAM_HF} target="_blank" rel="noopener">@halloweenfestlv</a>
+      </div>
+    )}
+  </section>
+
+  <section class="hv-faq" aria-labelledby="faq-t">
+    <p class="hv-eyebrow">FAQ</p>
+    <h2 id="faq-t">Preguntas frecuentes</h2>
+    <ul>
+      {faq.map((item) => (
+        <li>
+          <details>
+            <summary>{item.q}</summary>
+            <p>{item.a}</p>
+          </details>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="hv-past">
+    <img src="/images/halloween-fest/publico-halloween-fest-los-villares.webp" alt="Público de Halloween Fest en Los Villares" loading="lazy" width="2000" height="1333"/>
+    <div class="hv-past-text" data-reveal>
+      <h2>Cinco años de Halloween Fest</h2>
+      <p>Desde 2022 creando una noche para recordar. Cuatro ediciones con una media de 600 personas han convertido a Halloween Fest en una cita fija del calendario. Ahora llega su quinto aniversario.</p>
+      <a class="hv-link" href="/proyectos/halloween-fest">Ver ediciones anteriores</a>
+    </div>
+  </section>
+
+</main>
+
+<SiteFooter />
+
+<!-- Vuelta de la pasarela: ?compra=ok muestra el aviso y se limpia de la URL -->
+<script is:inline>
+  (function () {
+    var p = new URLSearchParams(location.search);
+    if (p.get("compra") !== "ok") return;
+    var el = document.querySelector("[data-ok]");
+    if (el) { el.hidden = false; }
+    p.delete("compra");
+    var qs = p.toString();
+    try { history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + "#entradas"); } catch (e) {}
+    var t = document.getElementById("entradas");
+    if (t) t.scrollIntoView();
+  })();
+</script>
+
+<style>
+  .hv { background: #000; color: #F3F3F0; font-family: "BSP Helvetica", sans-serif; }
+
+  /* ── Portada: la escena oficial con la V grande (sin el contador colgado) de fondo ── */
+  .hv-hero { position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden; display: grid; place-items: center; }
+  .hv-hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.55) saturate(.85) contrast(1.05); }
+  .hv-hero-shade { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0,0,0,.25) 30%, rgba(0,0,0,.8) 100%), linear-gradient(180deg, rgba(0,0,0,.5), transparent 30%, transparent 70%, #000); }
+  .hv-hero-body { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 120px 20px 64px; }
+  .hv-kicker { font-size: clamp(15px, 3.4vw, 22px); font-weight: 700; letter-spacing: -.04em; text-transform: uppercase; color: rgba(235, 55, 38, .95); margin: 0 0 6px; }
+  .hv-title { font-size: clamp(44px, 10vw, 110px); font-weight: 800; letter-spacing: -.08em; line-height: .9; text-transform: uppercase; margin: 0 0 18px; text-shadow: 0 0 .4em rgba(255, 40, 25, .3); }
+  .hv-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .hv-tag { font-size: clamp(13px, 3.4vw, 20px); font-weight: 700; letter-spacing: .42em; text-indent: .42em; text-transform: uppercase; margin: 0 0 14px; text-shadow: 0 0 .5em rgba(255, 40, 25, .35); }
+  .hv-date { font-size: clamp(14px, 3.6vw, 20px); font-weight: 600; letter-spacing: .24em; text-indent: .24em; text-transform: uppercase; color: rgba(243, 243, 240, .8); margin: 0 0 36px; }
+
+  .hv-btn { display: inline-block; font-size: 14px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: #fff; background: #C4241A; border: 2px solid #C4241A; padding: 16px 36px; transition: background .25s, color .25s, border-color .25s; }
+  .hv-btn:hover { background: transparent; color: #FF4A36; border-color: #FF4A36; }
+  .hv-btn--ghost { background: transparent; border-color: rgba(243, 243, 240, .4); color: #F3F3F0; letter-spacing: .06em; text-transform: none; font-size: 16px; }
+  .hv-btn--ghost:hover { border-color: #F3F3F0; color: #F3F3F0; }
+
+  /* ── Datos del evento: tarjetas (fecha, ubicación, vestimenta) ── */
+  /* Franja a todo el ancho con columnas separadas por líneas (diseño original de la lista de datos). */
+  .hv-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); border-top: 1px solid rgba(243, 243, 240, .1); border-bottom: 1px solid rgba(243, 243, 240, .1); }
+  .hv-cards li { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: clamp(24px, 3vw, 40px) clamp(20px, 3vw, 48px); border-left: 1px solid rgba(243, 243, 240, .1); }
+  .hv-cards li:first-child { border-left: none; }
+  .hv-card-k { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: rgba(243, 243, 240, .5); }
+  .hv-card-row { display: flex; flex-direction: column; gap: 2px; }
+  .hv-card-row small { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: #FF4A36; }
+  .hv-card-row strong { font-size: clamp(17px, 1.8vw, 24px); font-weight: 700; letter-spacing: -.02em; }
+  .hv-card-link { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #FF4A36; text-decoration: none; }
+  .hv-card-link:hover { color: #F3F3F0; }
+
+  @media (max-width: 700px) {
+    .hv-cards { grid-template-columns: 1fr; }
+    .hv-cards li { border-left: none; border-top: 1px solid rgba(243, 243, 240, .1); padding: 20px; }
+    .hv-cards li:first-child { border-top: none; }
+  }
+
+  .hv-eyebrow { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: #FF4A36; margin: 0 0 10px; text-align: center; }
+
+  /* ── Line-up ── */
+  .hv-lineup { max-width: 960px; margin: 0 auto; padding: clamp(56px, 7vw, 96px) 16px 0; }
+  .hv-lineup h2, .hv-faq h2 { font-size: clamp(30px, 4.5vw, 52px); font-weight: 800; letter-spacing: -.04em; line-height: 1; margin: 0 0 28px; text-align: center; }
+  .hv-lineup ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  .hv-lineup li { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 22px; border: 1px solid rgba(243, 243, 240, .12); background: rgba(243, 243, 240, .03); font-weight: 700; }
+  .hv-lineup img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; }
+
+  /* ── Preguntas frecuentes ── */
+  .hv-faq { max-width: 760px; margin: 0 auto; padding: 0 16px clamp(64px, 8vw, 110px); }
+  .hv-faq ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(243, 243, 240, .12); }
+  .hv-faq li { border-bottom: 1px solid rgba(243, 243, 240, .12); }
+  .hv-faq summary { cursor: pointer; list-style: none; padding: 20px 36px 20px 0; font-size: clamp(16px, 1.5vw, 19px); font-weight: 600; line-height: 1.35; position: relative; }
+  .hv-faq summary::-webkit-details-marker { display: none; }
+  .hv-faq summary::after { content: ""; position: absolute; right: 6px; top: 50%; width: 14px; height: 2px; background: rgba(243, 243, 240, .7); transform: translateY(-50%); }
+  .hv-faq summary::before { content: ""; position: absolute; right: 12px; top: 50%; width: 2px; height: 14px; background: rgba(243, 243, 240, .7); transform: translateY(-50%); transition: opacity .2s; }
+  .hv-faq details[open] summary::before { opacity: 0; }
+  .hv-faq details p { font-size: 16px; line-height: 1.7; color: rgba(243, 243, 240, .65); margin: 0 0 22px; max-width: 62ch; }
+
+  /* ── Entradas ── */
+  .hv-tickets { max-width: 960px; margin: 0 auto; padding: clamp(64px, 8vw, 110px) 16px; scroll-margin-top: 40px; }
+  .hv-tickets h2 { font-size: clamp(36px, 6vw, 72px); font-weight: 800; letter-spacing: -.04em; line-height: 1; margin: 0 0 20px; text-align: center; }
+  .hv-note, .hv-alt { font-size: 15px; line-height: 1.6; color: rgba(243, 243, 240, .6); text-align: center; max-width: 52ch; margin: 0 auto 32px; }
+  .hv-alt { margin: 20px auto 0; font-size: 14px; }
+  .hv-alt a { color: #F3F3F0; text-underline-offset: 3px; }
+  .hv-ok { text-align: center; font-size: 16px; font-weight: 600; padding: 16px 20px; margin: 0 auto 28px; max-width: 52ch; border: 1px solid rgba(255, 74, 54, .6); background: rgba(196, 36, 26, .12); }
+  .hv-embed { min-height: 480px; }
+  .hv-embed :global(iframe) { display: block; width: 100%; border: 0; }
+  .hv-soon { text-align: center; }
+  .hv-soon p { font-size: 17px; line-height: 1.6; color: rgba(243, 243, 240, .7); margin: 0 0 28px; }
+
+  /* ── Ediciones anteriores ── */
+  .hv-past { position: relative; min-height: 70vh; display: grid; align-items: end; overflow: hidden; }
+  .hv-past img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.5); }
+  .hv-past-text { position: relative; padding: clamp(40px, 6vw, 88px) clamp(20px, 5vw, 88px); max-width: 640px; }
+  .hv-past h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: 0 0 16px; }
+  .hv-past p { font-size: 16px; line-height: 1.7; color: rgba(243, 243, 240, .8); margin: 0 0 24px; }
+  .hv-link { font-size: 12px; letter-spacing: .28em; text-transform: uppercase; color: #F3F3F0; text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
+
+</style>
+
+</Layout>
