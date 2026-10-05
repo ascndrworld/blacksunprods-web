@@ -1,0 +1,59 @@
+<!doctype html>
+<!-- SIMULACIÓN del widget de Fourvenues (diseño de referencia, 05/10/2026). No se publica: está fuera de public/. La imagen apunta a la web publicada. -->
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Fourvenues (simulación)</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #111214; color: #eee; font: 15px/1.4 -apple-system, "Helvetica Neue", Arial, sans-serif; }
+  .w { padding: 18px; }
+  .demo { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #ffb020; border: 1px dashed #ffb020; padding: 6px 10px; border-radius: 6px; margin: 0 0 16px; text-align: center; }
+  .ev { display: flex; gap: 14px; align-items: center; margin-bottom: 18px; }
+  .ev img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; }
+  .ev b { display: block; font-size: 16px; }
+  .ev span { color: #9a9a9a; font-size: 13px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .tabs button { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #2a2b2f; background: #18191c; color: #bbb; font-weight: 600; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+  .tabs .on { background: #C4241A; border-color: #C4241A; color: #fff; }
+  .t { border: 1px solid #2a2b2f; background: #18191c; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; align-items: center; }
+  .t h3 { margin: 0; font-size: 15px; }
+  .t p { margin: 0; color: #9a9a9a; font-size: 13px; grid-column: 1; }
+  .t .price { font-size: 18px; font-weight: 700; color: #fff; grid-column: 1; }
+  .t .price small { color: #9a9a9a; font-weight: 400; font-size: 12px; }
+  .q { grid-column: 2; grid-row: 1 / span 3; display: flex; align-items: center; gap: 10px; }
+  .q button { width: 32px; height: 32px; border-radius: 50%; border: 1px solid #3a3b40; background: #222327; color: #fff; font-size: 18px; line-height: 1; }
+  .q b { min-width: 14px; text-align: center; }
+  .sold { opacity: .5; }
+  .sold .tag { grid-column: 2; grid-row: 1 / span 3; font-size: 11px; font-weight: 700; letter-spacing: .1em; color: #ff6a5a; border: 1px solid #ff6a5a; border-radius: 999px; padding: 4px 10px; }
+  .hot { font-size: 11px; color: #ffb020; font-weight: 600; }
+  .bar { position: sticky; bottom: 0; margin-top: 16px; padding: 14px 16px; background: #0c0c0d; border: 1px solid #2a2b2f; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .bar span { color: #9a9a9a; font-size: 13px; }
+  .bar b { display: block; font-size: 18px; color: #fff; }
+  .bar a { background: #C4241A; color: #fff; text-decoration: none; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; font-size: 13px; padding: 13px 20px; border-radius: 8px; }
+  .pay { margin-top: 12px; text-align: center; color: #777; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="w">
+  <p class="demo">Simulación · precios y tandas de ejemplo</p>
+  <div class="ev">
+    <img src="https://www.blacksunprods.com/images/halloween-v/escena-v.webp" alt=""/>
+    <div><b>Halloween Fest | V Aniversario</b><span>Sáb 31 oct · 23:00 · Caseta Municipal, Los Villares</span></div>
+  </div>
+  <div class="tabs"><button class="on">Entradas</button><button>Reservados</button></div>
+
+  <div class="t sold"><h3>Early Bird</h3><p>Entrada general · incluye 1 consumición</p><div class="price">10 €</div><span class="tag">AGOTADA</span></div>
+  <div class="t"><h3>1ª tanda</h3><p>Entrada general · incluye 1 consumición</p><div class="price">12 € <small>+ gastos</small></div><span class="hot">Últimas entradas</span>
+    <div class="q"><button>−</button><b>2</b><button>+</button></div></div>
+  <div class="t"><h3>2ª tanda</h3><p>Entrada general · incluye 1 consumición</p><div class="price">15 € <small>+ gastos</small></div>
+    <div class="q"><button>−</button><b>0</b><button>+</button></div></div>
+  <div class="t"><h3>Taquilla</h3><p>Precio en puerta, si quedan entradas</p><div class="price">20 €</div>
+    <div class="q"><button>−</button><b>0</b><button>+</button></div></div>
+
+  <div class="bar"><div><span>2 entradas</span><b>24,00 €</b></div><a href="#">Continuar</a></div>
+  <p class="pay">Pago seguro · Visa · Mastercard · Apple Pay · Google Pay · Bizum</p>
+</div>
+</body>
+</html>
