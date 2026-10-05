@@ -26,7 +26,7 @@ const SHOW_TESTIMONIALS = false;
 ---
 
 <Layout
-  title="Black Sun Prods | Productora de eventos en Jaén — del concepto a la multitud"
+  title="Productora de eventos en Jaén | Black Sun Prods"
   description="Productora de eventos en Jaén. Dirigimos, producimos y ejecutamos eventos musicales, fiestas temáticas y programación para ayuntamientos, salas, promotores y marcas."
   canonical={SITE.url}
   ogImage={absUrl(SITE.ogImage)}
@@ -91,7 +91,11 @@ const SHOW_TESTIMONIALS = false;
 
   <!-- HERO: titular en español + firma en inglés -->
   <div class="home-hero-content">
-    <h1 class="home-hero-title">Del concepto<br/>a la multitud.</h1>
+    <!-- H1 = lo que se busca («productora de eventos en Jaén») + el eslogan, que sigue siendo lo que se ve grande -->
+    <h1 class="home-hero-h1">
+      <span class="home-hero-kicker">Productora de eventos en Jaén</span>
+      <span class="home-hero-title">Del concepto<br/>a la multitud.</span>
+    </h1>
     <p class="home-hero-sub">from concept to crowd.</p>
     <a class="home-hero-btn" href="/proyectos">VER PROYECTOS</a>
   </div>
@@ -442,6 +446,18 @@ img, video {
 }
 
 /* ════ HERO — firma en inglés bajo el titular ════ */
+.home-hero-h1 { margin: 0; font: inherit; display: flex; flex-direction: column; }
+.home-hero-h1 .home-hero-title { display: block; }
+.home-hero-kicker {
+  display: block;
+  font-family: "BSP Helvetica", sans-serif;
+  font-size: clamp(11px, 1.1vw, 14px);
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(243, 243, 240, 0.75);
+  margin: 0 0 14px;
+}
 .home-hero-sub {
   font-family: "BSP Helvetica", sans-serif;
   font-size: clamp(14px, 1.5vw, 20px);
@@ -453,6 +469,7 @@ img, video {
 }
 @media (max-width: 768px) {
   .home-hero-sub { text-align: right; font-size: 11px; margin: -6px 0 22px; }
+  .home-hero-kicker { text-align: right; font-size: 10px; margin-bottom: 10px; }
 }
 
 /* ════ AVISO HALLOWEEN FEST V (base del vídeo) ════ */

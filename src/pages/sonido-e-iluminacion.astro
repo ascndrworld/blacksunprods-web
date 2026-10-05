@@ -12,6 +12,10 @@ const faq = [
     a: "Sí. No dejamos el equipo montado y nos vamos: operamos el sonido y la luz durante el acto, que es lo que hace que suene y se vea como tiene que sonar y verse.",
   },
   {
+    q: "¿Tenéis técnico de sonido e iluminación para eventos en Jaén?",
+    a: "Sí. El equipo va con nuestro técnico de sonido e iluminación, que lo monta, lo prueba, lo opera durante el acto y lo desmonta al terminar. Si ya tienes rider técnico lo revisamos, y si no, lo escribimos a partir del espacio y del aforo.",
+  },
+  {
     q: "¿El montaje y el desmontaje están incluidos?",
     a: "Sí, el servicio va de principio a fin: montaje, pruebas, operación en directo y desmontaje.",
   },
@@ -67,7 +71,7 @@ const eventos = [
   { name: "Galas y ceremonias", desc: "Montaje limpio y discreto, pensado para que no se vea el equipo." },
   { name: "Actos institucionales", desc: "Atriles, microfonía inalámbrica y megafonía para exterior o interior." },
   { name: "Eventos de empresa", desc: "Presentaciones, aniversarios y convenciones con técnica resuelta." },
-  { name: "Congresos y conferencias", desc: "Microfonía de mesa, grabación de sala y proyección." },
+  { name: "Congresos, convenciones y conferencias", desc: "Microfonía de mesa, grabación de sala y proyección." },
   { name: "Conciertos y fechas sueltas", desc: "Backline, monitores y control para bandas o sesiones concretas." },
   { name: "Celebraciones privadas", desc: "Bodas y fiestas donde solo falta el equipo y quien lo maneje." },
 ];
@@ -82,7 +86,7 @@ const pasos = [
 
 <Layout
   title={`Alquiler de sonido e iluminación en Jaén | ${SITE.name}`}
-  description="Alquiler y operación de rider técnico de sonido e iluminación en Jaén y Andalucía: entregas de premios, teatros, galas, actos institucionales y eventos de empresa. Solo la técnica, sin producir el evento."
+  description="Alquiler de sonido e iluminación con técnico en Jaén y Andalucía: entregas de premios, teatros, galas, congresos, convenciones y eventos de empresa. Montaje, operación y desmontaje."
   canonical={absUrl("/sonido-e-iluminacion")}
 >
 
@@ -125,8 +129,10 @@ const pasos = [
     <img class="st-hero-img" src="/images/sonido-e-iluminacion/alquiler-sonido-iluminacion-jaen.webp" alt="Line array, truss con cabezas móviles y técnicos montando el escenario de un recinto antes del evento" width="1672" height="941" fetchpriority="high"/>
     <div class="st-hero-overlay" aria-hidden="true"></div>
     <div class="st-hero-content">
-      <p class="st-eyebrow">SONIDO E ILUMINACIÓN</p>
-      <h1 class="st-title">Solo la técnica,<br/>si es lo único<br/>que necesitas.</h1>
+      <h1 class="st-h1">
+        <span class="st-eyebrow">Alquiler de sonido e iluminación en Jaén</span>
+        <span class="st-title">Solo la técnica,<br/>si es lo único<br/>que necesitas.</span>
+      </h1>
       <p class="st-sub">No hace falta que produzcamos tu evento para montarte el equipo. Alquilamos y operamos el rider de sonido, iluminación o ambos: tú pones el acto, nosotros que suene y se vea.</p>
       <a class="st-btn" href="/contacto?evento=Sonido%20e%20iluminaci%C3%B3n">Pedir presupuesto</a>
     </div>
@@ -240,10 +246,11 @@ const pasos = [
   /* padding-top que reserve el alto del header: si el titular crece, el hero
      crece con él (min-height, no height) en vez de meterse bajo el logo. */
   .st-hero-content { position: relative; padding: clamp(112px, 15vh, 160px) clamp(20px, 5vw, 88px) clamp(48px, 9vh, 96px); max-width: 980px; }
-  .st-eyebrow { font-size: 11px; letter-spacing: .3em; color: rgba(243, 243, 240,.75); margin: 0 0 22px; }
+  .st-h1 { margin: 0; font: inherit; }
+  .st-eyebrow { display: block; font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: rgba(243, 243, 240,.75); margin: 0 0 22px; }
   /* Máximo 96px (no 116): "solo la técnica," a 116px no cabía en el contenedor
      y partía en dos, convirtiendo el titular de 3 líneas en 5. */
-  .st-title { font-size: clamp(44px, 6.7vw, 96px); font-weight: 800; letter-spacing: -.045em; line-height: .95; margin: 0 0 28px; text-wrap: balance; }
+  .st-title { display: block; font-size: clamp(44px, 6.7vw, 96px); font-weight: 800; letter-spacing: -.045em; line-height: .95; margin: 0 0 28px; text-wrap: balance; }
   .st-sub { font-size: clamp(15px, 1.35vw, 19px); line-height: 1.6; color: rgba(243, 243, 240,.82); max-width: 52ch; margin: 0 0 36px; }
   .st-btn { display: inline-block; font-size: 14px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #F3F3F0; border: 2px solid #F3F3F0; padding: 15px 34px; text-decoration: none; transition: background .25s, color .25s; }
   .st-btn:hover { background: #F3F3F0; color: #000; }
