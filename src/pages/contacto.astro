@@ -46,6 +46,7 @@ const capacities = ["Menos de 300", "300–700", "700–1.500", "Más de 1.500",
     <p class="ct-eyebrow">CONTACTO</p>
     <h1 class="ct-title">Hablemos de<br/>tu evento</h1>
     <p class="ct-sub">Cuéntanos qué evento tienes en mente, o solo qué técnica necesitas. Te respondemos en menos de 24h.</p>
+    <p class="ct-artists">¿Eres artista y buscas fechas? <a href="/artistas#propuesta">Mándanos tu propuesta aquí</a>.</p>
     <p class="ct-direct">
       <span class="ct-direct-label">¿Prefieres escribir directo?</span>
       <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
@@ -429,6 +430,13 @@ const capacities = ["Menos de 300", "300–700", "700–1.500", "Más de 1.500",
   }
   .ct-success-back:hover { border-color: #F3F3F0; }
 
+  .ct-artists {
+    margin: 16px 0 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(243, 243, 240, 0.5);
+  }
+  .ct-artists a { color: #F3F3F0; text-decoration: underline; text-underline-offset: 3px; }
   .ct-direct {
     margin-top: 24px;
     font-size: 14px;

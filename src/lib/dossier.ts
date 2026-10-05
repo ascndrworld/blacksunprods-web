@@ -20,12 +20,18 @@ export interface Lead {
    * web y no hay razón para mandárselo al modelo.
    */
   phone: string;
-  clientType: string; // valor del formulario: ayuntamiento, sala, promotor, marca, privado
+  clientType: string; // valor del formulario: ayuntamiento, sala, promotor, marca, privado, artista
   eventType: string;
   location: string;   // municipio o recinto
   date: string;       // fecha aproximada (texto libre)
   capacity: string;   // aforo estimado
   consulta: string;
+  // Solo en propuestas de artista (/artistas, clientType "artista"). En ese
+  // caso eventType es la disciplina (DJ, orquesta…) y location desde dónde se mueven.
+  artistName?: string;
+  style?: string;
+  goal?: string;      // qué buscan: fechas, producir su evento o solo técnica
+  links?: string;
 }
 
 // Etiquetas legibles de "¿Quién eres?" (compartidas por email, Telegram y prompts).
@@ -35,6 +41,7 @@ export const CLIENT_TYPES: Record<string, string> = {
   promotor: "Promotor",
   marca: "Marca o empresa",
   privado: "Privado o asociación",
+  artista: "Artista / grupo",
 };
 export const clientTypeLabel = (v: string) => CLIENT_TYPES[v] || v || "";
 

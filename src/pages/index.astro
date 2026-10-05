@@ -281,6 +281,8 @@ const SHOW_TESTIMONIALS = false;
         <span class="aud-cta">Pedir presupuesto →</span>
       </a>
     </div>
+    <!-- Los artistas no son clientes: van fuera de la rejilla, como una línea aparte -->
+    <p class="aud-artists" data-reveal>¿Eres artista, grupo o DJ y buscas fechas? <a href="/artistas">Mándanos tu propuesta →</a></p>
   </section>
 
   <!-- ════ EL PROCESO ════ -->
@@ -414,6 +416,8 @@ const SHOW_TESTIMONIALS = false;
       <a href="/proyectos">Proyectos</a>
       <span>·</span>
       <a href="/ayuntamientos">Ayuntamientos</a>
+      <span>·</span>
+      <a href="/artistas">Artistas</a>
       <span>·</span>
       <a href="/terminos">Términos</a>
       <span>·</span>
@@ -710,6 +714,8 @@ img, video {
 .aud-name { font-size: clamp(24px, 2.4vw, 34px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; margin: 0; }
 .aud-desc { font-size: 16px; line-height: 1.6; color: rgba(243, 243, 240, 0.6); margin: 0; flex: 1; }
 .aud-cta { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
+.aud-artists { margin: 0; padding: clamp(20px, 2.4vw, 28px) 0 0; border-top: 1px solid rgba(243, 243, 240, 0.14); font-size: 16px; line-height: 1.6; color: rgba(243, 243, 240, 0.6); }
+.aud-artists a { color: #F3F3F0; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
 @media (hover: hover) {
   .aud-card:hover { background: rgba(243, 243, 240, 0.05); }
 }

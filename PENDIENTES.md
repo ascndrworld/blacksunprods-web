@@ -30,6 +30,13 @@ Lista viva de lo que falta. Tacha (o borra) cada punto al resolverlo.
 - [ ] **Valorar una tarjeta en "Para quién"** (`#para-quien` de la home) para teatros/empresas que solo buscan técnica; ahora solo están ayuntamientos, salas, promotores y marcas.
 - [ ] **Cónclave**: retirado de la web (era trabajo de diseño de Ascndr). Si fue producción vuestra, recuperarlo del historial de git.
 
+- [ ] **Página `/artistas`** (06/10/2026): puerta de entrada para grupos, orquestas, DJs y animación que buscan fechas. Enlazada desde el menú, los dos footers, la home (línea bajo «Para quién») y `/contacto`. Su formulario va a `/api/contacto` con `clientType: "artista"`: asunto «Propuesta de artista», Telegram sin botón de dossier y auto-respuesta propia. Pendiente de Francisco:
+  - **Modelo de negocio**: la página no habla de comisión, exclusividad ni cachés a propósito. Si se trabaja como agencia de booking (porcentaje por bolo), decirlo en la página y en la FAQ.
+  - **Revisar la FAQ y la auto-respuesta**: prometen que escuchar la propuesta es gratis y que se guarda en cartera aunque ahora no encaje.
+  - **Foto propia**: reutiliza `artista-en-directo.webp` (portada) y `escenario-truss-pantalla-led.webp` (escenario desde la pista) de Halloween Fest. Descartadas por Francisco para «Noches de 600 personas»: el equipo posando y el público desde el escenario.
+  - **GA4**: las propuestas mandan `artist_submission`, no `generate_lead`, para no inflar las conversiones de venta. No marcarlo como evento clave.
+  - **Airtable**: entran en la tabla `Leads` con «Tipo de cliente» = «Artista / grupo» (con `typecast` se crea la opción sola si es de selección). Filtrar por ese tipo para separarlos de los clientes.
+
 ## Configuración
 
 - [ ] `.env` propio con claves nuevas (Resend, Telegram, Anthropic, Airtable, GA4…). No reutilizar las de Ascndr.
@@ -43,9 +50,22 @@ Lista viva de lo que falta. Tacha (o borra) cada punto al resolverlo.
   - Search Console: propiedad de dominio verificada por DNS (Hostinger) y sitemap `https://www.blacksunprods.com/sitemap-index.xml` enviado. La home ya está indexada.
 - [ ] Search Console: indexación solicitada el 19/09/2026 para ayuntamientos, sonido-e-iluminacion, proyectos, halloween-fest, conclave-x-la-caseta, bendito-castigo y contacto, y el 21/09/2026 para privacidad y terminos (las 10 URLs del sitemap, ya todas pedidas). Revisar hacia el 03/10/2026 el informe "Páginas".
   - Estado el 21/09/2026 (informe actualizado a 18/09): 1 indexada (la home). Las 7 del día 19 están en «Rastreada: actualmente sin indexar», que es lo normal en un dominio con pocos días. **No volver a solicitarlas**: Google dice que repetir la petición no cambia la prioridad. Si el 03/10 siguen así, el remedio son enlaces entrantes (Instagram, perfil de Google Business) y no pedirlas otra vez.
-  - Las 2 de «Página con redirección» son variantes (http / sin www) que redirigen a la canónica: correcto, no hay que tocarlas.
+  - **Revisión del 06/10/2026**: las 10 URLs del sitemap de entonces, **indexadas** (el informe es del 21/09). Rendimiento a 28 días: 12 clics, 30 impresiones, posición media 7,3. Más clics: home (6) y sonido-e-iluminacion (3). Consultas que ya asoman: «tecnico de sonido jaen» y «equipos de sonido y proyeccion para convenciones y eventos».
+  - **`/halloween-fest` (landing de venta) NO está en Google** («Google no reconoce esta URL»): es posterior a la última lectura del sitemap (01/10). Solicitar indexación, que la fiesta es a finales de octubre. Lo mismo con `/artistas` en cuanto se publique.
+  - `/halloween-fest/stats` salía en el sitemap público (sin la clave da 404, así que no exponía datos). Excluido en `astro.config.mjs` junto con cualquier ruta `/stats`.
+  - Las 3 de «Página con redirección» (http, http-www y https sin www) son variantes (http / sin www) que redirigen a la canónica: correcto, no hay que tocarlas.
 - [ ] `PUBLIC_META_PIXEL_ID` y `PUBLIC_GSC_VERIFICATION` en Vercel están vacías: rellenar el píxel solo si se hacen anuncios en Meta; la de GSC no hace falta (verificado por DNS).
 - [ ] **Cabecera de Nochebuena & Nochevieja en PC** (23/09/2026): buscar otra foto. La actual (`/images/navidad/portada.webp`) es vertical (1800×2400) y en pantalla ancha se recorta a la franja central. En móvil no hace falta tocar nada: ahí manda el vídeo (`/videos/conclave-nochevieja.mp4`) y esa foto solo sirve de cartel mientras carga. Cuando haya foto apaisada, el patrón es el de `halloween-fest.astro`: un `<picture>` con `<source media="(min-width: 769px)">`.
+
+## Halloween Fest V — activar la venta (anotado el 05/10/2026)
+
+Diseño aprobado de cómo queda `/halloween-fest` con la venta activa: `docs/diseno-venta-halloween-v/` (capturas de ordenador y móvil y `widget-fourvenues-simulado.html`, que imita el widget). Precios, tandas y la consumición de la simulación son **de ejemplo**: no copiarlos.
+
+- [ ] **Datos fiscales en Fourvenues** para que deje generar el iframe (ahora el microsite sale bloqueado).
+- [ ] **Configurar en Fourvenues** las tandas reales (Early Bird → 1ª → 2ª → taquilla, como en la simulación), tema oscuro y que se vean las **agotadas** (empujan a comprar la siguiente tanda). Pestaña de reservados solo si se venden.
+- [ ] **Página de gracias** en Fourvenues: `https://www.blacksunprods.com/halloween-fest?compra=ok` (muestra el aviso y cuenta la compra en `/halloween-fest/stats`).
+- [ ] **Pegar el iframe** en `FOURVENUES_EMBED` y el enlace directo en `FOURVENUES_URL` (`src/pages/halloween-fest.astro`). Con eso el botón de la portada pasa solo a «Comprar entradas» y el bloque «Elige tu entrada» muestra el widget.
+- [ ] Ajustar el `height` del iframe a lo que mida el widget real, para que no salga barra de scroll dentro.
 
 ## SEO — lo que falta (anotado el 23/09/2026)
 

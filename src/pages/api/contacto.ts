@@ -175,6 +175,31 @@ async function sendTelegram(text: string, replyMarkup?: unknown) {
   return res.json();
 }
 
+// Las propuestas de /artistas llegan por este mismo endpoint con clientType
+// "artista". No son clientes: cambian el asunto, los campos del aviso y la
+// auto-respuesta, y no llevan el botón de dossier (investigar a quien nos
+// contrata no aplica a quien quiere tocar).
+const isArtist = (lead: Lead) => lead.clientType === "artista";
+
+// Texto plano con lo propio del artista, para Airtable (columna "Consulta").
+function artistSummary(lead: Lead) {
+  return [
+    lead.artistName && `Nombre artístico: ${lead.artistName}`,
+    lead.goal && `Busca: ${lead.goal}`,
+    lead.style && `Estilo: ${lead.style}`,
+    lead.links && `Enlaces:\n${lead.links}`,
+    lead.consulta && `Mensaje:\n${lead.consulta}`,
+  ].filter(Boolean).join("\n\n");
+}
+
+// Convierte en enlaces las URL que el artista pegó (una por línea o separadas
+// por espacios). El resto del texto se escapa tal cual.
+function linkify(text: string) {
+  return esc(text)
+    .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" style="color:#141414;text-decoration:underline;word-break:break-all;">$1</a>')
+    .replace(/\n/g, "<br>");
+}
+
 // Registra el lead en Airtable (CRM). Nunca lanza: si algo falla (config
 // ausente, API caída, campo inexistente) avisa por consola y devuelve null,
 // para no romper la respuesta al usuario. Devuelve el id del registro creado
@@ -191,15 +216,19 @@ async function createLead(lead: Lead): Promise<string | null> {
     // El nombre de la tabla puede llevar espacios o acentos: hay que escaparlo.
     const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE)}`;
 
+    // Una propuesta de artista va a la misma tabla, sin columnas nuevas:
+    // la disciplina ocupa "Tipo de evento", la ciudad "Municipio/Recinto" y
+    // el resto (nombre artístico, enlaces…) se junta en "Consulta".
+    const artist = isArtist(lead);
     const fields: Record<string, string> = {
-      Nombre: lead.name,
+      Nombre: artist && lead.artistName ? `${lead.artistName} (${lead.name})` : lead.name,
       Email: lead.email,
       "Tipo de cliente": clientTypeLabel(lead.clientType),
       "Tipo de evento": lead.eventType,
       "Municipio/Recinto": lead.location,
       Fecha: lead.date,
       Aforo: lead.capacity,
-      Consulta: lead.consulta,
+      Consulta: artist ? artistSummary(lead) : lead.consulta,
       Estado: "Nuevo",
       Fuente: "Web",
     };
@@ -214,7 +243,9 @@ async function createLead(lead: Lead): Promise<string | null> {
           Authorization: `Bearer ${AIRTABLE_TOKEN}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ fields: f }),
+        // typecast: si "Tipo de cliente" es de selección, Airtable crea la
+        // opción que falte (p. ej. "Artista / grupo") en vez de rechazar el lead.
+        body: JSON.stringify({ fields: f, typecast: true }),
       });
 
     let res = await send(fields);
@@ -282,7 +313,12 @@ export const POST: APIRoute = async ({ request }) => {
     date: str(data.date),
     capacity: str(data.capacity, 40),
     consulta: str(data.consulta, 600),
+    artistName: str(data.artistName, 120),
+    style: str(data.style, 120),
+    goal: str(data.goal, 80),
+    links: str(data.links, 600),
   };
+  const artist = isArtist(lead);
   const { name, email, consulta } = lead;
   const tipo = clientTypeLabel(lead.clientType);
   const website = data.website || ""; // honeypot
@@ -293,13 +329,32 @@ export const POST: APIRoute = async ({ request }) => {
   if (!name || !email) return json(400, { error: "Completa al menos nombre y email." });
   if (!isValidEmail(email)) return json(400, { error: "Revisa el formato del email." });
 
-  const notifyHtml = shell(`
+  const phoneField = lead.phone ? field("Teléfono", `<a href="tel:${esc(waDigits(lead.phone) ? "+" + waDigits(lead.phone) : lead.phone)}" style="color:#141414;text-decoration:underline;">${esc(lead.phone)}</a>${waDigits(lead.phone) ? ` · <a href="https://wa.me/${waDigits(lead.phone)}" style="color:#141414;text-decoration:underline;">WhatsApp</a>` : ""}`) : "";
+  const emailField = field("Email", `<a href="mailto:${esc(email)}" style="color:#141414;text-decoration:underline;">${esc(email)}</a>`);
+  const artistLabel = lead.artistName || name;
+
+  const notifyHtml = artist ? shell(`
+    <div style="font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:#9a948a;margin:0 0 8px;">Propuesta de artista</div>
+    <h1 style="margin:0 0 30px;font-size:26px;font-weight:800;letter-spacing:-0.5px;color:#141414;">${esc(artistLabel)} quiere tocar con vosotros</h1>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+      ${field("Nombre artístico", esc(lead.artistName || "") || "No indicado")}
+      ${field("Contacto", esc(name))}
+      ${emailField}
+      ${phoneField}
+      ${field("Qué son", esc(lead.eventType) || "No indicado")}
+      ${field("Qué buscan", esc(lead.goal || "") || "No indicado")}
+      ${field("Estilo o repertorio", esc(lead.style || "") || "No indicado")}
+      ${field("Desde dónde", esc(lead.location) || "No indicado")}
+      ${field("Enlaces", lead.links ? linkify(lead.links) : "Ninguno")}
+      ${field("Mensaje", esc(consulta).replace(/\n/g, "<br>") || "Sin mensaje")}
+    </table>
+    <a href="mailto:${esc(email)}" style="${BTN}margin-top:10px;">Responder a ${esc(name)}</a>`) : shell(`
     <div style="font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:#9a948a;margin:0 0 8px;">Nuevo contacto</div>
     <h1 style="margin:0 0 30px;font-size:26px;font-weight:800;letter-spacing:-0.5px;color:#141414;">Tienes un mensaje nuevo</h1>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       ${field("Nombre", esc(name))}
-      ${field("Email", `<a href="mailto:${esc(email)}" style="color:#141414;text-decoration:underline;">${esc(email)}</a>`)}
-      ${lead.phone ? field("Teléfono", `<a href="tel:${esc(waDigits(lead.phone) ? "+" + waDigits(lead.phone) : lead.phone)}" style="color:#141414;text-decoration:underline;">${esc(lead.phone)}</a>${waDigits(lead.phone) ? ` · <a href="https://wa.me/${waDigits(lead.phone)}" style="color:#141414;text-decoration:underline;">WhatsApp</a>` : ""}`) : ""}
+      ${emailField}
+      ${phoneField}
       ${field("Quién es", esc(tipo) || "No indicado")}
       ${field("Tipo de evento", esc(lead.eventType) || "No indicado")}
       ${field("Municipio o recinto", esc(lead.location) || "No indicado")}
@@ -311,12 +366,34 @@ export const POST: APIRoute = async ({ request }) => {
 
   const autoHtml = shell(`
     <h1 style="margin:0 0 22px;font-size:28px;font-weight:800;letter-spacing:-0.5px;color:#141414;">Gracias, ${esc(name)}</h1>
-    <p style="margin:0 0 16px;font-size:16px;line-height:1.65;color:#4a4744;">Hemos recibido tu mensaje y lo estamos revisando. Te responderemos personalmente en <strong style="color:#141414;">menos de 24 horas</strong>.</p>
-    ${URGENT_TEL ? `<p style="margin:0 0 16px;font-size:16px;line-height:1.65;color:#4a4744;">Si te corre prisa, ${URGENT_WA ? `escr&iacute;benos por <a href="${URGENT_WA}" style="color:#141414;text-decoration:underline;">WhatsApp</a> o ll&aacute;manos` : "ll&aacute;manos"} al <a href="tel:${esc(BRAND.phone)}" style="color:#141414;text-decoration:underline;white-space:nowrap;">${esc(URGENT_TEL)}</a>.</p>` : ""}
+    ${artist
+      ? `<p style="margin:0 0 16px;font-size:16px;line-height:1.65;color:#4a4744;">Hemos recibido la propuesta de <strong style="color:#141414;">${esc(artistLabel)}</strong>. La vamos a escuchar con calma y te escribiremos personalmente. Si ahora no hay un evento que os encaje, os guardamos en cartera para los próximos carteles.</p>
+    <p style="margin:0 0 16px;font-size:16px;line-height:1.65;color:#4a4744;">Mientras tanto, puedes ver lo que producimos en <a href="${IG}" style="color:#141414;text-decoration:underline;">Instagram</a>.</p>`
+      : `<p style="margin:0 0 16px;font-size:16px;line-height:1.65;color:#4a4744;">Hemos recibido tu mensaje y lo estamos revisando. Te responderemos personalmente en <strong style="color:#141414;">menos de 24 horas</strong>.</p>`}
+    ${!artist && URGENT_TEL ? `<p style="margin:0 0 16px;font-size:16px;line-height:1.65;color:#4a4744;">Si te corre prisa, ${URGENT_WA ? `escr&iacute;benos por <a href="${URGENT_WA}" style="color:#141414;text-decoration:underline;">WhatsApp</a> o ll&aacute;manos` : "ll&aacute;manos"} al <a href="tel:${esc(BRAND.phone)}" style="color:#141414;text-decoration:underline;white-space:nowrap;">${esc(URGENT_TEL)}</a>.</p>` : ""}
     <p style="margin:30px 0 0;font-size:15px;line-height:1.6;color:#4a4744;">Un saludo,<br><strong style="color:#141414;">${BRAND.ownerName}</strong></p>`);
 
   // Versiones en texto plano (alternativa al HTML: mejora entregabilidad y accesibilidad).
-  const notifyText = [
+  const notifyText = artist ? [
+    "PROPUESTA DE ARTISTA",
+    "",
+    `Nombre artístico: ${lead.artistName || "No indicado"}`,
+    `Contacto: ${name}`,
+    `Email: ${email}`,
+    `Teléfono: ${lead.phone || "No indicado"}`,
+    `Qué son: ${lead.eventType || "No indicado"}`,
+    `Qué buscan: ${lead.goal || "No indicado"}`,
+    `Estilo o repertorio: ${lead.style || "No indicado"}`,
+    `Desde dónde: ${lead.location || "No indicado"}`,
+    `Enlaces: ${lead.links || "Ninguno"}`,
+    `Mensaje: ${consulta || "Sin mensaje"}`,
+    "",
+    `Responder: ${email}`,
+    "",
+    "—",
+    `${BRAND.name} · ${BRAND.tagline}`,
+    `${BRAND.domainLabel} · ${IG_LABEL}`,
+  ].join("\n") : [
     "NUEVO CONTACTO",
     "",
     "Tienes un mensaje nuevo.",
@@ -341,8 +418,10 @@ export const POST: APIRoute = async ({ request }) => {
   const autoText = [
     `Gracias, ${name}`,
     "",
-    "Hemos recibido tu mensaje y lo estamos revisando. Te responderemos personalmente en menos de 24 horas.",
-    ...(URGENT_TEL
+    artist
+      ? `Hemos recibido la propuesta de ${artistLabel}. La vamos a escuchar con calma y te escribiremos personalmente. Si ahora no hay un evento que os encaje, os guardamos en cartera para los próximos carteles.`
+      : "Hemos recibido tu mensaje y lo estamos revisando. Te responderemos personalmente en menos de 24 horas.",
+    ...(!artist && URGENT_TEL
       ? [
           "",
           URGENT_WA
@@ -365,7 +444,9 @@ export const POST: APIRoute = async ({ request }) => {
       from: FROM_NOTIFY,
       to: NOTIFY_TO,
       reply_to: email,
-      subject: `Nuevo contacto: ${name}${tipo ? ` · ${tipo}` : ""}`,
+      subject: artist
+        ? `Propuesta de artista: ${artistLabel}${lead.eventType ? ` · ${lead.eventType}` : ""}`
+        : `Nuevo contacto: ${name}${tipo ? ` · ${tipo}` : ""}`,
       html: notifyHtml,
       text: notifyText,
     });
@@ -380,7 +461,7 @@ export const POST: APIRoute = async ({ request }) => {
       from: FROM_REPLY,
       to: [email],
       reply_to: OWNER_EMAIL,
-      subject: "Hemos recibido tu mensaje ✦",
+      subject: artist ? "Hemos recibido tu propuesta ✦" : "Hemos recibido tu mensaje ✦",
       html: autoHtml,
       text: autoText,
     });
@@ -394,7 +475,23 @@ export const POST: APIRoute = async ({ request }) => {
   const leadRecord = createLead(lead);
 
   // 4) Aviso instantáneo a Telegram (no bloquea: si falla, el email ya salió)
-  const tgText = [
+  const tgText = artist ? [
+    "🎤 <b>Propuesta de artista</b> · /artistas",
+    "",
+    `🎶 <b>${esc(artistLabel)}</b>`,
+    `👤 ${esc(name)}`,
+    `✉️ ${esc(email)}`,
+    `📞 ${esc(lead.phone) || "—"}`,
+    `🎛 ${esc(lead.eventType) || "—"} · ${esc(lead.style || "") || "—"}`,
+    `🎯 ${esc(lead.goal || "") || "—"}`,
+    `📍 ${esc(lead.location) || "—"}`,
+    "",
+    "🔗 <b>Enlaces</b>",
+    esc(lead.links || "") || "Ninguno",
+    "",
+    "📝 <b>Mensaje</b>",
+    esc(consulta) || "Sin mensaje",
+  ].join("\n") : [
     "📩 <b>Nuevo cliente</b> · formulario web",
     "",
     `👤 <b>${esc(name)}</b>`,
@@ -417,7 +514,7 @@ export const POST: APIRoute = async ({ request }) => {
     ]],
   };
   try {
-    await sendTelegram(tgText, tgButtons);
+    await sendTelegram(tgText, artist ? undefined : tgButtons);
   } catch (err) {
     console.warn("Aviso Telegram no enviado:", err);
   }

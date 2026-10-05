@@ -17,8 +17,13 @@ export default defineConfig({
   }),
   integrations: [
     sitemap({
-      // Landing secreta del teaser de Halloween Fest V: solo se llega por QR.
-      filter: (page) => !new URL(page).pathname.startsWith('/countdown'),
+      // Fuera del sitemap: la landing secreta del teaser (solo se llega por QR)
+      // y los paneles privados de cifras, que sin la clave responden 404 y
+      // Search Console marcaría como "URL enviada no encontrada".
+      filter: (page) => {
+        const path = new URL(page).pathname.replace(/\/$/, '');
+        return !path.startsWith('/countdown') && !path.endsWith('/stats');
+      },
       changefreq: 'monthly',
       priority: 0.7,
       lastmod: new Date(),
