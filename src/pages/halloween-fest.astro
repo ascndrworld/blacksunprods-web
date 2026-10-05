@@ -190,18 +190,96 @@ const faq = [
 
 <SiteFooter />
 
-<!-- Vuelta de la pasarela: ?compra=ok muestra el aviso y se limpia de la URL -->
+<!-- Medición de ventas (ver src/pages/api/hf.ts y /halloween-fest/stats).
+     La compra ocurre dentro del iframe de Fourvenues: la web solo ve la visita,
+     la entrada en el iframe y la vuelta con ?compra=ok. El origen (utm_source,
+     ?src= o el sitio de procedencia) se guarda en sessionStorage durante la
+     visita para poder atribuir la compra al volver de la pasarela. -->
 <script is:inline>
   (function () {
     var p = new URLSearchParams(location.search);
-    if (p.get("compra") !== "ok") return;
-    var el = document.querySelector("[data-ok]");
-    if (el) { el.hidden = false; }
-    p.delete("compra");
-    var qs = p.toString();
-    try { history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + "#entradas"); } catch (e) {}
-    var t = document.getElementById("entradas");
-    if (t) t.scrollIntoView();
+    var KEY = "hf_src";
+    var src = "";
+    try { src = sessionStorage.getItem(KEY) || ""; } catch (e) {}
+
+    // El origen se fija en la primera página vista de la sesión. La vuelta de
+    // la pasarela (?compra=ok) llega desde Fourvenues y no debe pisarlo.
+    if (!src) {
+      var tag = (p.get("utm_source") || p.get("src") || "").toLowerCase();
+      if (!tag && p.get("compra") !== "ok") {
+        var ref = "";
+        try { ref = document.referrer ? new URL(document.referrer).hostname : ""; } catch (e) {}
+        if (ref && ref.indexOf("blacksunprods.com") === -1) {
+          tag = /instagram/.test(ref) ? "instagram"
+            : /facebook|fb\./.test(ref) ? "facebook"
+            : /google\./.test(ref) ? "google"
+            : /whatsapp|wa\.me/.test(ref) ? "whatsapp"
+            : /tiktok/.test(ref) ? "tiktok"
+            : "otros";
+        } else if (ref) {
+          tag = "web";
+        }
+      }
+      src = tag || "directo";
+      try { sessionStorage.setItem(KEY, src); } catch (e) {}
+    }
+
+    function once(name) {
+      try {
+        if (sessionStorage.getItem("hf_" + name)) return false;
+        sessionStorage.setItem("hf_" + name, "1");
+      } catch (e) {}
+      return true;
+    }
+    function send(e) {
+      var body = JSON.stringify({ e: e, src: src });
+      try {
+        if (!(navigator.sendBeacon && navigator.sendBeacon("/api/hf", body))) {
+          fetch("/api/hf", { method: "POST", body: body, keepalive: true });
+        }
+      } catch (err) {}
+    }
+    // Píxel y GA4 solo si están cargados (y respetan el consentimiento ellos mismos).
+    function fb() { if (typeof window.fbq === "function") window.fbq.apply(null, arguments); }
+    function ga() { if (typeof window.gtag === "function") window.gtag.apply(null, arguments); }
+
+    var bought = p.get("compra") === "ok";
+
+    if (!bought && once("view")) {
+      send("view");
+      fb("track", "ViewContent", { content_name: "Halloween Fest V", content_category: "Entradas" });
+      ga("event", "view_item", { items: [{ item_name: "Halloween Fest V" }] });
+    }
+
+    // Entrar en el iframe de Fourvenues = empezar la compra. Al hacer clic
+    // dentro de un iframe, la página pierde el foco y el foco pasa al iframe.
+    window.addEventListener("blur", function () {
+      setTimeout(function () {
+        var a = document.activeElement;
+        if (!a || a.tagName !== "IFRAME" || !a.closest(".hv-embed")) return;
+        if (!once("checkout")) return;
+        send("checkout");
+        fb("track", "InitiateCheckout", { content_name: "Halloween Fest V", currency: "EUR" });
+        ga("event", "begin_checkout", { currency: "EUR", items: [{ item_name: "Halloween Fest V" }] });
+      }, 0);
+    });
+
+    // Vuelta de la pasarela: aviso, recuento y limpieza de la URL (así recargar no cuenta otra vez).
+    if (bought) {
+      var el = document.querySelector("[data-ok]");
+      if (el) { el.hidden = false; }
+      if (once("purchase")) {
+        send("purchase");
+        // El importe real lo sabe Fourvenues; aquí solo se marca la conversión.
+        fb("track", "Purchase", { content_name: "Halloween Fest V", currency: "EUR", value: 0 });
+        ga("event", "purchase", { transaction_id: "hf5-" + Date.now(), currency: "EUR", value: 0, items: [{ item_name: "Halloween Fest V" }] });
+      }
+      p.delete("compra");
+      var qs = p.toString();
+      try { history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + "#entradas"); } catch (e) {}
+      var t = document.getElementById("entradas");
+      if (t) t.scrollIntoView();
+    }
   })();
 </script>
 
@@ -210,6 +288,7 @@ const faq = [
 
   /* ── Portada: la escena oficial con la V grande (sin el contador colgado) de fondo ── */
   .hv-hero { position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden; display: grid; place-items: center; }
+  .hv-hero > picture { position: absolute; inset: 0; }
   .hv-hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.55) saturate(.85) contrast(1.05); }
   .hv-hero-shade { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0,0,0,.25) 30%, rgba(0,0,0,.8) 100%), linear-gradient(180deg, rgba(0,0,0,.5), transparent 30%, transparent 70%, #000); }
   .hv-hero-body { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 120px 20px 64px; }
@@ -237,6 +316,8 @@ const faq = [
   .hv-card-link:hover { color: #F3F3F0; }
 
   @media (max-width: 700px) {
+    .hv-hero { place-items: start center; }
+    .hv-hero-body { padding-top: max(110px, 16svh); }
     .hv-cards { grid-template-columns: 1fr; }
     .hv-cards li { border-left: none; border-top: 1px solid rgba(243, 243, 240, .1); padding: 20px; }
     .hv-cards li:first-child { border-top: none; }

@@ -1,0 +1,111 @@
+---
+/*
+ * /halloween-fest/stats?key=… — Cifras privadas de la landing de venta de
+ * Halloween Fest V: visitas, entradas en el iframe de Fourvenues y compras
+ * completadas, por origen. Misma clave que /countdown/stats (CD_STATS_KEY);
+ * sin ella responde 404, como si no existiera.
+ */
+import { HF_EVENTS, hasStore, readAll, type HfEvent, type DayStats } from "../../lib/countdownStats";
+
+export const prerender = false;
+
+const KEY =
+  import.meta.env.CD_STATS_KEY ?? (globalThis as any).process?.env?.CD_STATS_KEY;
+if (!KEY || Astro.url.searchParams.get("key") !== KEY) {
+  return new Response("Not found", { status: 404 });
+}
+Astro.response.headers.set("Cache-Control", "no-store");
+
+let days: DayStats[] = [];
+let error = "";
+if (!hasStore()) error = "Falta conectar Upstash Redis (KV_REST_API_URL / KV_REST_API_TOKEN).";
+else {
+  try { days = await readAll("hf"); }
+  catch (e) { error = String((e as Error).message ?? e); }
+}
+
+const ev = Object.keys(HF_EVENTS) as HfEvent[];
+const LABELS: Record<string, string> = { directo: "Directo / sin etiqueta", qr: "QR", web: "Web propia", otros: "Otras webs" };
+const label = (s: string) => LABELS[s] ?? s.charAt(0).toUpperCase() + s.slice(1);
+const sum = (c: Record<string, number>, e: string, src?: string) =>
+  Object.entries(c).reduce((n, [k, v]) => {
+    const [ke, ks] = k.split(":");
+    return ke === e && (src === undefined || ks === src) ? n + v : n;
+  }, 0);
+
+const totals: Record<string, number> = {};
+for (const d of days) for (const [k, v] of Object.entries(d.counts)) totals[k] = (totals[k] ?? 0) + v;
+const sources = [...new Set(Object.keys(totals).map((k) => k.split(":")[1]))]
+  .sort((a, b) => sum(totals, "purchase", b) - sum(totals, "purchase", a) || sum(totals, "view", b) - sum(totals, "view", a));
+const fmt = (n: number) => new Intl.NumberFormat("es-ES").format(n);
+const pct = (a: number, b: number) => (b ? `${new Intl.NumberFormat("es-ES", { maximumFractionDigits: 1 }).format((a / b) * 100)} %` : "—");
+const dayLabel = (d: string) => `${d.slice(8, 10)}/${d.slice(5, 7)}`;
+---
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Halloween Fest V · ventas</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0b0b0b; --fg:#eee; --mute:#888; --line:#262626; --acc:#ff5a1f; }
+    body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.45 "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    main { max-width:760px; margin:0 auto; padding:28px 16px 48px; }
+    h1 { font-size:20px; margin:0 0 4px; letter-spacing:.02em; }
+    .sub { color:var(--mute); margin:0 0 24px; font-size:13px; }
+    .tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; margin-bottom:28px; }
+    .tile { border:1px solid var(--line); border-radius:8px; padding:14px; }
+    .tile b { display:block; font-size:30px; font-variant-numeric:tabular-nums; }
+    .tile span { color:var(--mute); font-size:12px; }
+    .tile.acc b { color:var(--acc); }
+    h2 { font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:var(--mute); margin:28px 0 8px; }
+    .scroll { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; }
+    th, td { text-align:right; padding:7px 8px; border-bottom:1px solid var(--line); white-space:nowrap; }
+    th:first-child, td:first-child { text-align:left; }
+    th { color:var(--mute); font-weight:500; font-size:12px; }
+    .err { border:1px solid var(--acc); color:var(--acc); padding:12px; border-radius:8px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Halloween Fest V · /halloween-fest</h1>
+    <p class="sub">Recuento propio, una vez por visita. El origen sale de utm_source, de ?src= o de la web de procedencia. Las compras son las vueltas de Fourvenues con ?compra=ok: compáralas con el panel de Fourvenues, que es la cifra real. Los días van en hora de Madrid.</p>
+
+    {error && <p class="err">{error}</p>}
+
+    <div class="tiles">
+      {ev.map((e) => <div class={`tile${e === "purchase" ? " acc" : ""}`}><b>{fmt(sum(totals, e))}</b><span>{HF_EVENTS[e]}</span></div>)}
+      <div class="tile"><b>{pct(sum(totals, "purchase"), sum(totals, "view"))}</b><span>Conversión (compras / visitas)</span></div>
+    </div>
+
+    {sources.length > 0 && (
+      <Fragment>
+        <h2>Por origen</h2>
+        <div class="scroll"><table>
+          <thead><tr><th>Origen</th><th>Visitas</th><th>Empezaron</th><th>Compras</th><th>Conversión</th></tr></thead>
+          <tbody>{sources.map((s) => (
+            <tr>
+              <td>{label(s)}</td>
+              <td>{fmt(sum(totals, "view", s))}</td>
+              <td>{fmt(sum(totals, "checkout", s))}</td>
+              <td>{fmt(sum(totals, "purchase", s))}</td>
+              <td>{pct(sum(totals, "purchase", s), sum(totals, "view", s))}</td>
+            </tr>
+          ))}</tbody>
+        </table></div>
+
+        <h2>Por día</h2>
+        <div class="scroll"><table>
+          <thead><tr><th>Día</th><th>Visitas</th><th>Empezaron</th><th>Compras</th></tr></thead>
+          <tbody>{days.map((d) => (
+            <tr><td>{dayLabel(d.day)}</td>{ev.map((e) => <td>{fmt(sum(d.counts, e))}</td>)}</tr>
+          ))}</tbody>
+        </table></div>
+      </Fragment>
+    )}
+    {!error && sources.length === 0 && <p class="sub">Aún no hay datos.</p>}
+  </main>
+</body>
+</html>

@@ -4,8 +4,9 @@
 // origen, así que no hace falta consentimiento. Se habla con la API REST de
 // Upstash con fetch (sin dependencias).
 //
-// Claves:  cd:day:YYYY-MM-DD  (hash)  campo "evento:origen" → contador
-//          cd:days            (set)   días con datos
+// Claves:  {ns}:day:YYYY-MM-DD  (hash)  campo "evento:origen" → contador
+//          {ns}:days            (set)   días con datos
+// ns = "cd" para /countdown y "hf" para la landing de venta /halloween-fest.
 
 const env = (k: string): string | undefined =>
   (import.meta.env as Record<string, string | undefined>)[k] ??
@@ -53,22 +54,22 @@ async function pipeline(cmds: (string | number)[][]): Promise<any[]> {
   });
 }
 
-export async function track(event: CdEvent, src: string): Promise<void> {
+export async function track(event: string, src: string, ns = "cd"): Promise<void> {
   const day = madridDay();
   await pipeline([
-    ["HINCRBY", `cd:day:${day}`, `${event}:${src}`, 1],
-    ["SADD", "cd:days", day],
+    ["HINCRBY", `${ns}:day:${day}`, `${event}:${src}`, 1],
+    ["SADD", `${ns}:days`, day],
   ]);
 }
 
 export type DayStats = { day: string; counts: Record<string, number> };
 
 // Todos los días con datos, del más reciente al más antiguo.
-export async function readAll(): Promise<DayStats[]> {
-  const [days] = (await pipeline([["SMEMBERS", "cd:days"]])) as string[][];
+export async function readAll(ns = "cd"): Promise<DayStats[]> {
+  const [days] = (await pipeline([["SMEMBERS", `${ns}:days`]])) as string[][];
   if (!days?.length) return [];
   days.sort().reverse();
-  const hashes = await pipeline(days.map((d) => ["HGETALL", `cd:day:${d}`]));
+  const hashes = await pipeline(days.map((d) => ["HGETALL", `${ns}:day:${d}`]));
   return days.map((day, i) => {
     const flat: string[] = hashes[i] ?? [];
     const counts: Record<string, number> = {};
@@ -76,3 +77,16 @@ export async function readAll(): Promise<DayStats[]> {
     return { day, counts };
   });
 }
+
+// ── Landing de venta /halloween-fest ─────────────────────────────────────
+// La compra ocurre dentro del iframe de Fourvenues, así que la web solo ve
+// tres momentos: la visita, la entrada en el iframe y la vuelta con ?compra=ok.
+export const HF_EVENTS = {
+  view: "Visitas a la landing",
+  checkout: "Empezaron la compra (entraron en Fourvenues)",
+  purchase: "Compras completadas",
+} as const;
+export type HfEvent = keyof typeof HF_EVENTS;
+
+export const isHfEvent = (e: unknown): e is HfEvent =>
+  typeof e === "string" && Object.hasOwn(HF_EVENTS, e);
