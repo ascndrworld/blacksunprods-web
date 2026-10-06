@@ -62,7 +62,7 @@ Lista viva de lo que falta. Tacha (o borra) cada punto al resolverlo.
 Diseño aprobado de cómo queda `/halloween-fest` con la venta activa: `docs/diseno-venta-halloween-v/` (capturas de ordenador y móvil y `widget-fourvenues-simulado.html`, que imita el widget). Precios, tandas y la consumición de la simulación son **de ejemplo**: no copiarlos.
 
 - [ ] **Datos fiscales en Fourvenues** para que deje generar el iframe (ahora el microsite sale bloqueado). **Enviados el 06/10/2026, Fourvenues los está revisando.**
-- [ ] **Configurar en Fourvenues** las tandas reales (Early Bird → 1ª → 2ª → taquilla, como en la simulación), tema oscuro y que se vean las **agotadas** (empujan a comprar la siguiente tanda). Pestaña de reservados solo si se venden.
+- [x] ~~**Configurar en Fourvenues** las tandas reales~~ (rangos de venta creados el 06/10/2026) (Early Bird → 1ª → 2ª → taquilla, como en la simulación), tema oscuro y que se vean las **agotadas** (empujan a comprar la siguiente tanda). Pestaña de reservados solo si se venden.
 - [ ] **Página de gracias** en Fourvenues: `https://www.blacksunprods.com/halloween-fest?compra=ok` (muestra el aviso y cuenta la compra en `/halloween-fest/stats`).
 - [ ] **Pegar el iframe** en `FOURVENUES_EMBED` y el enlace directo en `FOURVENUES_URL` (`src/pages/halloween-fest.astro`). Con eso el botón de la portada pasa solo a «Comprar entradas» y el bloque «Elige tu entrada» muestra el widget.
 - [ ] Ajustar el `height` del iframe a lo que mida el widget real, para que no salga barra de scroll dentro.
