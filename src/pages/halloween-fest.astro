@@ -20,9 +20,10 @@ import SiteFooter from "../components/SiteFooter.astro";
 import { SITE, absUrl } from "../config/site.mjs";
 
 // ── MARCA: pegar aquí el script del iframe de Fourvenues ──────────────────
-const FOURVENUES_EMBED = ``;
+// Apunta al evento concreto (WZEJ) para que los tramos salgan nada más cargar, sin pasar por la lista de eventos.
+const FOURVENUES_EMBED = `<script src="https://www.fourvenues.com/assets/iframe/halloween-fest2/events/WZEJ"></script>`;
 // Enlace directo al evento en Fourvenues (plan B si el iframe no carga).
-const FOURVENUES_URL = "";
+const FOURVENUES_URL = "https://www.fourvenues.com/halloween-fest2/WZEJ";
 
 const EVENT = {
   name: "Halloween Fest | V Aniversario",
@@ -75,6 +76,15 @@ const faq = [
 >
 
 <Fragment slot="head">
+  {onSale && (
+    <>
+      {/* El widget de Fourvenues encadena script → script → iframe (con redirección a web.fourvenues.com) → API:
+          abrir las conexiones desde el principio le ahorra casi un segundo al pulsar «Comprar entradas». */}
+      <link rel="preconnect" href="https://www.fourvenues.com"/>
+      <link rel="preconnect" href="https://web.fourvenues.com"/>
+      <link rel="preconnect" href="https://api.fourvenues.com" crossorigin/>
+    </>
+  )}
   <link rel="preload" as="image" href={`${IMG}/escena-v.webp`} media="(max-aspect-ratio: 1/1)"/>
   <link rel="preload" as="image" href={`${IMG}/escena-v-horizontal.webp`} media="(min-aspect-ratio: 1/1)"/>
   <script type="application/ld+json" is:inline set:html={JSON.stringify([{
@@ -151,7 +161,6 @@ const faq = [
     <p class="hv-ok" hidden data-ok>Compra completada. Te llegarán las entradas al correo que has indicado.</p>
     {onSale ? (
       <>
-        <p class="hv-note" data-reveal>Venta oficial. El pago se hace de forma segura con Fourvenues y las entradas llegan al momento por correo.</p>
         <div class="hv-embed" set:html={FOURVENUES_EMBED} />
         {FOURVENUES_URL && (
           <p class="hv-alt">¿No se carga? <a href={FOURVENUES_URL} target="_blank" rel="noopener">Compra directamente en Fourvenues</a></p>
@@ -309,10 +318,10 @@ const faq = [
   /* ── Datos del evento: tarjetas (fecha, ubicación, vestimenta) ── */
   /* Franja a todo el ancho con columnas separadas por líneas (diseño original de la lista de datos). */
   .hv-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); border-top: 1px solid rgba(243, 243, 240, .1); border-bottom: 1px solid rgba(243, 243, 240, .1); }
-  .hv-cards li { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: clamp(24px, 3vw, 40px) clamp(20px, 3vw, 48px); border-left: 1px solid rgba(243, 243, 240, .1); }
+  .hv-cards li { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: clamp(24px, 3vw, 40px) clamp(20px, 3vw, 48px); border-left: 1px solid rgba(243, 243, 240, .1); }
   .hv-cards li:first-child { border-left: none; }
   .hv-card-k { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: rgba(243, 243, 240, .5); }
-  .hv-card-row { display: flex; flex-direction: column; gap: 2px; }
+  .hv-card-row { display: flex; flex-direction: column; align-items: center; gap: 2px; }
   .hv-card-row small { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: #FF4A36; }
   .hv-card-row strong { font-size: clamp(17px, 1.8vw, 24px); font-weight: 700; letter-spacing: -.02em; }
   .hv-card-link { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #FF4A36; text-decoration: none; }
@@ -348,9 +357,8 @@ const faq = [
 
   /* ── Entradas ── */
   .hv-tickets { max-width: 960px; margin: 0 auto; padding: clamp(64px, 8vw, 110px) 16px; scroll-margin-top: 40px; }
-  .hv-tickets h2 { font-size: clamp(36px, 6vw, 72px); font-weight: 800; letter-spacing: -.04em; line-height: 1; margin: 0 0 20px; text-align: center; }
-  .hv-note, .hv-alt { font-size: 15px; line-height: 1.6; color: rgba(243, 243, 240, .6); text-align: center; max-width: 52ch; margin: 0 auto 32px; }
-  .hv-alt { margin: 20px auto 0; font-size: 14px; }
+  .hv-tickets h2 { font-size: clamp(36px, 6vw, 72px); font-weight: 800; letter-spacing: -.04em; line-height: 1; margin: 0 0 32px; text-align: center; }
+  .hv-alt { font-size: 14px; line-height: 1.6; color: rgba(243, 243, 240, .6); text-align: center; max-width: 52ch; margin: 20px auto 0; }
   .hv-alt a { color: #F3F3F0; text-underline-offset: 3px; }
   .hv-ok { text-align: center; font-size: 16px; font-weight: 600; padding: 16px 20px; margin: 0 auto 28px; max-width: 52ch; border: 1px solid rgba(255, 74, 54, .6); background: rgba(196, 36, 26, .12); }
   .hv-embed { min-height: 480px; }

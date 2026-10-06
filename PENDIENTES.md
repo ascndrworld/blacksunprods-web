@@ -61,11 +61,13 @@ Lista viva de lo que falta. Tacha (o borra) cada punto al resolverlo.
 
 Diseño aprobado de cómo queda `/halloween-fest` con la venta activa: `docs/diseno-venta-halloween-v/` (capturas de ordenador y móvil y `widget-fourvenues-simulado.html`, que imita el widget). Precios, tandas y la consumición de la simulación son **de ejemplo**: no copiarlos.
 
-- [ ] **Datos fiscales en Fourvenues** para que deje generar el iframe (ahora el microsite sale bloqueado). **Enviados el 06/10/2026, Fourvenues los está revisando.**
+- [x] ~~**Datos fiscales en Fourvenues**~~ (aprobados; microsite activo el 06/10/2026).
 - [x] ~~**Configurar en Fourvenues** las tandas reales~~ (rangos de venta creados el 06/10/2026) (Early Bird → 1ª → 2ª → taquilla, como en la simulación), tema oscuro y que se vean las **agotadas** (empujan a comprar la siguiente tanda). Pestaña de reservados solo si se venden.
-- [ ] **Página de gracias** en Fourvenues: `https://www.blacksunprods.com/halloween-fest?compra=ok` (muestra el aviso y cuenta la compra en `/halloween-fest/stats`).
-- [ ] **Pegar el iframe** en `FOURVENUES_EMBED` y el enlace directo en `FOURVENUES_URL` (`src/pages/halloween-fest.astro`). Con eso el botón de la portada pasa solo a «Comprar entradas» y el bloque «Elige tu entrada» muestra el widget.
-- [ ] Ajustar el `height` del iframe a lo que mida el widget real, para que no salga barra de scroll dentro.
+- [ ] **Página de gracias** en Fourvenues: `https://www.blacksunprods.com/halloween-fest?compra=ok` (muestra el aviso y cuenta la compra en `/halloween-fest/stats`). Cancel page: `https://www.blacksunprods.com/halloween-fest#entradas`. Comprobar que están puestas.
+- [x] ~~**Pegar el iframe**~~ (06/10/2026): script del evento WZEJ (abre directamente en los tramos) y enlace directo `fourvenues.com/halloween-fest2/WZEJ`.
+- [x] ~~Ajustar el `height` del iframe~~: el script de Fourvenues ajusta la altura solo.
+- [ ] **Acortar la descripción del evento en Fourvenues** (ahora son 5 párrafos antes de los tramos).
+- [ ] Avisar al soporte de Fourvenues de textos sin traducir en el widget (`microsites.event_page.tickets` en móvil, `global.till_late` sin hora de cierre).
 
 ## SEO — lo que falta (anotado el 23/09/2026)
 
