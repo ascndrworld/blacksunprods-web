@@ -5,7 +5,7 @@
  * completadas, por origen. Misma clave que /countdown/stats (CD_STATS_KEY);
  * sin ella responde 404, como si no existiera.
  */
-import { HF_EVENTS, hasStore, readAll, type HfEvent, type DayStats } from "../../lib/countdownStats";
+import { HF_EVENTS, hasStore, hfNs, readAll, type HfEvent, type DayStats } from "../../lib/countdownStats";
 
 export const prerender = false;
 
@@ -20,7 +20,7 @@ let days: DayStats[] = [];
 let error = "";
 if (!hasStore()) error = "Falta conectar Upstash Redis (KV_REST_API_URL / KV_REST_API_TOKEN).";
 else {
-  try { days = await readAll("hf"); }
+  try { days = await readAll(hfNs()); }
   catch (e) { error = String((e as Error).message ?? e); }
 }
 

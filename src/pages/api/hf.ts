@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { cleanSrc, hasStore, isHfEvent, track } from "../../lib/countdownStats";
+import { cleanSrc, hasStore, hfNs, isHfEvent, track } from "../../lib/countdownStats";
 
 // Recibe los eventos de la landing de venta /halloween-fest (sendBeacon).
 // Mismo almacén que /api/cd, con el prefijo "hf". Serverless en Vercel.
@@ -20,7 +20,7 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(null, { status: 204 });
   }
   try {
-    await track(body.e, cleanSrc(body.src), "hf");
+    await track(body.e, cleanSrc(body.src), hfNs());
   } catch (err) {
     console.error("[hf] Error guardando evento:", err);
   }
