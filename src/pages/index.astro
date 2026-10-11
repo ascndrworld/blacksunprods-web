@@ -101,13 +101,13 @@ const SHOW_TESTIMONIALS = false;
   </div>
 
   <!-- AVISO HALLOWEEN FEST V: tira fija en la base del vídeo, enlaza a la landing de venta -->
-  <!-- div (no <a>) para poder anidar el enlace a Instagram: el enlace principal se estira con ::after -->
+  <!-- el enlace se estira con ::after para que toda la tira sea clicable -->
   <div class="hf5-strip">
-    <a class="hf5-strip-link" href="/halloween-fest" aria-label="Halloween Fest V: entradas y cartel oficial de la 5ª edición, muy pronto.">
+    <a class="hf5-strip-link" href="/halloween-fest#entradas" aria-label="Halloween Fest V: entradas ya disponibles. Comprar entradas.">
       <span class="hf5-strip-tag">HALLOWEEN FEST V</span>
-      <span class="hf5-strip-text">Entradas y cartel oficial de la 5ª edición <strong>disponibles muy pronto</strong></span>
+      <span class="hf5-strip-text">Entradas <strong>ya disponibles</strong></span>
+      <span class="hf5-strip-btn" aria-hidden="true">Comprar entradas</span>
     </a>
-    <span class="hf5-strip-info">+INFO: <a href="https://www.instagram.com/halloweenfestlv/" target="_blank" rel="noopener">@halloweenfestlv</a></span>
   </div>
 
   </div><!-- /#home -->
@@ -505,21 +505,6 @@ img, video {
   text-decoration: none;
 }
 .hf5-strip-link::after { content: ""; position: absolute; inset: 0; }
-.hf5-strip-info {
-  position: relative;
-  z-index: 1;
-  font-size: 13px;
-  font-weight: 800;
-  white-space: nowrap;
-}
-.hf5-strip-info a {
-  color: inherit;
-  text-transform: none;
-  letter-spacing: 0.02em;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.hf5-strip-info a:hover { color: #fff; }
 .hf5-strip-tag {
   flex: none;
   padding: 4px 10px;
@@ -531,6 +516,18 @@ img, video {
 }
 .hf5-strip-text { font-size: 15px; font-weight: 600; }
 .hf5-strip-text strong { font-weight: 800; }
+.hf5-strip-btn {
+  flex: none;
+  padding: 8px 16px;
+  border: 2px solid #000;
+  background: #000;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  transition: background 0.2s, color 0.2s;
+}
+.hf5-strip:hover .hf5-strip-btn { background: transparent; color: #000; }
 @keyframes hf5Glow {
   0%, 100% { box-shadow: 0 0 24px rgba(255, 90, 31, 0.35); }
   50%      { box-shadow: 0 0 56px rgba(255, 90, 31, 0.7); }
@@ -544,9 +541,9 @@ img, video {
     text-align: center;
   }
   .hf5-strip-link { flex-wrap: wrap; justify-content: center; gap: 6px 12px; }
-  .hf5-strip-info { display: none; }
   .hf5-strip-tag { font-size: 10px; }
-  .hf5-strip-text { font-size: 12px; flex-basis: 100%; }
+  .hf5-strip-text { font-size: 12px; }
+  .hf5-strip-btn { font-size: 11px; padding: 6px 12px; }
 }
 
 /* ════ CIFRAS (bajo el hero) ════ */
