@@ -166,7 +166,7 @@ const faq = [
     <p class="hv-ok" hidden data-ok>Compra completada. Te llegarán las entradas al correo que has indicado.</p>
     {onSale ? (
       <>
-        <p class="hv-age">Edad mínima 16 años. Si tienes 16 o 17, trae la autorización firmada por tu madre, padre o tutor y una fotocopia de su DNI. <a href={AUTH_PDF} target="_blank" rel="noopener">Descargar autorización (PDF)</a></p>
+        <p class="hv-age"><a href={AUTH_PDF} target="_blank" rel="noopener">Descargar autorización menores (PDF)</a></p>
         <div class="hv-embed" set:html={FOURVENUES_EMBED} />
         {FOURVENUES_URL && (
           <p class="hv-alt">¿No se carga? <a href={FOURVENUES_URL} target="_blank" rel="noopener">Compra directamente en Fourvenues</a></p>
@@ -395,7 +395,7 @@ const faq = [
   .hv-tickets { max-width: 960px; margin: 0 auto; padding: clamp(64px, 8vw, 110px) 16px; scroll-margin-top: 40px; }
   .hv-tickets h2 { font-size: clamp(36px, 6vw, 72px); font-weight: 800; letter-spacing: -.04em; line-height: 1; margin: 0 0 32px; text-align: center; }
   .hv-age { font-size: 15px; line-height: 1.6; color: rgba(243, 243, 240, .75); text-align: center; max-width: 60ch; margin: -12px auto 28px; }
-  .hv-age a { display: inline-block; margin-top: 6px; color: #F3F3F0; font-weight: 600; text-underline-offset: 3px; }
+  .hv-age a { color: #F3F3F0; font-weight: 600; text-underline-offset: 3px; }
   .hv-alt { font-size: 14px; line-height: 1.6; color: rgba(243, 243, 240, .6); text-align: center; max-width: 52ch; margin: 20px auto 0; }
   .hv-alt a { color: #F3F3F0; text-underline-offset: 3px; }
   .hv-ok { text-align: center; font-size: 16px; font-weight: 600; padding: 16px 20px; margin: 0 auto 28px; max-width: 52ch; border: 1px solid rgba(255, 74, 54, .6); background: rgba(196, 36, 26, .12); }
