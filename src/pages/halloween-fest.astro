@@ -49,10 +49,14 @@ const DRESS_CODE = "";
 /** Line-up: { name, img? } con img en /images/halloween-v/ (cuadrada). */
 const LINEUP: { name: string; img?: string }[] = [];
 
+/** Autorización para 16 y 17 años (fuente: docs/autorizacion-menores/autorizacion.html). */
+const AUTH_PDF = "/docs/autorizacion-menores-halloween-fest-v.pdf";
+
 const cards = [
   { k: "Fecha", rows: [["", "Sábado 31 de octubre de 2026"]] },
   { k: "Ubicación", rows: [["", `${EVENT.venue} ${EVENT.place} (${EVENT.region})`]], link: { href: mapsUrl, label: "Cómo llegar" } },
   { k: "Horario", rows: [["", "23:00 – 6:00"]] },
+  { k: "Edad", rows: [["", "+16 · 16 y 17 años con autorización"]], link: { href: AUTH_PDF, label: "Descargar autorización" } },
   ...(DRESS_CODE ? [{ k: "Código de vestimenta", rows: [["", DRESS_CODE]] }] : []),
 ];
 
@@ -61,6 +65,7 @@ const cards = [
 const faq = [
   { q: "¿Dónde compro las entradas oficiales de Halloween Fest V?", a: "Aquí mismo, en esta página. La venta oficial se hace a través de Fourvenues: el pago es seguro y las entradas llegan al momento a tu correo." },
   { q: "¿Cuándo y dónde es Halloween Fest V?", a: `El sábado 31 de octubre de 2026, de 23:00 a 06:00, en la ${EVENT.venue} de ${EVENT.place} (${EVENT.region}).` },
+  { q: "¿Pueden entrar menores de edad?", a: "La edad mínima es 16 años. Si tienes 16 o 17, en la entrada tienes que enseñar la autorización firmada por tu madre, padre o tutor junto con una fotocopia de su DNI. La autorización se descarga en esta página. Los menores de 16 años no pueden entrar." },
   { q: "¿Cómo recibo mi entrada?", a: "Al terminar la compra te llega por correo electrónico. Puedes enseñarla en la puerta desde el móvil, no hace falta imprimirla." },
   { q: "¿Qué es Halloween Fest?", a: "Es la fiesta de Halloween de Los Villares (Jaén), que se celebra desde 2022. Cuatro ediciones con una media de 600 personas por noche, y este año, en su quinto aniversario, la organiza Black Sun Prods." },
 ];
@@ -161,6 +166,7 @@ const faq = [
     <p class="hv-ok" hidden data-ok>Compra completada. Te llegarán las entradas al correo que has indicado.</p>
     {onSale ? (
       <>
+        <p class="hv-age">Edad mínima 16 años. Si tienes 16 o 17, trae la autorización firmada por tu madre, padre o tutor y una fotocopia de su DNI. <a href={AUTH_PDF} target="_blank" rel="noopener">Descargar autorización (PDF)</a></p>
         <div class="hv-embed" set:html={FOURVENUES_EMBED} />
         {FOURVENUES_URL && (
           <p class="hv-alt">¿No se carga? <a href={FOURVENUES_URL} target="_blank" rel="noopener">Compra directamente en Fourvenues</a></p>
@@ -388,6 +394,8 @@ const faq = [
   /* ── Entradas ── */
   .hv-tickets { max-width: 960px; margin: 0 auto; padding: clamp(64px, 8vw, 110px) 16px; scroll-margin-top: 40px; }
   .hv-tickets h2 { font-size: clamp(36px, 6vw, 72px); font-weight: 800; letter-spacing: -.04em; line-height: 1; margin: 0 0 32px; text-align: center; }
+  .hv-age { font-size: 15px; line-height: 1.6; color: rgba(243, 243, 240, .75); text-align: center; max-width: 60ch; margin: -12px auto 28px; }
+  .hv-age a { display: inline-block; margin-top: 6px; color: #F3F3F0; font-weight: 600; text-underline-offset: 3px; }
   .hv-alt { font-size: 14px; line-height: 1.6; color: rgba(243, 243, 240, .6); text-align: center; max-width: 52ch; margin: 20px auto 0; }
   .hv-alt a { color: #F3F3F0; text-underline-offset: 3px; }
   .hv-ok { text-align: center; font-size: 16px; font-weight: 600; padding: 16px 20px; margin: 0 auto 28px; max-width: 52ch; border: 1px solid rgba(255, 74, 54, .6); background: rgba(196, 36, 26, .12); }
