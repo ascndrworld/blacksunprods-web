@@ -276,16 +276,46 @@ const faq = [
       }, 0);
     });
 
-    // Vuelta de la pasarela: aviso, recuento y limpieza de la URL (así recargar no cuenta otra vez).
-    if (bought) {
+    function purchased() {
       var el = document.querySelector("[data-ok]");
       if (el) { el.hidden = false; }
-      if (once("purchase")) {
-        send("purchase");
-        // El importe real lo sabe Fourvenues; aquí solo se marca la conversión.
-        fb("track", "Purchase", { content_name: "Halloween Fest V", currency: "EUR", value: 0 });
-        ga("event", "purchase", { transaction_id: "hf5-" + Date.now(), currency: "EUR", value: 0, items: [{ item_name: "Halloween Fest V" }] });
+      if (!once("purchase")) return;
+      send("purchase");
+      // El importe real lo sabe Fourvenues; aquí solo se marca la conversión.
+      fb("track", "Purchase", { content_name: "Halloween Fest V", currency: "EUR", value: 0 });
+      ga("event", "purchase", { transaction_id: "hf5-" + Date.now(), currency: "EUR", value: 0, items: [{ item_name: "Halloween Fest V" }] });
+    }
+
+    // Fourvenues no devuelve a ?compra=ok: la compra acaba dentro del iframe.
+    // El iframe avisa a esta página con postMessage (navegación entre pasos y
+    // eventos de seguimiento); un evento Purchase o una pantalla de éxito
+    // cuentan como compra. Cada aviso distinto va a los logs de /api/hf para
+    // poder ajustar la detección con compras reales.
+    var seen = {};
+    window.addEventListener("message", function (m) {
+      if (!/(^|\.)fourvenues\.com$/.test((function () { try { return new URL(m.origin).hostname; } catch (e) { return ""; } })())) return;
+      var d = m.data;
+      if (typeof d === "string") { try { d = JSON.parse(d); } catch (e) { return; } }
+      if (!d || typeof d.key !== "string" || d.key === "addHeight" || d.key === "forwardScroll") return;
+      var info = d.key === "navigate" ? (d.segments || []).join("/")
+        : d.key === "track" ? JSON.stringify(d.eventObject || {})
+        : JSON.stringify(d.value === undefined ? "" : d.value);
+      info = String(info).slice(0, 300);
+      if (!seen[d.key + info]) {
+        seen[d.key + info] = 1;
+        try { navigator.sendBeacon("/api/hf", JSON.stringify({ e: "fv", src: src, k: d.key, i: info })); } catch (e) {}
       }
+      var ev = d.key === "track" && d.eventObject ? String(d.eventObject.event || d.eventObject.eventName || d.eventObject.name || d.eventObject.action || "") : "";
+      if (/^purchase$/i.test(ev)
+        || (d.key === "track" && /"(event|eventName|name|action)":"purchase"/i.test(info))
+        || (d.key === "navigate" && /success|exito|gracias|thank|completed/i.test(info))) {
+        purchased();
+      }
+    });
+
+    // Vuelta con ?compra=ok (por si Fourvenues redirige): aviso, recuento y limpieza de la URL (así recargar no cuenta otra vez).
+    if (bought) {
+      purchased();
       p.delete("compra");
       var qs = p.toString();
       try { history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + "#entradas"); } catch (e) {}
