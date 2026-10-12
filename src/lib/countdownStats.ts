@@ -93,5 +93,5 @@ export const isHfEvent = (e: unknown): e is HfEvent =>
 
 // Reinicio de cifras al abrir la venta real: desde esta hora los eventos van a
 // "hf5" y el panel lee de ahí; lo anterior (pruebas) se queda en "hf".
-const HF_RESET_AT = Date.parse("2026-10-12T14:00:00+02:00");
+const HF_RESET_AT = Date.parse("2026-10-12T14:59:00+02:00");
 export const hfNs = (now = Date.now()): string => (now >= HF_RESET_AT ? "hf5" : "hf");
