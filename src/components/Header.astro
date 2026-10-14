@@ -127,10 +127,8 @@ import { SITE } from "../config/site.mjs";
   .site-logo {
     display: flex;
     align-items: center;
-    /* El wordmark pesa abajo (la "A" alta deja hueco arriba): el centro de masa
-       cae ~5px por debajo del centro geométrico. Lo subimos para que quede
-       ópticamente centrado y a la misma altura que el hamburger. */
-    transform: translateY(-5px);
+    /* Sin desplazar: el sol del logo ocupa todo el alto de la imagen, así que su
+       centro coincide con el del header y con la raya central del hamburger. */
   }
   .site-logo img {
     height: 44px;
