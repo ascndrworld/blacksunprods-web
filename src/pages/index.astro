@@ -106,7 +106,7 @@ const SHOW_TESTIMONIALS = false;
     <a class="hf5-strip-link" href="/halloween-fest#entradas" aria-label="Halloween Fest V: entradas ya disponibles. Comprar entradas.">
       <span class="hf5-strip-tag">HALLOWEEN FEST V</span>
       <span class="hf5-strip-text">Entradas <strong>ya disponibles</strong></span>
-      <span class="hf5-strip-btn" aria-hidden="true">Comprar entradas</span>
+      <span class="hf5-strip-btn" aria-hidden="true">Comprar<span class="hf5-strip-btn-extra"> entradas</span></span>
     </a>
   </div>
 
@@ -533,17 +533,28 @@ img, video {
   50%      { box-shadow: 0 0 56px rgba(255, 90, 31, 0.7); }
 }
 @media (prefers-reduced-motion: reduce) { .hf5-strip { animation: none; } }
+/* móvil: una sola fila — etiqueta y texto apilados a la izquierda, botón a la derecha */
 @media (max-width: 768px) {
   .hf5-strip {
-    flex-wrap: wrap;
-    gap: 6px 12px;
-    padding: 12px 16px;
-    text-align: center;
+    justify-content: stretch;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
   }
-  .hf5-strip-link { flex-wrap: wrap; justify-content: center; gap: 6px 12px; }
-  .hf5-strip-tag { font-size: 10px; }
-  .hf5-strip-text { font-size: 12px; }
-  .hf5-strip-btn { font-size: 11px; padding: 6px 12px; }
+  .hf5-strip-link {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "tag btn" "text btn";
+    align-items: center;
+    gap: 4px 12px;
+  }
+  .hf5-strip-tag { grid-area: tag; justify-self: start; padding: 3px 7px; font-size: 9px; }
+  .hf5-strip-text { grid-area: text; font-size: 12px; line-height: 1.2; }
+  .hf5-strip-btn { grid-area: btn; padding: 10px 14px; font-size: 11px; }
+  .hf5-strip-btn-extra { display: none; }
+}
+@media (max-width: 360px) {
+  .hf5-strip-text { font-size: 11px; letter-spacing: 0.04em; }
+  .hf5-strip-btn { padding: 10px 12px; }
 }
 
 /* ════ CIFRAS (bajo el hero) ════ */
