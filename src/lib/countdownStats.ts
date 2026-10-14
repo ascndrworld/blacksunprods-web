@@ -95,3 +95,20 @@ export const isHfEvent = (e: unknown): e is HfEvent =>
 // "hf5" y el panel lee de ahí; lo anterior (pruebas) se queda en "hf".
 const HF_RESET_AT = Date.parse("2026-10-12T14:59:00+02:00");
 export const hfNs = (now = Date.now()): string => (now >= HF_RESET_AT ? "hf5" : "hf");
+
+// Avisos (postMessage) del iframe de Fourvenues, para averiguar qué manda al
+// terminar una compra. Lista {ns}:fv con los más recientes primero, acotada.
+export type FvNotice = { t: number; v: string; src: string; k: string; i: string };
+const FV_MAX = 3000;
+
+export async function logFv(n: FvNotice, ns = hfNs()): Promise<void> {
+  await pipeline([
+    ["LPUSH", `${ns}:fv`, JSON.stringify(n)],
+    ["LTRIM", `${ns}:fv`, 0, FV_MAX - 1],
+  ]);
+}
+
+export async function readFv(limit = 200, ns = hfNs()): Promise<FvNotice[]> {
+  const [rows] = (await pipeline([["LRANGE", `${ns}:fv`, 0, limit - 1]])) as string[][];
+  return (rows ?? []).flatMap((r) => { try { return [JSON.parse(r) as FvNotice]; } catch { return []; } });
+}

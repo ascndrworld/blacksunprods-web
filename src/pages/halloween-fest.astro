@@ -294,9 +294,11 @@ const faq = [
     // Fourvenues no devuelve a ?compra=ok: la compra acaba dentro del iframe.
     // El iframe avisa a esta página con postMessage (navegación entre pasos y
     // eventos de seguimiento); un evento Purchase o una pantalla de éxito
-    // cuentan como compra. Cada aviso distinto va a los logs de /api/hf para
+    // cuentan como compra. Cada aviso distinto se guarda vía /api/hf (con un id
+    // de visita al azar para agrupar) y sale en /halloween-fest/stats, para
     // poder ajustar la detección con compras reales.
     var seen = {};
+    var vid = Math.random().toString(36).slice(2, 10);
     window.addEventListener("message", function (m) {
       if (!/(^|\.)fourvenues\.com$/.test((function () { try { return new URL(m.origin).hostname; } catch (e) { return ""; } })())) return;
       var d = m.data;
@@ -308,7 +310,7 @@ const faq = [
       info = String(info).slice(0, 300);
       if (!seen[d.key + info]) {
         seen[d.key + info] = 1;
-        try { navigator.sendBeacon("/api/hf", JSON.stringify({ e: "fv", src: src, k: d.key, i: info })); } catch (e) {}
+        try { navigator.sendBeacon("/api/hf", JSON.stringify({ e: "fv", src: src, v: vid, k: d.key, i: info })); } catch (e) {}
       }
       var ev = d.key === "track" && d.eventObject ? String(d.eventObject.event || d.eventObject.eventName || d.eventObject.name || d.eventObject.action || "") : "";
       if (/^purchase$/i.test(ev)

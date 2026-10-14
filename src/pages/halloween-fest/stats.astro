@@ -5,7 +5,7 @@
  * completadas, por origen. Misma clave que /countdown/stats (CD_STATS_KEY);
  * sin ella responde 404, como si no existiera.
  */
-import { HF_EVENTS, hasStore, hfNs, readAll, type HfEvent, type DayStats } from "../../lib/countdownStats";
+import { HF_EVENTS, hasStore, hfNs, readAll, readFv, type HfEvent, type DayStats, type FvNotice } from "../../lib/countdownStats";
 
 export const prerender = false;
 
@@ -17,10 +17,11 @@ if (!KEY || Astro.url.searchParams.get("key") !== KEY) {
 Astro.response.headers.set("Cache-Control", "no-store");
 
 let days: DayStats[] = [];
+let fv: FvNotice[] = [];
 let error = "";
 if (!hasStore()) error = "Falta conectar Upstash Redis (KV_REST_API_URL / KV_REST_API_TOKEN).";
 else {
-  try { days = await readAll(hfNs()); }
+  try { [days, fv] = await Promise.all([readAll(hfNs()), readFv(300)]); }
   catch (e) { error = String((e as Error).message ?? e); }
 }
 
@@ -40,6 +41,12 @@ const sources = [...new Set(Object.keys(totals).map((k) => k.split(":")[1]))]
 const fmt = (n: number) => new Intl.NumberFormat("es-ES").format(n);
 const pct = (a: number, b: number) => (b ? `${new Intl.NumberFormat("es-ES", { maximumFractionDigits: 1 }).format((a / b) * 100)} %` : "—");
 const dayLabel = (d: string) => `${d.slice(8, 10)}/${d.slice(5, 7)}`;
+
+// Avisos del iframe agrupados por visita (la más reciente primero, avisos en orden).
+const visits = new Map<string, FvNotice[]>();
+for (const n of fv) visits.set(n.v || `?${n.t}`, [n, ...(visits.get(n.v || `?${n.t}`) ?? [])]);
+const hhmm = (t: number) =>
+  new Intl.DateTimeFormat("es-ES", { timeZone: "Europe/Madrid", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(t);
 ---
 <!DOCTYPE html>
 <html lang="es">
@@ -65,13 +72,17 @@ const dayLabel = (d: string) => `${d.slice(8, 10)}/${d.slice(5, 7)}`;
     th, td { text-align:right; padding:7px 8px; border-bottom:1px solid var(--line); white-space:nowrap; }
     th:first-child, td:first-child { text-align:left; }
     th { color:var(--mute); font-weight:500; font-size:12px; }
+    .fv { font:12px/1.4 ui-monospace, Menlo, monospace; border:1px solid var(--line); border-radius:8px; padding:10px; margin-bottom:8px; }
+    .fv p { margin:0 0 6px; color:var(--mute); }
+    .fv div { word-break:break-all; }
+    .fv b { color:var(--acc); font-weight:500; }
     .err { border:1px solid var(--acc); color:var(--acc); padding:12px; border-radius:8px; }
   </style>
 </head>
 <body>
   <main>
     <h1>Halloween Fest V · /halloween-fest</h1>
-    <p class="sub">Recuento propio, una vez por visita. El origen sale de utm_source, de ?src= o de la web de procedencia. Las compras son las vueltas de Fourvenues con ?compra=ok: compáralas con el panel de Fourvenues, que es la cifra real. Los días van en hora de Madrid.</p>
+    <p class="sub">Recuento propio, una vez por visita. El origen sale de utm_source, de ?src= o de la web de procedencia. Las compras son las que detecta la web en el iframe de Fourvenues (o la vuelta con ?compra=ok) y no incluyen las hechas por otras vías: compáralas con el panel de Fourvenues, que es la cifra real. Los días van en hora de Madrid.</p>
 
     {error && <p class="err">{error}</p>}
 
@@ -103,6 +114,18 @@ const dayLabel = (d: string) => `${d.slice(8, 10)}/${d.slice(5, 7)}`;
             <tr><td>{dayLabel(d.day)}</td>{ev.map((e) => <td>{fmt(sum(d.counts, e))}</td>)}</tr>
           ))}</tbody>
         </table></div>
+      </Fragment>
+    )}
+    {visits.size > 0 && (
+      <Fragment>
+        <h2>Avisos del iframe de Fourvenues</h2>
+        <p class="sub">Lo que manda el iframe en cada visita (últimos {fv.length} avisos). Sirve para ver qué aviso llega al terminar una compra y ajustar la detección.</p>
+        {[...visits.values()].map((ns) => (
+          <div class="fv">
+            <p>{hhmm(ns[0].t)} · {label(ns[0].src)} · {ns.length} avisos</p>
+            {ns.map((n) => <div><b>{n.k}</b> {n.i}</div>)}
+          </div>
+        ))}
       </Fragment>
     )}
     {!error && sources.length === 0 && <p class="sub">Aún no hay datos.</p>}
