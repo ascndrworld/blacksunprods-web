@@ -18,11 +18,12 @@ export default defineConfig({
   integrations: [
     sitemap({
       // Fuera del sitemap: la landing secreta del teaser (solo se llega por QR)
+      // el juego del visualizer (solo por el QR de la pantalla)
       // y los paneles privados de cifras, que sin la clave responden 404 y
       // Search Console marcaría como "URL enviada no encontrada".
       filter: (page) => {
         const path = new URL(page).pathname.replace(/\/$/, '');
-        return !path.startsWith('/countdown') && !path.endsWith('/stats');
+        return !path.startsWith('/countdown') && !path.startsWith('/juego') && !path.endsWith('/stats');
       },
       changefreq: 'monthly',
       priority: 0.7,

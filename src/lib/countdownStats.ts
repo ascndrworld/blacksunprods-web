@@ -41,7 +41,7 @@ export const madridDay = (d = new Date()): string =>
 
 export const hasStore = (): boolean => Boolean(URL_ && TOKEN);
 
-async function pipeline(cmds: (string | number)[][]): Promise<any[]> {
+export async function pipeline(cmds: (string | number)[][]): Promise<any[]> {
   const res = await fetch(`${URL_}/pipeline`, {
     method: "POST",
     headers: { Authorization: `Bearer ${TOKEN}`, "Content-Type": "application/json" },

@@ -9,7 +9,7 @@
     {
       "source": "/",
       "has": [{ "type": "host", "value": "^halloweenfest\\.blacksunprods\\.com$" }],
-      "destination": "/countdown?src=qr",
+      "destination": "/halloween-fest?src=qr#entradas",
       "permanent": false
     }
   ]
