@@ -77,7 +77,7 @@ const barajar = (n: number): number[] => {
 
 // Posición → [número ganador, premio]. Se sortea una sola vez (el primer
 // escaneo lo guarda; si llegan dos a la vez, vale el que se guardó primero).
-async function plan(ns: string): Promise<Record<string, [number, number]>> {
+export async function plan(ns: string): Promise<Record<string, [number, number]>> {
   const [prev] = await pipeline([["GET", `${ns}:plan`]]);
   if (prev) return JSON.parse(prev);
   const nums = barajar(NUMEROS.length), premios = barajar(PREMIOS.length);
@@ -130,3 +130,35 @@ export const cleanNumero = (s: unknown): string => (typeof s === "string" && NUM
 export async function marcarEntregado(ns: string, n: string, ok: boolean): Promise<void> {
   await pipeline([[ok ? "SADD" : "SREM", `${ns}:ok`, n]]);
 }
+
+// Panel de administración (/juego/admin): los números elegidos con su premio
+// (el del plan, que se sortea con el primer escaneo o al abrir el panel) y si
+// ya ha salido o se ha entregado.
+export type Elegido = { n: string; premio: string; estado: "sin-salir" | "ganado" | "entregado" };
+
+export async function elegidos(ns: string): Promise<Resultados & { elegidos: Elegido[] }> {
+  const [p, r] = await Promise.all([plan(ns), resultados(ns)]);
+  const premioDe = Object.fromEntries(Object.values(p).map(([num, premio]) => [NUMEROS[num], PREMIOS[premio]]));
+  const salidos = new Set(r.ganadores.map((g) => g.n));
+  return {
+    ...r,
+    elegidos: NUMEROS.map((n) => ({
+      n,
+      premio: premioDe[n],
+      estado: r.ok.includes(n) ? "entregado" : salidos.has(n) ? "ganado" : "sin-salir",
+    })),
+  };
+}
+
+// Sesión del administrador: la cookie guarda el hash de JUEGO_ADMIN_KEY, nunca la clave.
+export const ADMIN_COOKIE = "juego_admin";
+const ADMIN_KEY = import.meta.env.JUEGO_ADMIN_KEY ?? (globalThis as any).process?.env?.JUEGO_ADMIN_KEY;
+
+const sha256 = async (s: string): Promise<string> =>
+  [...new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`juego5:${s}`)))]
+    .map((b) => b.toString(16).padStart(2, "0")).join("");
+
+export const adminToken = async (clave: string): Promise<string> => (ADMIN_KEY && clave === ADMIN_KEY ? sha256(ADMIN_KEY) : "");
+
+export const esAdmin = async (cookie: string | undefined): Promise<boolean> =>
+  Boolean(ADMIN_KEY && cookie && cookie === (await sha256(ADMIN_KEY)));

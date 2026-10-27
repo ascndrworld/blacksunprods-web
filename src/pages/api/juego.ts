@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { hasStore } from "../../lib/countdownStats";
-import { cleanId, cleanNumero, estado, jugar, juegoNs, marcarEntregado, resultados } from "../../lib/juego";
+import { ADMIN_COOKIE, cleanId, cleanNumero, elegidos, esAdmin, estado, jugar, juegoNs, marcarEntregado, resultados } from "../../lib/juego";
 
 // API del juego del visualizer (página /juego y panel /juego/sorteo).
 export const prerender = false;
@@ -19,8 +19,9 @@ export const GET: APIRoute = async ({ url }) => {
 };
 
 // POST: {id} pide el número del móvil y si ha ganado; {key, accion} son las
-// acciones del panel.
-export const POST: APIRoute = async ({ request }) => {
+// acciones del panel /juego/sorteo, y {accion} con la cookie de sesión, las de
+// /juego/admin (que además recibe los números elegidos).
+export const POST: APIRoute = async ({ request, cookies }) => {
   let body: { id?: unknown; prueba?: unknown; key?: unknown; accion?: unknown; n?: unknown; ok?: unknown } = {};
   try {
     body = JSON.parse(await request.text());
@@ -33,12 +34,14 @@ export const POST: APIRoute = async ({ request }) => {
 
   try {
     if (body.accion !== undefined) {
-      if (!KEY || body.key !== KEY) return json({ error: "clave" }, 404);
+      const admin = await esAdmin(cookies.get(ADMIN_COOKIE)?.value);
+      if (!admin && (!KEY || body.key !== KEY)) return json({ error: "clave" }, 404);
+      const ver = () => (admin ? elegidos(ns) : resultados(ns));
       if (body.accion === "entregado" && cleanNumero(body.n)) {
         await marcarEntregado(ns, cleanNumero(body.n), body.ok !== false);
-        return json(await resultados(ns));
+        return json(await ver());
       }
-      if (body.accion === "ver") return json(await resultados(ns));
+      if (body.accion === "ver") return json(await ver());
       return json({ error: "accion" }, 400);
     }
 

@@ -1,0 +1,205 @@
+---
+/*
+ * /juego/admin — Administración del juego del visualizer, solo para Frank.
+ * Se entra con la contraseña JUEGO_ADMIN_KEY (distinta de la de las
+ * estadísticas) y el móvil queda dentro 30 días. Muestra los números elegidos
+ * con su premio y si ya han salido o se han entregado, y un buscador para
+ * comprobar en la barra el número que enseñe cada uno.
+ * Con ?prueba trabaja sobre los números de prueba (/juego?prueba).
+ */
+import { ADMIN_COOKIE, GRUPO, NUMEROS, PREMIOS, adminToken, esAdmin } from "../../lib/juego";
+
+export const prerender = false;
+
+Astro.response.headers.set("Cache-Control", "no-store");
+const prueba = Astro.url.searchParams.has("prueba");
+const aqui = `/juego/admin${prueba ? "?prueba" : ""}`;
+const cookieOpts = { path: "/", httpOnly: true, secure: import.meta.env.PROD, sameSite: "strict" as const };
+
+if (Astro.url.searchParams.has("salir")) {
+  Astro.cookies.delete(ADMIN_COOKIE, cookieOpts);
+  return Astro.redirect("/juego/admin", 303);
+}
+
+let fallo = false;
+if (Astro.request.method === "POST") {
+  const clave = String((await Astro.request.formData()).get("clave") ?? "");
+  const token = await adminToken(clave);
+  if (token) {
+    Astro.cookies.set(ADMIN_COOKIE, token, { ...cookieOpts, maxAge: 60 * 60 * 24 * 30 });
+    return Astro.redirect(aqui, 303);
+  }
+  await new Promise((r) => setTimeout(r, 1500)); // frena a quien pruebe contraseñas
+  fallo = true;
+}
+
+const dentro = await esAdmin(Astro.cookies.get(ADMIN_COOKIE)?.value);
+---
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Admin · Juego Halloween Fest V</title>
+  <style is:global>
+    @font-face { font-family: "BSP Helvetica Black"; src: url("/fonts/helvetica-neue/HelveticaNeueBlack.woff2") format("woff2"); font-weight: 900; }
+    :root { color-scheme: dark; --bg: #0b0b0b; --fg: #eee; --mute: #888; --line: #262626; --acc: #ec3a26; --ok: #3ccf6e; --warn: #f6c813; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.45 "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    main { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
+    header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 4px; }
+    h1 { font-size: 20px; margin: 0; }
+    header nav { display: flex; gap: 14px; font-size: 13px; white-space: nowrap; }
+    a { color: var(--mute); }
+    .sub { color: var(--mute); margin: 0 0 20px; font-size: 13px; }
+    .prueba { display: inline-block; background: var(--warn); color: #000; font-weight: 700; font-size: 12px; padding: 2px 8px; border-radius: 4px; margin-left: 8px; vertical-align: 3px; }
+    .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+    .tile { border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+    .tile b { display: block; font-size: 28px; font-variant-numeric: tabular-nums; }
+    .tile span { color: var(--mute); font-size: 12px; }
+    .tile.acc b { color: var(--acc); }
+    button, input { font: inherit; }
+    button { cursor: pointer; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); background: #161616; color: var(--fg); font-size: 13px; white-space: nowrap; }
+    h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--mute); margin: 0 0 8px; }
+    .err { border: 1px solid var(--acc); color: var(--acc); padding: 12px; border-radius: 8px; margin-bottom: 16px; }
+
+    /* Login */
+    .login { max-width: 360px; margin: 18vh auto 0; display: grid; gap: 12px; }
+    .login input { padding: 12px; border-radius: 8px; border: 1px solid var(--line); background: #161616; color: var(--fg); font-size: 16px; }
+    .login button { padding: 12px; font-size: 15px; background: var(--acc); border-color: var(--acc); color: #fff; font-weight: 700; }
+
+    /* Comprobar un número */
+    .check { border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 24px; }
+    .check input { width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--line); background: #161616; color: var(--fg);
+      font-family: "BSP Helvetica Black", sans-serif; font-size: 40px; letter-spacing: .12em; text-align: center; font-variant-numeric: tabular-nums; }
+    .veredicto { margin-top: 12px; padding: 14px; border-radius: 8px; display: flex; align-items: center; gap: 12px; }
+    .veredicto p { margin: 0; flex: 1; }
+    .veredicto b { display: block; font-size: 18px; }
+    .veredicto.si { background: rgba(60,207,110,.12); border: 1px solid var(--ok); }
+    .veredicto.si b { color: var(--ok); }
+    .veredicto.ya { background: rgba(246,200,19,.1); border: 1px solid var(--warn); }
+    .veredicto.ya b { color: var(--warn); }
+    .veredicto.no { background: rgba(236,58,38,.1); border: 1px solid var(--acc); }
+    .veredicto.no b { color: var(--acc); }
+    .veredicto button { background: var(--ok); border-color: var(--ok); color: #000; font-weight: 700; }
+
+    /* Números elegidos */
+    ol { list-style: none; margin: 0; padding: 0; }
+    li { display: flex; align-items: center; gap: 12px; padding: 10px 4px; border-bottom: 1px solid var(--line); }
+    li .n { font-family: "BSP Helvetica Black", sans-serif; font-size: 28px; width: 3.4em; font-variant-numeric: tabular-nums; }
+    li .p { flex: 1; font-size: 14px; }
+    li .e { font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--line); color: var(--mute); white-space: nowrap; }
+    li.ganado .e { border-color: var(--acc); color: var(--acc); }
+    li.entregado .n, li.entregado .p { color: var(--mute); text-decoration: line-through; }
+    li.entregado .e { border-color: var(--ok); color: var(--ok); }
+    li.sin-salir .n { color: var(--mute); }
+    li button { padding: 6px 10px; font-size: 12px; }
+  </style>
+</head>
+<body data-prueba={prueba ? "1" : ""} data-premios={PREMIOS.length}>
+  <main>
+  {!dentro ? (
+    <form class="login" method="post" action={aqui}>
+      <h1>Juego · Administración</h1>
+      {fallo && <p class="err">Contraseña incorrecta.</p>}
+      <input type="password" name="clave" placeholder="Contraseña" autocomplete="current-password" required autofocus/>
+      <button>Entrar</button>
+    </form>
+  ) : (
+    <>
+      <header>
+        <h1>Juego · Administración {prueba && <span class="prueba">PRUEBA</span>}</h1>
+        <nav>
+          <a href={prueba ? "/juego/admin" : "/juego/admin?prueba"}>{prueba ? "Ver la noche real" : "Ver prueba"}</a>
+          <a href="/juego/admin?salir">Salir</a>
+        </nav>
+      </header>
+      <p class="sub">Solo tienen premio estos {NUMEROS.length} números. Salen solos: de cada {GRUPO} escaneos, uno recibe uno de ellos hasta repartirlos todos. En la barra, escribe el número que te enseñen para saber si es bueno.</p>
+      <p class="err" id="err" hidden></p>
+
+      <section class="check">
+        <h2>Comprobar un número</h2>
+        <input id="buscar" inputmode="numeric" maxlength="4" placeholder="0000" autocomplete="off"/>
+        <div id="veredicto" hidden></div>
+      </section>
+
+      <div class="tiles">
+        <div class="tile"><b id="total">–</b><span>Han escaneado</span></div>
+        <div class="tile acc"><b id="ganados">–</b><span>Premios ganados</span></div>
+        <div class="tile"><b id="entregados">–</b><span>Premios entregados</span></div>
+      </div>
+
+      <h2>Números elegidos</h2>
+      <ol id="lista"></ol>
+    </>
+  )}
+  </main>
+
+  <script>
+    const lista = document.getElementById("lista");
+    if (lista) {
+      const prueba = document.body.dataset.prueba === "1";
+      const nPremios = Number(document.body.dataset.premios);
+      const $ = (id: string) => document.getElementById(id)!;
+      const buscar = $("buscar") as HTMLInputElement;
+      type Elegido = { n: string; premio: string; estado: "sin-salir" | "ganado" | "entregado" };
+      type R = { total: number; ok: string[]; elegidos: Elegido[]; ganadores: unknown[]; error?: string };
+      let ultimo: R | null = null;
+
+      async function api(accion: string, extra: object = {}): Promise<R> {
+        const r = await fetch("/api/juego", { method: "POST", body: JSON.stringify({ prueba, accion, ...extra }) });
+        if (r.status === 404) { location.reload(); throw new Error("sesión caducada"); }
+        const d = await r.json();
+        if (!r.ok || d.error) throw new Error(d.error || r.status);
+        return d;
+      }
+
+      const ESTADO = { "sin-salir": "Sin salir", ganado: "Ganado", entregado: "✓ Entregado" };
+      const boton = (n: string, estado: Elegido["estado"]) =>
+        estado === "ganado" ? `<button data-n="${n}" data-ok="1">Entregar</button>`
+        : estado === "entregado" ? `<button data-n="${n}" data-ok="">Deshacer</button>` : "";
+
+      function veredicto() {
+        const v = $("veredicto");
+        const n = buscar.value;
+        if (n.length < 4 || !ultimo) { v.hidden = true; return; }
+        const e = ultimo.elegidos.find((x) => x.n === n);
+        const [clase, titulo, texto] =
+          !e ? ["no", `#${n} no tiene premio`, "No es uno de los números elegidos."]
+          : e.estado === "sin-salir" ? ["no", `#${n} aún no ha salido`, "Es un número elegido, pero el juego no se lo ha dado a nadie todavía. No entregues nada."]
+          : e.estado === "entregado" ? ["ya", `#${n} ya se entregó`, `${e.premio}. No lo entregues otra vez.`]
+          : ["si", `#${n} ha ganado`, e.premio];
+        v.className = `veredicto ${clase}`;
+        v.innerHTML = `<p><b>${titulo}</b>${texto}</p>${e?.estado === "ganado" ? boton(n, "ganado") : ""}`;
+        v.hidden = false;
+      }
+
+      function pintar(d: R) {
+        ultimo = d;
+        $("err").hidden = true;
+        $("total").textContent = String(d.total);
+        $("ganados").textContent = `${d.ganadores.length}/${nPremios}`;
+        $("entregados").textContent = `${d.ok.length}/${nPremios}`;
+        lista!.innerHTML = [...d.elegidos].sort((a, b) => a.n.localeCompare(b.n)).map(({ n, premio, estado }) =>
+          `<li class="${estado}"><span class="n">#${n}</span><span class="p">${premio}</span>` +
+          `<span class="e">${ESTADO[estado]}</span>${boton(n, estado)}</li>`).join("");
+        veredicto();
+      }
+      const fallo = (e: unknown) => { $("err").textContent = `Error: ${(e as Error).message}. Comprueba la conexión.`; $("err").hidden = false; };
+
+      buscar.addEventListener("input", () => { buscar.value = buscar.value.replace(/\D/g, "").slice(0, 4); veredicto(); });
+      document.querySelector("main")!.addEventListener("click", async (ev) => {
+        const b = (ev.target as HTMLElement).closest("button[data-n]") as HTMLButtonElement | null;
+        if (!b) return;
+        b.disabled = true;
+        try { pintar(await api("entregado", { n: b.dataset.n, ok: b.dataset.ok === "1" })); }
+        catch (e) { b.disabled = false; fallo(e); }
+      });
+
+      const ver = () => api("ver").then(pintar).catch(fallo);
+      ver(); setInterval(ver, 5000);
+    }
+  </script>
+</body>
+</html>
