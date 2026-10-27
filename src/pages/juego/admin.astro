@@ -92,13 +92,12 @@ const dentro = await esAdmin(Astro.cookies.get(ADMIN_COOKIE)?.value);
     li .p { flex: 1; font-size: 14px; }
     li .e { font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--line); color: var(--mute); white-space: nowrap; }
     li.ganado .e { border-color: var(--acc); color: var(--acc); }
-    li.entregado .n, li.entregado .p { color: var(--mute); text-decoration: line-through; }
+    li.entregado .n, li.entregado .pt { color: var(--mute); text-decoration: line-through; }
     li.entregado .e { border-color: var(--ok); color: var(--ok); }
     li.sin-salir .n { color: var(--mute); }
     li button { padding: 6px 10px; font-size: 12px; }
     .d { display: block; font-size: 13px; color: var(--fg); margin-top: 2px; }
     .d.falta { color: var(--warn); }
-    li.entregado .p .d { text-decoration: none; }
 
     /* Datos del ganador de una entrada */
     form.datos { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
@@ -222,7 +221,7 @@ const dentro = await esAdmin(Astro.cookies.get(ADMIN_COOKIE)?.value);
         $("entregados").textContent = `${d.ok.length}/${nPremios}`;
         if (editando) return;
         lista!.innerHTML = [...d.elegidos].sort((a, b) => a.n.localeCompare(b.n)).map((e) =>
-          `<li class="${e.estado}" data-li="${e.n}"><span class="n">#${e.n}</span><span class="p">${e.premio}${lineaDatos(e)}</span>` +
+          `<li class="${e.estado}" data-li="${e.n}"><span class="n">#${e.n}</span><span class="p"><span class="pt">${e.premio}</span>${lineaDatos(e)}</span>` +
           `<span class="e">${ESTADO[e.estado]}</span>${botonDatos(e)}${esEntrada(e.premio) && e.estado === "ganado" ? "" : boton(e.n, e.estado)}</li>`).join("");
         veredicto();
       }
