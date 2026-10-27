@@ -5,8 +5,9 @@
 // el primer escaneo de la noche); al resto le sale otro número cualquiera. El
 // panel /juego/sorteo solo sirve para ver los ganadores y marcar entregados.
 //
-// Sin datos personales: cada móvil se identifica con un id aleatorio que genera
-// el propio navegador. Mismo Upstash que las estadísticas.
+// Los móviles no envían datos personales: cada uno se identifica con un id
+// aleatorio que genera el propio navegador. Solo los ganadores de una entrada
+// dejan su nombre, que apunta Frank en /juego/admin para contactar con ellos. Mismo Upstash que las estadísticas.
 //
 // Claves:  {ns}:n              contador de escaneos
 //          {ns}:dev:{id}       JSON {n, premio} de ese móvil
@@ -14,6 +15,8 @@
 //          {ns}:usados (set)   números ya dados a los que no ganan
 //          {ns}:drawn  (list)  JSON {n, premio} de los ganadores, por orden de llegada
 //          {ns}:ok     (set)   números ganadores que ya han recogido el premio
+//          {ns}:datos  (hash)  número → JSON {nombre, apellidos, contacto} de quien
+//                              gana una entrada (lo apunta Frank en /juego/admin)
 // ns = "juego5", o "juego5p" con ?prueba (no se mezcla con la noche real).
 
 import { pipeline } from "./countdownStats";
@@ -134,10 +137,16 @@ export async function marcarEntregado(ns: string, n: string, ok: boolean): Promi
 // Panel de administración (/juego/admin): los números elegidos con su premio
 // (el del plan, que se sortea con el primer escaneo o al abrir el panel) y si
 // ya ha salido o se ha entregado.
-export type Elegido = { n: string; premio: string; estado: "sin-salir" | "ganado" | "entregado" };
+export type Datos = { nombre: string; apellidos: string; contacto: string };
+export type Elegido = { n: string; premio: string; estado: "sin-salir" | "ganado" | "entregado"; datos?: Datos };
+
+// Las entradas son para otras fechas: de quien las gana se apuntan sus datos.
+export const esEntrada = (premio: string): boolean => premio.startsWith("Una entrada");
 
 export async function elegidos(ns: string): Promise<Resultados & { elegidos: Elegido[] }> {
-  const [p, r] = await Promise.all([plan(ns), resultados(ns)]);
+  const [p, r, [plano]] = await Promise.all([plan(ns), resultados(ns), pipeline([["HGETALL", `${ns}:datos`]])]);
+  const datos: Record<string, Datos> = {};
+  for (let i = 0; i < (plano ?? []).length; i += 2) datos[plano[i]] = JSON.parse(plano[i + 1]);
   const premioDe = Object.fromEntries(Object.values(p).map(([num, premio]) => [NUMEROS[num], PREMIOS[premio]]));
   const salidos = new Set(r.ganadores.map((g) => g.n));
   return {
@@ -146,8 +155,20 @@ export async function elegidos(ns: string): Promise<Resultados & { elegidos: Ele
       n,
       premio: premioDe[n],
       estado: r.ok.includes(n) ? "entregado" : salidos.has(n) ? "ganado" : "sin-salir",
+      datos: datos[n],
     })),
   };
+}
+
+const texto = (s: unknown, max: number): string => (typeof s === "string" ? s.trim().replace(/\s+/g, " ").slice(0, max) : "");
+
+export const cleanDatos = (b: { nombre?: unknown; apellidos?: unknown; contacto?: unknown }): Datos | null => {
+  const d = { nombre: texto(b.nombre, 60), apellidos: texto(b.apellidos, 80), contacto: texto(b.contacto, 60) };
+  return d.nombre && d.apellidos ? d : null;
+};
+
+export async function guardarDatos(ns: string, n: string, d: Datos): Promise<void> {
+  await pipeline([["HSET", `${ns}:datos`, n, JSON.stringify(d)]]);
 }
 
 // Sesión del administrador: la cookie guarda el hash de JUEGO_ADMIN_KEY, nunca la clave.

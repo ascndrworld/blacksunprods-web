@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { hasStore } from "../../lib/countdownStats";
-import { ADMIN_COOKIE, cleanId, cleanNumero, elegidos, esAdmin, estado, jugar, juegoNs, marcarEntregado, resultados } from "../../lib/juego";
+import { ADMIN_COOKIE, cleanDatos, cleanId, cleanNumero, elegidos, esAdmin, estado, jugar, juegoNs, guardarDatos, marcarEntregado, resultados } from "../../lib/juego";
 
 // API del juego del visualizer (página /juego y panel /juego/sorteo).
 export const prerender = false;
@@ -22,7 +22,8 @@ export const GET: APIRoute = async ({ url }) => {
 // acciones del panel /juego/sorteo, y {accion} con la cookie de sesión, las de
 // /juego/admin (que además recibe los números elegidos).
 export const POST: APIRoute = async ({ request, cookies }) => {
-  let body: { id?: unknown; prueba?: unknown; key?: unknown; accion?: unknown; n?: unknown; ok?: unknown } = {};
+  let body: { id?: unknown; prueba?: unknown; key?: unknown; accion?: unknown; n?: unknown; ok?: unknown;
+    nombre?: unknown; apellidos?: unknown; contacto?: unknown } = {};
   try {
     body = JSON.parse(await request.text());
   } catch {
@@ -42,6 +43,13 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         return json(await ver());
       }
       if (body.accion === "ver") return json(await ver());
+      // Datos del ganador de una entrada: solo desde /juego/admin.
+      if (body.accion === "datos" && admin && cleanNumero(body.n)) {
+        const d = cleanDatos(body);
+        if (!d) return json({ error: "faltan nombre y apellidos" }, 400);
+        await guardarDatos(ns, cleanNumero(body.n), d);
+        return json(await ver());
+      }
       return json({ error: "accion" }, 400);
     }
 

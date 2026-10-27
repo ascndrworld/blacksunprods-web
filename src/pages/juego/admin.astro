@@ -4,7 +4,8 @@
  * Se entra con la contraseña JUEGO_ADMIN_KEY (distinta de la de las
  * estadísticas) y el móvil queda dentro 30 días. Muestra los números elegidos
  * con su premio y si ya han salido o se han entregado, y un buscador para
- * comprobar en la barra el número que enseñe cada uno.
+ * comprobar en la barra el número que enseñe cada uno. Al entregar una
+ * entrada pide nombre, apellidos y contacto del ganador para avisarle luego.
  * Con ?prueba trabaja sobre los números de prueba (/juego?prueba).
  */
 import { ADMIN_COOKIE, GRUPO, NUMEROS, PREMIOS, adminToken, esAdmin } from "../../lib/juego";
@@ -86,7 +87,7 @@ const dentro = await esAdmin(Astro.cookies.get(ADMIN_COOKIE)?.value);
 
     /* Números elegidos */
     ol { list-style: none; margin: 0; padding: 0; }
-    li { display: flex; align-items: center; gap: 12px; padding: 10px 4px; border-bottom: 1px solid var(--line); }
+    li { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 10px 4px; border-bottom: 1px solid var(--line); }
     li .n { font-family: "BSP Helvetica Black", sans-serif; font-size: 28px; width: 3.4em; font-variant-numeric: tabular-nums; }
     li .p { flex: 1; font-size: 14px; }
     li .e { font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--line); color: var(--mute); white-space: nowrap; }
@@ -95,6 +96,16 @@ const dentro = await esAdmin(Astro.cookies.get(ADMIN_COOKIE)?.value);
     li.entregado .e { border-color: var(--ok); color: var(--ok); }
     li.sin-salir .n { color: var(--mute); }
     li button { padding: 6px 10px; font-size: 12px; }
+    .d { display: block; font-size: 13px; color: var(--fg); margin-top: 2px; }
+    .d.falta { color: var(--warn); }
+    li.entregado .p .d { text-decoration: none; }
+
+    /* Datos del ganador de una entrada */
+    form.datos { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+    form.datos input { padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: #161616; color: var(--fg); font-size: 16px; min-width: 0; }
+    form.datos .ancho { grid-column: 1 / -1; }
+    form.datos .acciones { grid-column: 1 / -1; display: flex; gap: 8px; }
+    form.datos .acciones button:first-child { flex: 1; padding: 10px; background: var(--ok); border-color: var(--ok); color: #000; font-weight: 700; }
   </style>
 </head>
 <body data-prueba={prueba ? "1" : ""} data-premios={PREMIOS.length}>
@@ -143,9 +154,28 @@ const dentro = await esAdmin(Astro.cookies.get(ADMIN_COOKIE)?.value);
       const nPremios = Number(document.body.dataset.premios);
       const $ = (id: string) => document.getElementById(id)!;
       const buscar = $("buscar") as HTMLInputElement;
-      type Elegido = { n: string; premio: string; estado: "sin-salir" | "ganado" | "entregado" };
+      type Datos = { nombre: string; apellidos: string; contacto: string };
+      type Elegido = { n: string; premio: string; estado: "sin-salir" | "ganado" | "entregado"; datos?: Datos };
       type R = { total: number; ok: string[]; elegidos: Elegido[]; ganadores: unknown[]; error?: string };
       let ultimo: R | null = null;
+      // Mientras se escriben los datos de un ganador, el refresco no repinta la lista.
+      let editando = false;
+
+      const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+      const esEntrada = (premio: string) => premio.startsWith("Una entrada");
+      const lineaDatos = (e: Elegido) => !esEntrada(e.premio) || e.estado === "sin-salir" ? ""
+        : e.datos ? `<span class="d">${esc(`${e.datos.nombre} ${e.datos.apellidos}`)}${e.datos.contacto ? ` · ${esc(e.datos.contacto)}` : ""}</span>`
+        : `<span class="d falta">Faltan sus datos</span>`;
+      // Formulario de datos. Con «entregar», al guardar marca también la entrada como entregada.
+      const formDatos = (e: Elegido, entregar: boolean) => {
+        const d = e.datos ?? { nombre: "", apellidos: "", contacto: "" };
+        return `<form class="datos" data-n="${e.n}" data-entregar="${entregar ? "1" : ""}">` +
+          `<input name="nombre" placeholder="Nombre" value="${esc(d.nombre)}" autocomplete="off" required/>` +
+          `<input name="apellidos" placeholder="Apellidos" value="${esc(d.apellidos)}" autocomplete="off" required/>` +
+          `<input class="ancho" name="contacto" placeholder="Teléfono o Instagram" value="${esc(d.contacto)}" autocomplete="off"/>` +
+          `<div class="acciones"><button>${entregar ? "Guardar y entregar" : "Guardar datos"}</button>` +
+          `<button type="button" data-cancelar>Cancelar</button></div></form>`;
+      };
 
       async function api(accion: string, extra: object = {}): Promise<R> {
         const r = await fetch("/api/juego", { method: "POST", body: JSON.stringify({ prueba, accion, ...extra }) });
@@ -159,6 +189,11 @@ const dentro = await esAdmin(Astro.cookies.get(ADMIN_COOKIE)?.value);
       const boton = (n: string, estado: Elegido["estado"]) =>
         estado === "ganado" ? `<button data-n="${n}" data-ok="1">Entregar</button>`
         : estado === "entregado" ? `<button data-n="${n}" data-ok="">Deshacer</button>` : "";
+      // En las entradas, «Entregar» abre antes el formulario de datos.
+      const botonDatos = (e: Elegido) =>
+        !esEntrada(e.premio) || e.estado === "sin-salir" ? ""
+        : e.estado === "ganado" ? `<button data-editar="${e.n}" data-entregar="1">Entregar</button>`
+        : `<button data-editar="${e.n}">Datos</button>`;
 
       function veredicto() {
         const v = $("veredicto");
@@ -170,8 +205,12 @@ const dentro = await esAdmin(Astro.cookies.get(ADMIN_COOKIE)?.value);
           : e.estado === "sin-salir" ? ["no", `#${n} aún no ha salido`, "Es un número elegido, pero el juego no se lo ha dado a nadie todavía. No entregues nada."]
           : e.estado === "entregado" ? ["ya", `#${n} ya se entregó`, `${e.premio}. No lo entregues otra vez.`]
           : ["si", `#${n} ha ganado`, e.premio];
+        // Una entrada no se entrega sin apuntar antes a quién.
+        const entrada = e?.estado === "ganado" && esEntrada(e.premio);
         v.className = `veredicto ${clase}`;
-        v.innerHTML = `<p><b>${titulo}</b>${texto}</p>${e?.estado === "ganado" ? boton(n, "ganado") : ""}`;
+        v.innerHTML = `<p><b>${titulo}</b>${texto}${e ? lineaDatos(e) : ""}</p>` +
+          (entrada ? formDatos(e, true) : e?.estado === "ganado" ? boton(n, "ganado") : "");
+        v.style.flexWrap = "wrap";
         v.hidden = false;
       }
 
@@ -181,16 +220,44 @@ const dentro = await esAdmin(Astro.cookies.get(ADMIN_COOKIE)?.value);
         $("total").textContent = String(d.total);
         $("ganados").textContent = `${d.ganadores.length}/${nPremios}`;
         $("entregados").textContent = `${d.ok.length}/${nPremios}`;
-        lista!.innerHTML = [...d.elegidos].sort((a, b) => a.n.localeCompare(b.n)).map(({ n, premio, estado }) =>
-          `<li class="${estado}"><span class="n">#${n}</span><span class="p">${premio}</span>` +
-          `<span class="e">${ESTADO[estado]}</span>${boton(n, estado)}</li>`).join("");
+        if (editando) return;
+        lista!.innerHTML = [...d.elegidos].sort((a, b) => a.n.localeCompare(b.n)).map((e) =>
+          `<li class="${e.estado}" data-li="${e.n}"><span class="n">#${e.n}</span><span class="p">${e.premio}${lineaDatos(e)}</span>` +
+          `<span class="e">${ESTADO[e.estado]}</span>${botonDatos(e)}${esEntrada(e.premio) && e.estado === "ganado" ? "" : boton(e.n, e.estado)}</li>`).join("");
         veredicto();
       }
       const fallo = (e: unknown) => { $("err").textContent = `Error: ${(e as Error).message}. Comprueba la conexión.`; $("err").hidden = false; };
 
-      buscar.addEventListener("input", () => { buscar.value = buscar.value.replace(/\D/g, "").slice(0, 4); veredicto(); });
-      document.querySelector("main")!.addEventListener("click", async (ev) => {
-        const b = (ev.target as HTMLElement).closest("button[data-n]") as HTMLButtonElement | null;
+      buscar.addEventListener("input", () => { buscar.value = buscar.value.replace(/\D/g, "").slice(0, 4); editando = false; veredicto(); });
+      const main = document.querySelector("main")!;
+      main.addEventListener("input", (ev) => { if ((ev.target as HTMLElement).closest("form.datos")) editando = true; });
+
+      main.addEventListener("submit", async (ev) => {
+        const f = ev.target as HTMLFormElement;
+        if (!f.matches("form.datos")) return;
+        ev.preventDefault();
+        const b = f.querySelector("button")!;
+        b.disabled = true;
+        try {
+          const n = f.dataset.n;
+          let d = await api("datos", { n, ...Object.fromEntries(new FormData(f)) });
+          if (f.dataset.entregar) d = await api("entregado", { n, ok: true });
+          editando = false;
+          pintar(d);
+        } catch (e) { b.disabled = false; fallo(e); }
+      });
+
+      main.addEventListener("click", async (ev) => {
+        const t = ev.target as HTMLElement;
+        const editar = t.closest("button[data-editar]") as HTMLButtonElement | null;
+        if (editar) {
+          const li = lista!.querySelector(`[data-li="${editar.dataset.editar}"]`)!;
+          const e = ultimo?.elegidos.find((x) => x.n === editar.dataset.editar);
+          if (e && !li.querySelector("form")) { li.insertAdjacentHTML("beforeend", formDatos(e, Boolean(editar.dataset.entregar))); editando = true; }
+          return;
+        }
+        if (t.closest("[data-cancelar]")) { editando = false; if (ultimo) pintar(ultimo); return; }
+        const b = t.closest("button[data-n]") as HTMLButtonElement | null;
         if (!b) return;
         b.disabled = true;
         try { pintar(await api("entregado", { n: b.dataset.n, ok: b.dataset.ok === "1" })); }
