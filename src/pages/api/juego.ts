@@ -23,7 +23,7 @@ export const GET: APIRoute = async ({ url }) => {
 // /juego/admin (que además recibe los números elegidos).
 export const POST: APIRoute = async ({ request, cookies }) => {
   let body: { id?: unknown; prueba?: unknown; key?: unknown; accion?: unknown; n?: unknown; ok?: unknown;
-    nombre?: unknown; apellidos?: unknown; contacto?: unknown } = {};
+    nombre?: unknown; apellidos?: unknown; contacto?: unknown; cuantos?: unknown } = {};
   try {
     body = JSON.parse(await request.text());
   } catch {
@@ -49,6 +49,13 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         if (!d) return json({ error: "faltan nombre y apellidos" }, 400);
         await guardarDatos(ns, cleanNumero(body.n), d);
         return json(await ver());
+      }
+      // Escaneos simulados (móviles inventados): solo en la prueba y desde /juego/admin.
+      if (body.accion === "simular" && admin && prueba) {
+        const cuantos = Math.min(20, Math.max(1, Math.floor(Number(body.cuantos) || 1)));
+        const simulados = [];
+        for (let i = 0; i < cuantos; i++) simulados.push(await jugar(ns, `sim-${crypto.randomUUID()}`));
+        return json({ ...(await ver()), simulados });
       }
       return json({ error: "accion" }, 400);
     }

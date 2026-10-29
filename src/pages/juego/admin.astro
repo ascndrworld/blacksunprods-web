@@ -59,6 +59,15 @@ const dentro = await esAdmin(Astro.cookies.get(ADMIN_COOKIE)?.value);
     .tile b { display: block; font-size: 28px; font-variant-numeric: tabular-nums; }
     .tile span { color: var(--mute); font-size: 12px; }
     .tile.acc b { color: var(--acc); }
+
+    /* Escaneos simulados (solo en la prueba) */
+    .simular { border: 1px dashed var(--warn); border-radius: 12px; padding: 16px; margin-bottom: 24px; }
+    .simular .botones { display: flex; flex-wrap: wrap; gap: 8px; }
+    .simular .botones button:first-child { background: var(--warn); border-color: var(--warn); color: #000; font-weight: 700; }
+    .simular ul { list-style: none; margin: 12px 0 0; padding: 0; max-height: 220px; overflow-y: auto; font-size: 13px; }
+    .simular ul li { padding: 4px 0; border-bottom: 1px solid var(--line); gap: 8px; }
+    .simular ul li b { font-variant-numeric: tabular-nums; }
+    .simular ul li.gana { color: var(--ok); font-weight: 700; }
     button, input { font: inherit; }
     button { cursor: pointer; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); background: #161616; color: var(--fg); font-size: 13px; white-space: nowrap; }
     h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--mute); margin: 0 0 8px; }
@@ -138,6 +147,18 @@ const dentro = await esAdmin(Astro.cookies.get(ADMIN_COOKIE)?.value);
         <div class="tile"><b id="entregados">–</b><span>Premios entregados</span></div>
       </div>
 
+      {prueba && (
+        <section class="simular">
+          <h2>Escaneos de prueba</h2>
+          <div class="botones">
+            <button data-simular="1">Simular un escaneo</button>
+            <button data-simular="5">+5</button>
+            <button data-simular="20">+20</button>
+          </div>
+          <ul id="simulados"></ul>
+        </section>
+      )}
+
       <h2>Números elegidos</h2>
       <ol id="lista"></ol>
     </>
@@ -153,7 +174,7 @@ const dentro = await esAdmin(Astro.cookies.get(ADMIN_COOKIE)?.value);
       const buscar = $("buscar") as HTMLInputElement;
       type Datos = { nombre: string; apellidos: string; contacto: string };
       type Elegido = { n: string; premio: string; estado: "sin-salir" | "ganado" | "entregado"; datos?: Datos };
-      type R = { total: number; ok: string[]; elegidos: Elegido[]; ganadores: unknown[]; error?: string };
+      type R = { total: number; ok: string[]; elegidos: Elegido[]; ganadores: unknown[]; simulados?: { n: string; premio: string | null }[]; error?: string };
       let ultimo: R | null = null;
       // Mientras se escriben los datos de un ganador, el refresco no repinta la lista.
       let editando = false;
@@ -254,6 +275,22 @@ const dentro = await esAdmin(Astro.cookies.get(ADMIN_COOKIE)?.value);
           return;
         }
         if (t.closest("[data-cancelar]")) { editando = false; if (ultimo) pintar(ultimo); return; }
+        const sim = t.closest("button[data-simular]") as HTMLButtonElement | null;
+        if (sim) {
+          const botones = [...document.querySelectorAll<HTMLButtonElement>("button[data-simular]")];
+          botones.forEach((x) => { x.disabled = true; });
+          try {
+            const antes = ultimo?.total ?? 0;
+            const d = await api("simular", { cuantos: Number(sim.dataset.simular) });
+            // Cada escaneo con su posición; los más recientes arriba.
+            const filas = (d.simulados ?? []).map((r, i) =>
+              `<li class="${r.premio ? "gana" : ""}"><b>Escaneo ${antes + i + 1}</b> · #${r.n} · ${r.premio ? `¡Gana! ${esc(r.premio)}` : "Sin premio"}</li>`).reverse();
+            $("simulados").insertAdjacentHTML("afterbegin", filas.join(""));
+            pintar(d);
+          } catch (e) { fallo(e); }
+          botones.forEach((x) => { x.disabled = false; });
+          return;
+        }
         const b = t.closest("button[data-n]") as HTMLButtonElement | null;
         if (!b) return;
         b.disabled = true;
