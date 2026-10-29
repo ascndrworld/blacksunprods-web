@@ -45,8 +45,8 @@ export const PREMIOS = [
   "Una entrada para Nochebuena",
   "Una entrada para Nochevieja",
   "Una entrada para Nochevieja",
-  "Una entrada para Halloween Fest VI",
-  "Una entrada para Halloween Fest VI",
+  "Una entrada para Halloween Fest 2027",
+  "Una entrada para Halloween Fest 2027",
 ];
 
 // Frases al recibir el número (una por móvil, siempre la misma).
