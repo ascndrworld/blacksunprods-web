@@ -131,6 +131,18 @@ export async function resultados(ns: string): Promise<Resultados> {
   return { total: Number(total ?? 0), ganadores: (drawn ?? []).map((x: string) => JSON.parse(x)), ok: ok ?? [] };
 }
 
+// Borra todos los datos de la prueba (contador, plan, móviles, ganadores y entregas).
+// Nunca toca la noche real.
+export async function reiniciarPrueba(): Promise<void> {
+  const ns = juegoNs(true);
+  let cursor = "0";
+  do {
+    const [[sig, claves]] = await pipeline([["SCAN", cursor, "MATCH", `${ns}:*`, "COUNT", 500]]);
+    if (claves.length) await pipeline([["DEL", ...claves]]);
+    cursor = sig;
+  } while (cursor !== "0");
+}
+
 export const cleanNumero = (s: unknown): string => (typeof s === "string" && NUMEROS.includes(s) ? s : "");
 
 export async function marcarEntregado(ns: string, n: string, ok: boolean): Promise<void> {

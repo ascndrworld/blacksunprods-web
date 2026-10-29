@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { hasStore } from "../../lib/countdownStats";
-import { ADMIN_COOKIE, cleanDatos, cleanId, cleanNumero, elegidos, esAdmin, estado, jugar, juegoNs, guardarDatos, marcarEntregado, resultados } from "../../lib/juego";
+import { ADMIN_COOKIE, cleanDatos, cleanId, cleanNumero, elegidos, esAdmin, estado, jugar, juegoNs, guardarDatos, marcarEntregado, reiniciarPrueba, resultados } from "../../lib/juego";
 
 // API del juego del visualizer (página /juego y panel /juego/sorteo).
 export const prerender = false;
@@ -56,6 +56,10 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         const simulados = [];
         for (let i = 0; i < cuantos; i++) simulados.push(await jugar(ns, `sim-${crypto.randomUUID()}`));
         return json({ ...(await ver()), simulados });
+      }
+      if (body.accion === "reiniciar" && admin && prueba) {
+        await reiniciarPrueba();
+        return json(await ver());
       }
       return json({ error: "accion" }, 400);
     }
