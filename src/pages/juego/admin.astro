@@ -8,7 +8,7 @@
  * entrada pide nombre, apellidos y contacto del ganador para avisarle luego.
  * Con ?prueba trabaja sobre los números de prueba (/juego?prueba).
  */
-import { ADMIN_COOKIE, GRUPO, NUMEROS, PREMIOS, adminToken, esAdmin } from "../../lib/juego";
+import { ADMIN_COOKIE, PREMIOS, adminToken, esAdmin } from "../../lib/juego";
 
 export const prerender = false;
 
@@ -49,11 +49,10 @@ const dentro = await esAdmin(Astro.cookies.get(ADMIN_COOKIE)?.value);
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.45 "Helvetica Neue", Helvetica, Arial, sans-serif; }
     main { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
-    header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 4px; }
+    header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
     h1 { font-size: 20px; margin: 0; }
     header nav { display: flex; gap: 14px; font-size: 13px; white-space: nowrap; }
     a { color: var(--mute); }
-    .sub { color: var(--mute); margin: 0 0 20px; font-size: 13px; }
     .prueba { display: inline-block; background: var(--warn); color: #000; font-weight: 700; font-size: 12px; padding: 2px 8px; border-radius: 4px; margin-left: 8px; vertical-align: 3px; }
     .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
     .tile { border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
@@ -125,7 +124,6 @@ const dentro = await esAdmin(Astro.cookies.get(ADMIN_COOKIE)?.value);
           <a href="/juego/admin?salir">Salir</a>
         </nav>
       </header>
-      <p class="sub">Solo tienen premio estos {NUMEROS.length} números. Salen solos: de cada {GRUPO} escaneos, uno recibe uno de ellos hasta repartirlos todos. En la barra, escribe el número que te enseñen para saber si es bueno.</p>
       <p class="err" id="err" hidden></p>
 
       <section class="check">

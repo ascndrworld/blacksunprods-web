@@ -1,6 +1,6 @@
 // Juego del visualizer de Halloween Fest V: quien escanea el QR de la pantalla
 // recibe un número de 4 cifras al azar y, al momento, sabe si ha ganado. Solo
-// tienen premio los NUMEROS elegidos: de cada grupo de 3 escaneos, uno al azar
+// tienen premio los NUMEROS elegidos: de cada grupo de GRUPO escaneos, uno al azar
 // recibe uno de ellos hasta repartirlos todos (las posiciones se sortean con
 // el primer escaneo de la noche); al resto le sale otro número cualquiera. El
 // panel /juego/sorteo solo sirve para ver los ganadores y marcar entregados.
@@ -11,13 +11,15 @@
 //
 // Claves:  {ns}:n              contador de escaneos
 //          {ns}:dev:{id}       JSON {n, premio} de ese móvil
-//          {ns}:plan           JSON {posición: [índice de NUMEROS, índice de PREMIOS]}
+//          {ns}:plan:g{GRUPO}  JSON {posición: [índice de NUMEROS, índice de PREMIOS]}
+//                              (la clave lleva GRUPO: si cambia, se sortea un plan nuevo)
 //          {ns}:usados (set)   números ya dados a los que no ganan
 //          {ns}:drawn  (list)  JSON {n, premio} de los ganadores, por orden de llegada
 //          {ns}:ok     (set)   números ganadores que ya han recogido el premio
 //          {ns}:datos  (hash)  número → JSON {nombre, apellidos, contacto} de quien
 //                              gana una entrada (lo apunta Frank en /juego/admin)
-// ns = "juego5", o "juego5p" con ?prueba (no se mezcla con la noche real).
+// ns = "juego5", o "juego5p-g5" con ?prueba (no se mezcla con la noche real; la prueba empieza
+// de cero con los grupos de 5).
 
 import { pipeline } from "./countdownStats";
 
@@ -25,10 +27,10 @@ import { pipeline } from "./countdownStats";
 export const OPENS = Date.parse("2026-10-31T20:00:00+01:00");
 export const CLOSES = Date.parse("2026-11-01T12:00:00+01:00");
 
-export const juegoNs = (prueba: boolean): string => (prueba ? "juego5p" : "juego5");
+export const juegoNs = (prueba: boolean): string => (prueba ? "juego5p-g5" : "juego5");
 
 // Un ganador al azar en cada grupo de GRUPO escaneos.
-export const GRUPO = 3;
+export const GRUPO = 5;
 
 // Los únicos números con premio. A cada uno le toca un premio al azar.
 export const NUMEROS = ["2104", "2506", "2412", "3112", "0211", "0111", "2009", "2704", "1803", "3110"];
@@ -81,11 +83,12 @@ const barajar = (n: number): number[] => {
 // Posición → [número ganador, premio]. Se sortea una sola vez (el primer
 // escaneo lo guarda; si llegan dos a la vez, vale el que se guardó primero).
 export async function plan(ns: string): Promise<Record<string, [number, number]>> {
-  const [prev] = await pipeline([["GET", `${ns}:plan`]]);
+  const clave = `${ns}:plan:g${GRUPO}`;
+  const [prev] = await pipeline([["GET", clave]]);
   if (prev) return JSON.parse(prev);
   const nums = barajar(NUMEROS.length), premios = barajar(PREMIOS.length);
   const nuevo = Object.fromEntries(NUMEROS.map((_, g) => [g * GRUPO + 1 + azar(GRUPO), [nums[g], premios[g]]]));
-  const [, guardado] = await pipeline([["SET", `${ns}:plan`, JSON.stringify(nuevo), "NX"], ["GET", `${ns}:plan`]]);
+  const [, guardado] = await pipeline([["SET", clave, JSON.stringify(nuevo), "NX"], ["GET", clave]]);
   return JSON.parse(guardado);
 }
 

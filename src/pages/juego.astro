@@ -133,7 +133,7 @@ import { CLOSES, FRASES_GAME_OVER, FRASES_GANA, OPENS } from "../lib/juego";
     tick(); setInterval(tick, 1000);
 
     // Id aleatorio del móvil, guardado para que vuelva a ver su número.
-    const store = prueba ? "juego5p" : "juego5";
+    const store = prueba ? "juego5p-g5" : "juego5";
     const get = (k: string) => { try { return localStorage.getItem(k); } catch { return null; } };
     const set = (k: string, v: string) => { try { localStorage.setItem(k, v); } catch {} };
     const cookie = (k: string) => document.cookie.split("; ").find((c) => c.startsWith(k + "="))?.split("=")[1] ?? null;
