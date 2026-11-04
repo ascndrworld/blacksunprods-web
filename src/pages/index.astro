@@ -100,16 +100,6 @@ const SHOW_TESTIMONIALS = false;
     <a class="home-hero-btn" href="/proyectos">VER PROYECTOS</a>
   </div>
 
-  <!-- AVISO HALLOWEEN FEST V: tira fija en la base del vídeo, enlaza a la landing de venta -->
-  <!-- el enlace se estira con ::after para que toda la tira sea clicable -->
-  <div class="hf5-strip">
-    <a class="hf5-strip-link" href="/halloween-fest#entradas" aria-label="Halloween Fest V: entradas ya disponibles. Comprar entradas.">
-      <span class="hf5-strip-tag">HALLOWEEN FEST V</span>
-      <span class="hf5-strip-text">Entradas <strong>ya disponibles</strong></span>
-      <span class="hf5-strip-btn" aria-hidden="true">Comprar<span class="hf5-strip-btn-extra"> entradas</span></span>
-    </a>
-  </div>
-
   </div><!-- /#home -->
 
   <!-- ════ CIFRAS (sustituye a la franja de logos) ════ -->
@@ -474,81 +464,6 @@ img, video {
 @media (max-width: 768px) {
   .home-hero-sub { text-align: right; font-size: 11px; margin: -6px 0 22px; }
   .home-hero-kicker { text-align: right; font-size: 10px; margin-bottom: 10px; }
-}
-
-/* ════ AVISO HALLOWEEN FEST V (base del vídeo) ════ */
-.hf5-strip {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  padding: 14px clamp(16px, 5vw, 88px);
-  background: #C4241A; /* rojo de la landing /halloween-fest */
-  color: #F3F3F0;
-  font-family: "BSP Helvetica", sans-serif;
-  text-decoration: none;
-  text-transform: uppercase;
-  box-shadow: 0 0 24px rgba(255, 40, 25, 0.35);
-}
-.hf5-strip-link {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  color: inherit;
-  text-decoration: none;
-}
-.hf5-strip-link::after { content: ""; position: absolute; inset: 0; }
-.hf5-strip-tag {
-  flex: none;
-  padding: 4px 10px;
-  background: #000;
-  color: #FF4A36;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-}
-/* letras como en la landing: titulares en 700–800 apretados, botón en 600 abierto */
-.hf5-strip-text { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
-.hf5-strip-text strong { font-weight: 800; }
-.hf5-strip-btn {
-  flex: none;
-  padding: 8px 16px;
-  border: 2px solid #000;
-  background: #000;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  transition: background 0.25s, color 0.25s, border-color 0.25s;
-}
-.hf5-strip:hover .hf5-strip-btn { background: transparent; color: #F3F3F0; border-color: #F3F3F0; }
-/* móvil: una sola fila — etiqueta y texto apilados a la izquierda, botón a la derecha */
-@media (max-width: 768px) {
-  .hf5-strip {
-    justify-content: stretch;
-    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
-  }
-  .hf5-strip-link {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-areas: "tag btn" "text btn";
-    align-items: center;
-    gap: 4px 12px;
-  }
-  .hf5-strip-tag { grid-area: tag; justify-self: start; padding: 3px 7px; font-size: 11px; }
-  .hf5-strip-text { grid-area: text; font-size: 14px; line-height: 1.2; }
-  .hf5-strip-btn { grid-area: btn; padding: 10px 14px; font-size: 11px; }
-  .hf5-strip-btn-extra { display: none; }
-}
-@media (max-width: 360px) {
-  .hf5-strip-text { font-size: 13px; }
-  .hf5-strip-btn { padding: 10px 12px; }
 }
 
 /* ════ CIFRAS (bajo el hero) ════ */
