@@ -1,29 +1,14 @@
 ---
 /*
- * /halloween-fest — Landing de venta de HALLOWEEN FEST V (5º aniversario).
+ * /halloween-fest — Página de HALLOWEEN FEST V (5º aniversario).
  *
- * La venta la hace Fourvenues dentro de un iframe: el pago, las entradas y
- * los correos de confirmación son suyos. El código se saca del panel:
- *   pro.fourvenues.com → Ajustes → Venta pública → Configuración web → IFRAME
- * (tema oscuro; como página de gracias, https://www.blacksunprods.com/halloween-fest?compra=ok).
- * Se pega tal cual en FOURVENUES_EMBED. Mientras esté vacío, la sección de
- * entradas muestra «Muy pronto» y remite a Instagram.
- *
- * Fourvenues no deja generar el iframe hasta completar los datos fiscales de
- * la organización (el microsite sale bloqueado hasta entonces).
- *
- * Diseño aprobado de cómo queda con la venta activa (simulación del widget y
- * capturas): docs/diseno-venta-halloween-v/.
+ * El evento ya se celebró (31/10/2026): la venta de Fourvenues, el botón de
+ * compra, las preguntas sobre entradas y la medición de ventas se quitaron el
+ * 04/11/2026. El histórico de ventas sigue en /halloween-fest/stats.
  */
 import Layout from "../layouts/Layout.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { SITE, absUrl } from "../config/site.mjs";
-
-// ── MARCA: pegar aquí el script del iframe de Fourvenues ──────────────────
-// Apunta al evento concreto (WZEJ) para que los tramos salgan nada más cargar, sin pasar por la lista de eventos.
-const FOURVENUES_EMBED = `<script src="https://www.fourvenues.com/assets/iframe/halloween-fest2/events/WZEJ"></script>`;
-// Enlace directo al evento en Fourvenues (plan B si el iframe no carga).
-const FOURVENUES_URL = "https://www.fourvenues.com/halloween-fest2/WZEJ";
 
 const EVENT = {
   name: "Halloween Fest | V Aniversario",
@@ -35,11 +20,9 @@ const EVENT = {
   region: "Jaén",
 };
 const IMG = "/images/halloween-v";
-const INSTAGRAM_HF = "https://www.instagram.com/halloweenfestlv";
 
 const canonical = absUrl("/halloween-fest");
-const ogImage = absUrl(`${IMG}/og-entradas-a-la-venta.jpg`);
-const onSale = FOURVENUES_EMBED.trim() !== "";
+const ogImage = absUrl(`${IMG}/og-halloween-fest-v.jpg`);
 
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${EVENT.venue} ${EVENT.place} ${EVENT.region}`)}`;
 
@@ -48,9 +31,6 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComp
 const DRESS_CODE = "";
 /** Line-up: { name, img? } con img en /images/halloween-v/ (cuadrada). */
 const LINEUP: { name: string; img?: string }[] = [];
-
-/** Autorización para 16 y 17 años (fuente: docs/autorizacion-menores/autorizacion.html). */
-const AUTH_PDF = "/docs/autorizacion-menores-halloween-fest-v.pdf";
 
 const cards = [
   { k: "Fecha", rows: [["", "Sábado 31 de octubre de 2026"]] },
@@ -62,33 +42,22 @@ const cards = [
 // Solo preguntas con respuesta comprobada. Añadir edad mínima, taquilla, guardarropa,
 // aparcamiento… cuando estén confirmados (salen también en el FAQPage de Google).
 const faq = [
-  { q: "¿Dónde compro las entradas oficiales de Halloween Fest V?", a: "Aquí mismo, en esta página. La venta oficial se hace a través de Fourvenues: el pago es seguro y las entradas llegan al momento a tu correo." },
   { q: "¿Cuándo y dónde es Halloween Fest V?", a: `El sábado 31 de octubre de 2026, de 23:00 a 06:00, en la ${EVENT.venue} de ${EVENT.place} (${EVENT.region}).` },
-  { q: "¿Pueden entrar menores de edad?", a: "La edad mínima es 16 años. Si tienes 16 o 17, en la entrada tienes que enseñar la autorización firmada por tu madre, padre o tutor junto con una fotocopia de su DNI. La autorización se descarga en esta página. Los menores de 16 años no pueden entrar." },
-  { q: "¿Cómo recibo mi entrada?", a: "Al terminar la compra te llega por correo electrónico. Puedes enseñarla en la puerta desde el móvil, no hace falta imprimirla." },
+  { q: "¿Pueden entrar menores de edad?", a: "La edad mínima es 16 años. Si tienes 16 o 17, en la entrada tienes que enseñar la autorización firmada por tu madre, padre o tutor junto con una fotocopia de su DNI. Los menores de 16 años no pueden entrar." },
   { q: "¿Qué es Halloween Fest?", a: "Es la fiesta de Halloween de Los Villares (Jaén), que se celebra desde 2022. Cuatro ediciones con una media de 600 personas por noche, y este año, en su quinto aniversario, la organiza Black Sun Prods." },
 ];
 
 ---
 
 <Layout
-  title="Halloween Fest V 2026 en Los Villares (Jaén) · Entradas"
-  description="Halloween Fest V, el quinto aniversario: sábado 31 de octubre de 2026, de 23:00 a 6:00, en la Caseta Municipal de Los Villares (Jaén). Entradas oficiales aquí."
+  title="Halloween Fest V 2026 en Los Villares (Jaén)"
+  description="Halloween Fest V, el quinto aniversario: sábado 31 de octubre de 2026, de 23:00 a 6:00, en la Caseta Municipal de Los Villares (Jaén)."
   canonical={canonical}
   ogImage={ogImage}
-  ogImageAlt="Halloween Fest V, 5º aniversario: entradas ya a la venta. 31 de octubre de 2026 en Los Villares"
+  ogImageAlt="Halloween Fest V, 5º aniversario. 31 de octubre de 2026 en Los Villares"
 >
 
 <Fragment slot="head">
-  {onSale && (
-    <>
-      {/* El widget de Fourvenues encadena script → script → iframe (con redirección a web.fourvenues.com) → API:
-          abrir las conexiones desde el principio le ahorra casi un segundo al pulsar «Comprar entradas». */}
-      <link rel="preconnect" href="https://www.fourvenues.com"/>
-      <link rel="preconnect" href="https://web.fourvenues.com"/>
-      <link rel="preconnect" href="https://api.fourvenues.com" crossorigin/>
-    </>
-  )}
   <link rel="preload" as="image" href={`${IMG}/escena-v.webp`} media="(max-aspect-ratio: 1/1)"/>
   <link rel="preload" as="image" href={`${IMG}/escena-v-horizontal.webp`} media="(min-aspect-ratio: 1/1)"/>
   <script type="application/ld+json" is:inline set:html={JSON.stringify([{
@@ -106,8 +75,7 @@ const faq = [
     },
     "image": [ogImage],
     "url": canonical,
-    "organizer": { "@type": "Organization", "name": SITE.name, "url": SITE.url },
-    "offers": onSale ? { "@type": "Offer", "url": canonical, "availability": "https://schema.org/InStock", "priceCurrency": "EUR" } : undefined
+    "organizer": { "@type": "Organization", "name": SITE.name, "url": SITE.url }
   }, {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -128,7 +96,6 @@ const faq = [
       <h1 class="hv-title">Halloween Fest<span class="hv-sr"> V</span></h1>
       <p class="hv-tag">The game begins</p>
       <p class="hv-date"><time datetime={EVENT.start}>31.10.2026</time> · {EVENT.place}</p>
-      <a class="hv-btn" href="#entradas">{onSale ? "Comprar entradas" : "Entradas muy pronto"}</a>
     </div>
   </section>
 
@@ -159,26 +126,6 @@ const faq = [
     </section>
   )}
 
-  <section class="hv-tickets" id="entradas" aria-labelledby="entradas-t">
-    <p class="hv-eyebrow" data-reveal>Entradas oficiales</p>
-    <h2 id="entradas-t" data-reveal>Consigue tu entrada</h2>
-    <p class="hv-ok" hidden data-ok>Compra completada. Te llegarán las entradas al correo que has indicado.</p>
-    {onSale ? (
-      <>
-        <p class="hv-age"><a href={AUTH_PDF} target="_blank" rel="noopener">Descargar autorización (PDF)</a></p>
-        <div class="hv-embed" set:html={FOURVENUES_EMBED} />
-        {FOURVENUES_URL && (
-          <p class="hv-alt">¿No se carga? <a href={FOURVENUES_URL} target="_blank" rel="noopener">Compra directamente en Fourvenues</a></p>
-        )}
-      </>
-    ) : (
-      <div class="hv-soon" data-reveal>
-        <p>La venta abre muy pronto. Síguenos para enterarte el primero.</p>
-        <a class="hv-btn hv-btn--ghost" href={INSTAGRAM_HF} target="_blank" rel="noopener">@halloweenfestlv</a>
-      </div>
-    )}
-  </section>
-
   <section class="hv-faq" aria-labelledby="faq-t">
     <p class="hv-eyebrow">FAQ</p>
     <h2 id="faq-t">Preguntas frecuentes</h2>
@@ -207,131 +154,6 @@ const faq = [
 
 <SiteFooter />
 
-<!-- Medición de ventas (ver src/pages/api/hf.ts y /halloween-fest/stats).
-     La compra ocurre dentro del iframe de Fourvenues: la web solo ve la visita,
-     la entrada en el iframe y la vuelta con ?compra=ok. El origen (utm_source,
-     ?src= o el sitio de procedencia) se guarda en sessionStorage durante la
-     visita para poder atribuir la compra al volver de la pasarela. -->
-<script is:inline>
-  (function () {
-    var p = new URLSearchParams(location.search);
-    var KEY = "hf_src";
-    var src = "";
-    try { src = sessionStorage.getItem(KEY) || ""; } catch (e) {}
-
-    // El origen se fija en la primera página vista de la sesión. La vuelta de
-    // la pasarela (?compra=ok) llega desde Fourvenues y no debe pisarlo.
-    if (!src) {
-      var tag = (p.get("utm_source") || p.get("src") || "").toLowerCase();
-      if (!tag && p.get("compra") !== "ok") {
-        var ref = "";
-        try { ref = document.referrer ? new URL(document.referrer).hostname : ""; } catch (e) {}
-        if (ref && ref.indexOf("blacksunprods.com") === -1) {
-          tag = /instagram/.test(ref) ? "instagram"
-            : /facebook|fb\./.test(ref) ? "facebook"
-            : /google\./.test(ref) ? "google"
-            : /whatsapp|wa\.me/.test(ref) ? "whatsapp"
-            : /tiktok/.test(ref) ? "tiktok"
-            : "otros";
-        } else if (ref) {
-          tag = "web";
-        }
-      }
-      src = tag || "directo";
-      try { sessionStorage.setItem(KEY, src); } catch (e) {}
-    }
-
-    function once(name) {
-      try {
-        if (sessionStorage.getItem("hf_" + name)) return false;
-        sessionStorage.setItem("hf_" + name, "1");
-      } catch (e) {}
-      return true;
-    }
-    function send(e) {
-      var body = JSON.stringify({ e: e, src: src });
-      try {
-        if (!(navigator.sendBeacon && navigator.sendBeacon("/api/hf", body))) {
-          fetch("/api/hf", { method: "POST", body: body, keepalive: true });
-        }
-      } catch (err) {}
-    }
-    // Píxel y GA4 solo si están cargados (y respetan el consentimiento ellos mismos).
-    function fb() { if (typeof window.fbq === "function") window.fbq.apply(null, arguments); }
-    function ga() { if (typeof window.gtag === "function") window.gtag.apply(null, arguments); }
-
-    var bought = p.get("compra") === "ok";
-
-    if (!bought && once("view")) {
-      send("view");
-      fb("track", "ViewContent", { content_name: "Halloween Fest V", content_category: "Entradas" });
-      ga("event", "view_item", { items: [{ item_name: "Halloween Fest V" }] });
-    }
-
-    // Entrar en el iframe de Fourvenues = empezar la compra. Al hacer clic
-    // dentro de un iframe, la página pierde el foco y el foco pasa al iframe.
-    window.addEventListener("blur", function () {
-      setTimeout(function () {
-        var a = document.activeElement;
-        if (!a || a.tagName !== "IFRAME" || !a.closest(".hv-embed")) return;
-        if (!once("checkout")) return;
-        send("checkout");
-        fb("track", "InitiateCheckout", { content_name: "Halloween Fest V", currency: "EUR" });
-        ga("event", "begin_checkout", { currency: "EUR", items: [{ item_name: "Halloween Fest V" }] });
-      }, 0);
-    });
-
-    function purchased() {
-      var el = document.querySelector("[data-ok]");
-      if (el) { el.hidden = false; }
-      if (!once("purchase")) return;
-      send("purchase");
-      // El importe real lo sabe Fourvenues; aquí solo se marca la conversión.
-      fb("track", "Purchase", { content_name: "Halloween Fest V", currency: "EUR", value: 0 });
-      ga("event", "purchase", { transaction_id: "hf5-" + Date.now(), currency: "EUR", value: 0, items: [{ item_name: "Halloween Fest V" }] });
-    }
-
-    // Fourvenues no devuelve a ?compra=ok: la compra acaba dentro del iframe.
-    // El iframe avisa a esta página con postMessage (navegación entre pasos y
-    // eventos de seguimiento); un evento Purchase o una pantalla de éxito
-    // cuentan como compra. Cada aviso distinto se guarda vía /api/hf (con un id
-    // de visita al azar para agrupar) y sale en /halloween-fest/stats, para
-    // poder ajustar la detección con compras reales.
-    var seen = {};
-    var vid = Math.random().toString(36).slice(2, 10);
-    window.addEventListener("message", function (m) {
-      if (!/(^|\.)fourvenues\.com$/.test((function () { try { return new URL(m.origin).hostname; } catch (e) { return ""; } })())) return;
-      var d = m.data;
-      if (typeof d === "string") { try { d = JSON.parse(d); } catch (e) { return; } }
-      if (!d || typeof d.key !== "string" || d.key === "addHeight" || d.key === "forwardScroll") return;
-      var info = d.key === "navigate" ? (d.segments || []).join("/")
-        : d.key === "track" ? JSON.stringify(d.eventObject || {})
-        : JSON.stringify(d.value === undefined ? "" : d.value);
-      info = String(info).slice(0, 300);
-      if (!seen[d.key + info]) {
-        seen[d.key + info] = 1;
-        try { navigator.sendBeacon("/api/hf", JSON.stringify({ e: "fv", src: src, v: vid, k: d.key, i: info })); } catch (e) {}
-      }
-      var ev = d.key === "track" && d.eventObject ? String(d.eventObject.event || d.eventObject.eventName || d.eventObject.name || d.eventObject.action || "") : "";
-      if (/^purchase$/i.test(ev)
-        || (d.key === "track" && /"(event|eventName|name|action)":"purchase"/i.test(info))
-        || (d.key === "navigate" && /success|exito|gracias|thank|completed/i.test(info))) {
-        purchased();
-      }
-    });
-
-    // Vuelta con ?compra=ok (por si Fourvenues redirige): aviso, recuento y limpieza de la URL (así recargar no cuenta otra vez).
-    if (bought) {
-      purchased();
-      p.delete("compra");
-      var qs = p.toString();
-      try { history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + "#entradas"); } catch (e) {}
-      var t = document.getElementById("entradas");
-      if (t) t.scrollIntoView();
-    }
-  })();
-</script>
-
 <style>
   .hv { background: #000; color: #F3F3F0; font-family: "BSP Helvetica", sans-serif; }
 
@@ -346,11 +168,6 @@ const faq = [
   .hv-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .hv-tag { font-size: clamp(13px, 3.4vw, 20px); font-weight: 700; letter-spacing: .42em; text-indent: .42em; text-transform: uppercase; margin: 0 0 14px; text-shadow: 0 0 .5em rgba(255, 40, 25, .35); }
   .hv-date { font-size: clamp(14px, 3.6vw, 20px); font-weight: 600; letter-spacing: .24em; text-indent: .24em; text-transform: uppercase; color: rgba(243, 243, 240, .8); margin: 0 0 36px; }
-
-  .hv-btn { display: inline-block; font-size: 14px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: #fff; background: #C4241A; border: 2px solid #C4241A; padding: 16px 36px; transition: background .25s, color .25s, border-color .25s; }
-  .hv-btn:hover { background: transparent; color: #FF4A36; border-color: #FF4A36; }
-  .hv-btn--ghost { background: transparent; border-color: rgba(243, 243, 240, .4); color: #F3F3F0; letter-spacing: .06em; text-transform: none; font-size: 16px; }
-  .hv-btn--ghost:hover { border-color: #F3F3F0; color: #F3F3F0; }
 
   /* ── Datos del evento: tarjetas (fecha, ubicación, vestimenta) ── */
   /* Franja a todo el ancho con columnas separadas por líneas (diseño original de la lista de datos). */
@@ -391,19 +208,6 @@ const faq = [
   .hv-faq summary::before { content: ""; position: absolute; right: 12px; top: 50%; width: 2px; height: 14px; background: rgba(243, 243, 240, .7); transform: translateY(-50%); transition: opacity .2s; }
   .hv-faq details[open] summary::before { opacity: 0; }
   .hv-faq details p { font-size: 16px; line-height: 1.7; color: rgba(243, 243, 240, .65); margin: 0 0 22px; max-width: 62ch; }
-
-  /* ── Entradas ── */
-  .hv-tickets { max-width: 960px; margin: 0 auto; padding: clamp(64px, 8vw, 110px) 16px; scroll-margin-top: 40px; }
-  .hv-tickets h2 { font-size: clamp(36px, 6vw, 72px); font-weight: 800; letter-spacing: -.04em; line-height: 1; margin: 0 0 32px; text-align: center; }
-  .hv-age { font-size: 15px; line-height: 1.6; color: rgba(243, 243, 240, .75); text-align: center; max-width: 60ch; margin: -12px auto 28px; }
-  .hv-age a { color: #F3F3F0; font-weight: 600; text-underline-offset: 3px; }
-  .hv-alt { font-size: 14px; line-height: 1.6; color: rgba(243, 243, 240, .6); text-align: center; max-width: 52ch; margin: 20px auto 0; }
-  .hv-alt a { color: #F3F3F0; text-underline-offset: 3px; }
-  .hv-ok { text-align: center; font-size: 16px; font-weight: 600; padding: 16px 20px; margin: 0 auto 28px; max-width: 52ch; border: 1px solid rgba(255, 74, 54, .6); background: rgba(196, 36, 26, .12); }
-  .hv-embed { min-height: 480px; }
-  .hv-embed :global(iframe) { display: block; width: 100%; border: 0; }
-  .hv-soon { text-align: center; }
-  .hv-soon p { font-size: 17px; line-height: 1.6; color: rgba(243, 243, 240, .7); margin: 0 0 28px; }
 
   /* ── Ediciones anteriores ── */
   .hv-past { position: relative; min-height: 70vh; display: grid; align-items: end; overflow: hidden; }
