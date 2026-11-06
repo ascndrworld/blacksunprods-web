@@ -155,37 +155,37 @@ const faq = [
 <SiteFooter />
 
 <style>
-  .hv { background: #000; color: #F3F3F0; font-family: "BSP Helvetica", sans-serif; }
+  .hv { background: #0F0C0A; color: #EDE8E1; font-family: "BSP Helvetica", sans-serif; }
 
   /* ── Portada: la escena oficial con la V grande (sin el contador colgado) de fondo ── */
   .hv-hero { position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden; display: grid; place-items: center; }
   .hv-hero > picture { position: absolute; inset: 0; }
   .hv-hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.55) saturate(.85) contrast(1.05); }
-  .hv-hero-shade { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0,0,0,.25) 30%, rgba(0,0,0,.8) 100%), linear-gradient(180deg, rgba(0,0,0,.5), transparent 30%, transparent 70%, #000); }
+  .hv-hero-shade { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(15, 12, 10,.25) 30%, rgba(15, 12, 10,.8) 100%), linear-gradient(180deg, rgba(15, 12, 10,.5), transparent 30%, transparent 70%, #0F0C0A); }
   .hv-hero-body { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 120px 20px 64px; }
   .hv-kicker { font-size: clamp(15px, 3.4vw, 22px); font-weight: 700; letter-spacing: -.04em; text-transform: uppercase; color: rgba(235, 55, 38, .95); margin: 0 0 6px; }
   .hv-title { font-size: clamp(44px, 10vw, 110px); font-weight: 800; letter-spacing: -.08em; line-height: .9; text-transform: uppercase; margin: 0 0 18px; text-shadow: 0 0 .4em rgba(255, 40, 25, .3); }
   .hv-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .hv-tag { font-size: clamp(13px, 3.4vw, 20px); font-weight: 700; letter-spacing: .42em; text-indent: .42em; text-transform: uppercase; margin: 0 0 14px; text-shadow: 0 0 .5em rgba(255, 40, 25, .35); }
-  .hv-date { font-size: clamp(14px, 3.6vw, 20px); font-weight: 600; letter-spacing: .24em; text-indent: .24em; text-transform: uppercase; color: rgba(243, 243, 240, .8); margin: 0 0 36px; }
+  .hv-date { font-size: clamp(14px, 3.6vw, 20px); font-weight: 600; letter-spacing: .24em; text-indent: .24em; text-transform: uppercase; color: rgba(237, 232, 225, .8); margin: 0 0 36px; }
 
   /* ── Datos del evento: tarjetas (fecha, ubicación, vestimenta) ── */
   /* Franja a todo el ancho con columnas separadas por líneas (diseño original de la lista de datos). */
-  .hv-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); border-top: 1px solid rgba(243, 243, 240, .1); border-bottom: 1px solid rgba(243, 243, 240, .1); }
-  .hv-cards li { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: clamp(24px, 3vw, 40px) clamp(20px, 3vw, 48px); border-left: 1px solid rgba(243, 243, 240, .1); }
+  .hv-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); border-top: 1px solid rgba(237, 232, 225, .1); border-bottom: 1px solid rgba(237, 232, 225, .1); }
+  .hv-cards li { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: clamp(24px, 3vw, 40px) clamp(20px, 3vw, 48px); border-left: 1px solid rgba(237, 232, 225, .1); }
   .hv-cards li:first-child { border-left: none; }
-  .hv-card-k { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: rgba(243, 243, 240, .5); }
+  .hv-card-k { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: rgba(237, 232, 225, .5); }
   .hv-card-row { display: flex; flex-direction: column; align-items: center; gap: 2px; }
   .hv-card-row small { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: #FF4A36; }
   .hv-card-row strong { font-size: clamp(17px, 1.8vw, 24px); font-weight: 700; letter-spacing: -.02em; }
   .hv-card-link { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #FF4A36; text-decoration: none; }
-  .hv-card-link:hover { color: #F3F3F0; }
+  .hv-card-link:hover { color: #EDE8E1; }
 
   @media (max-width: 700px) {
     .hv-hero { place-items: start center; }
     .hv-hero-body { padding-top: max(110px, 36svh); }
     .hv-cards { grid-template-columns: 1fr; }
-    .hv-cards li { border-left: none; border-top: 1px solid rgba(243, 243, 240, .1); padding: 20px; }
+    .hv-cards li { border-left: none; border-top: 1px solid rgba(237, 232, 225, .1); padding: 20px; }
     .hv-cards li:first-child { border-top: none; }
   }
 
@@ -195,27 +195,27 @@ const faq = [
   .hv-lineup { max-width: 960px; margin: 0 auto; padding: clamp(56px, 7vw, 96px) 16px 0; }
   .hv-lineup h2, .hv-faq h2 { font-size: clamp(30px, 4.5vw, 52px); font-weight: 800; letter-spacing: -.04em; line-height: 1; margin: 0 0 28px; text-align: center; }
   .hv-lineup ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
-  .hv-lineup li { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 22px; border: 1px solid rgba(243, 243, 240, .12); background: rgba(243, 243, 240, .03); font-weight: 700; }
+  .hv-lineup li { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 22px; border: 1px solid rgba(237, 232, 225, .12); background: rgba(237, 232, 225, .03); font-weight: 700; }
   .hv-lineup img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; }
 
   /* ── Preguntas frecuentes ── */
   .hv-faq { max-width: 760px; margin: 0 auto; padding: 0 16px clamp(64px, 8vw, 110px); }
-  .hv-faq ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(243, 243, 240, .12); }
-  .hv-faq li { border-bottom: 1px solid rgba(243, 243, 240, .12); }
+  .hv-faq ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(237, 232, 225, .12); }
+  .hv-faq li { border-bottom: 1px solid rgba(237, 232, 225, .12); }
   .hv-faq summary { cursor: pointer; list-style: none; padding: 20px 36px 20px 0; font-size: clamp(16px, 1.5vw, 19px); font-weight: 600; line-height: 1.35; position: relative; }
   .hv-faq summary::-webkit-details-marker { display: none; }
-  .hv-faq summary::after { content: ""; position: absolute; right: 6px; top: 50%; width: 14px; height: 2px; background: rgba(243, 243, 240, .7); transform: translateY(-50%); }
-  .hv-faq summary::before { content: ""; position: absolute; right: 12px; top: 50%; width: 2px; height: 14px; background: rgba(243, 243, 240, .7); transform: translateY(-50%); transition: opacity .2s; }
+  .hv-faq summary::after { content: ""; position: absolute; right: 6px; top: 50%; width: 14px; height: 2px; background: rgba(237, 232, 225, .7); transform: translateY(-50%); }
+  .hv-faq summary::before { content: ""; position: absolute; right: 12px; top: 50%; width: 2px; height: 14px; background: rgba(237, 232, 225, .7); transform: translateY(-50%); transition: opacity .2s; }
   .hv-faq details[open] summary::before { opacity: 0; }
-  .hv-faq details p { font-size: 16px; line-height: 1.7; color: rgba(243, 243, 240, .65); margin: 0 0 22px; max-width: 62ch; }
+  .hv-faq details p { font-size: 16px; line-height: 1.7; color: rgba(237, 232, 225, .65); margin: 0 0 22px; max-width: 62ch; }
 
   /* ── Ediciones anteriores ── */
   .hv-past { position: relative; min-height: 70vh; display: grid; align-items: end; overflow: hidden; }
   .hv-past img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.5); }
   .hv-past-text { position: relative; padding: clamp(40px, 6vw, 88px) clamp(20px, 5vw, 88px); max-width: 640px; }
   .hv-past h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: 0 0 16px; }
-  .hv-past p { font-size: 16px; line-height: 1.7; color: rgba(243, 243, 240, .8); margin: 0 0 24px; }
-  .hv-link { font-size: 12px; letter-spacing: .28em; text-transform: uppercase; color: #F3F3F0; text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
+  .hv-past p { font-size: 16px; line-height: 1.7; color: rgba(237, 232, 225, .8); margin: 0 0 24px; }
+  .hv-link { font-size: 12px; letter-spacing: .28em; text-transform: uppercase; color: #EDE8E1; text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
 
 </style>
 

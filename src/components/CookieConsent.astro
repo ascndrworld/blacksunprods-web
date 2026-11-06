@@ -26,15 +26,15 @@
     bottom: 0;
     z-index: 9999;
     width: 100%;
-    background: var(--field-bg, #1a1a1a);
-    border-top: 1px solid var(--dim, #2e2e2e);
+    background: var(--field-bg, #1E1A17);
+    border-top: 1px solid var(--dim, #332D28);
     padding: 1rem clamp(1.25rem, 4vw, 40px);
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     gap: 1.75rem;
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.55);
+    box-shadow: 0 -10px 40px rgba(15, 12, 10, 0.55);
     animation: ccIn 0.45s ease both;
   }
   /* El atributo [hidden] debe ganar a display:flex (si no, no se oculta). */
@@ -51,10 +51,10 @@
     font-weight: 300;
     font-size: 0.82rem;
     line-height: 1.55;
-    color: var(--ink, #F3F3F0);
+    color: var(--ink, #EDE8E1);
   }
   .cc__text a {
-    color: var(--ink, #F3F3F0);
+    color: var(--ink, #EDE8E1);
     text-decoration: underline;
   }
   .cc__actions {
@@ -75,13 +75,13 @@
   }
   .cc__btn--ghost {
     background: transparent;
-    border: 1px solid var(--dim, #2e2e2e);
-    color: var(--ink, #F3F3F0);
+    border: 1px solid var(--dim, #332D28);
+    color: var(--ink, #EDE8E1);
   }
   .cc__btn--solid {
-    background: var(--ink, #F3F3F0);
-    border: 1px solid var(--ink, #F3F3F0);
-    color: #000;
+    background: var(--ink, #EDE8E1);
+    border: 1px solid var(--ink, #EDE8E1);
+    color: #0F0C0A;
   }
   .cc__btn:hover { opacity: 0.82; }
   /* Móvil: el texto y las pills se apilan, las pills a ancho completo. */

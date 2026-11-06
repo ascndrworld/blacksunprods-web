@@ -98,32 +98,32 @@ const identidad = [
 <SiteFooter />
 
 <style>
-  .bc { background: #000; color: #F3F3F0; font-family: "BSP Helvetica", sans-serif; }
+  .bc { background: #0F0C0A; color: #EDE8E1; font-family: "BSP Helvetica", sans-serif; }
   /* svh y no dvh: con dvh la foto se reescala en móvil cada vez que la barra del navegador aparece o se oculta al deslizar */
   .bc-hero { position: relative; overflow: hidden; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding: 160px clamp(20px, 5vw, 88px) clamp(56px, 8vw, 110px); }
   /* Foto apaisada: el lado izquierdo ya es negro y deja respirar al título */
   .bc-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 45%; }
-  .bc-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,.1) 35%, rgba(0,0,0,.75) 100%); }
+  .bc-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15, 12, 10,.5) 0%, rgba(15, 12, 10,.1) 35%, rgba(15, 12, 10,.75) 100%); }
   .bc-hero-text { position: relative; }
-  .bc-cat { font-size: 11px; letter-spacing: .32em; text-transform: uppercase; color: rgba(243, 243, 240,.8); margin: 0 0 22px; }
+  .bc-cat { font-size: 11px; letter-spacing: .32em; text-transform: uppercase; color: rgba(237, 232, 225,.8); margin: 0 0 22px; }
   .bc-title { font-size: clamp(52px, 8.4vw, 120px); font-weight: 800; letter-spacing: -.05em; line-height: .85; margin: 0 0 32px; }
-  .bc-desc { font-size: clamp(16px, 1.4vw, 20px); line-height: 1.6; color: rgba(243, 243, 240,.85); max-width: 52ch; margin: 0; }
+  .bc-desc { font-size: clamp(16px, 1.4vw, 20px); line-height: 1.6; color: rgba(237, 232, 225,.85); max-width: 52ch; margin: 0; }
 
-  .bc-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid rgba(243, 243, 240,.12); border-bottom: 1px solid rgba(243, 243, 240,.12); }
-  .bc-block { padding: clamp(32px, 4vw, 56px) clamp(20px, 3vw, 48px); border-left: 1px solid rgba(243, 243, 240,.12); }
+  .bc-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid rgba(237, 232, 225,.12); border-bottom: 1px solid rgba(237, 232, 225,.12); }
+  .bc-block { padding: clamp(32px, 4vw, 56px) clamp(20px, 3vw, 48px); border-left: 1px solid rgba(237, 232, 225,.12); }
   .bc-block:first-child { border-left: none; padding-left: clamp(20px, 5vw, 88px); }
-  .bc-block h2 { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: rgba(243, 243, 240,.5); font-weight: 500; margin: 0 0 18px; }
+  .bc-block h2 { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: rgba(237, 232, 225,.5); font-weight: 500; margin: 0 0 18px; }
   .bc-block p { font-size: clamp(18px, 1.6vw, 24px); font-weight: 700; line-height: 1.35; margin: 0; }
   .bc-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
-  .bc-tags li { font-size: 15px; padding: 9px 16px; border: 1px solid rgba(243, 243, 240,.25); border-radius: 999px; }
+  .bc-tags li { font-size: 15px; padding: 9px 16px; border: 1px solid rgba(237, 232, 225,.25); border-radius: 999px; }
 
 
   .bc-id { padding: clamp(64px, 8vw, 120px) clamp(20px, 5vw, 88px) 0; }
   .bc-id-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: clamp(24px, 5vw, 88px); align-items: end; margin: 0 0 clamp(32px, 4vw, 56px); }
   .bc-id-head h2 { font-size: clamp(32px, 4vw, 56px); font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: 0; }
-  .bc-id-head p { font-size: clamp(15px, 1.2vw, 17px); line-height: 1.7; color: rgba(243, 243, 240,.6); max-width: 48ch; margin: 0; }
+  .bc-id-head p { font-size: clamp(15px, 1.2vw, 17px); line-height: 1.7; color: rgba(237, 232, 225,.6); max-width: 48ch; margin: 0; }
   .bc-gallery { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(8px, 1vw, 16px); }
-  .bc-gallery li { overflow: hidden; aspect-ratio: 4 / 5; background: #0d0d0d; }
+  .bc-gallery li { overflow: hidden; aspect-ratio: 4 / 5; background: #110E0C; }
   .bc-gallery img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s cubic-bezier(.25,.46,.45,.94); }
   @media (hover: hover) {
     .bc-gallery li:hover img { transform: scale(1.04); }
@@ -132,9 +132,9 @@ const identidad = [
   .bc-cta { text-align: center; padding: clamp(80px, 10vw, 140px) 20px; }
   .bc-cta p { font-size: clamp(22px, 2.6vw, 36px); font-weight: 800; letter-spacing: -.02em; line-height: 1.2; max-width: 24ch; margin: 0 auto 36px; }
   .bc-links { display: flex; flex-direction: column; align-items: center; gap: 28px; }
-  .bc-btn { font-size: 14px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #000; background: #F3F3F0; border: 2px solid #F3F3F0; padding: 16px 40px; text-decoration: none; transition: background .25s, color .25s; }
-  .bc-btn:hover { background: transparent; color: #F3F3F0; }
-  .bc-back { font-size: 12px; letter-spacing: .28em; text-transform: uppercase; color: rgba(243, 243, 240,.7); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
+  .bc-btn { font-size: 14px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #0F0C0A; background: #EDE8E1; border: 2px solid #EDE8E1; padding: 16px 40px; text-decoration: none; transition: background .25s, color .25s; }
+  .bc-btn:hover { background: transparent; color: #EDE8E1; }
+  .bc-back { font-size: 12px; letter-spacing: .28em; text-transform: uppercase; color: rgba(237, 232, 225,.7); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
 
   @media (max-width: 768px) {
     /* El nombre va en una línea: el cuerpo se ajusta al ancho de la pantalla */
@@ -143,7 +143,7 @@ const identidad = [
     .bc-hero-img { object-position: 96% center; }
     .bc-grid { grid-template-columns: 1fr; }
     .bc-block, .bc-block:first-child { border-left: none; padding: 32px 20px; }
-    .bc-block + .bc-block { border-top: 1px solid rgba(243, 243, 240,.12); }
+    .bc-block + .bc-block { border-top: 1px solid rgba(237, 232, 225,.12); }
     .bc-id-head { grid-template-columns: 1fr; align-items: start; }
     .bc-gallery { grid-template-columns: 1fr; }
   }

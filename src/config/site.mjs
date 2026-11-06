@@ -97,11 +97,13 @@ export const SITE = {
   // ── Marca visual ───────────────────────────────────────────
   /** Logo del header (PNG con transparencia). */
   logo: "/logo.png",
+  /** Logo en hueso (#EDE8E1) para la cabecera y el pie, a juego con la paleta cálida. */
+  logoWeb: "/logo-hueso.png",
   /** Banda de cabecera de los emails (600px de ancho, PNG). */
   emailBanner: "/email-logo-band-bsp.png",
   /** Color de la barra del navegador y fondo de la PWA. */
-  themeColor: "#0a0a0a",
-  backgroundColor: "#000000",
+  themeColor: "#0D0A08",
+  backgroundColor: "#0F0C0A",
 
   // ── Negocio local (Schema.org LocalBusiness) ───────────────
   business: {

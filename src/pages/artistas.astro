@@ -397,7 +397,7 @@ const faq = [
 </script>
 
 <style>
-  .ar { background: #000; color: #F3F3F0; font-family: "BSP Helvetica", sans-serif; }
+  .ar { background: #0F0C0A; color: #EDE8E1; font-family: "BSP Helvetica", sans-serif; }
 
   /* Hero partido: la foto es vertical y a sangre completa en pantalla ancha
      se quedaba en un recorte de la cara. Texto a la izquierda, foto entera a la derecha. */
@@ -405,95 +405,95 @@ const faq = [
   .ar-hero-content { display: flex; flex-direction: column; justify-content: flex-end; padding: clamp(112px, 15vh, 160px) clamp(20px, 5vw, 88px) clamp(48px, 9vh, 96px); }
   .ar-hero-media { position: relative; overflow: hidden; }
   .ar-hero-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 40% center; display: block; }
-  .ar-hero-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, #000 0%, rgba(0,0,0,0) 22%); pointer-events: none; }
+  .ar-hero-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, #0F0C0A 0%, rgba(15, 12, 10,0) 22%); pointer-events: none; }
   .ar-h1 { margin: 0; font: inherit; }
-  .ar-eyebrow { display: block; font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: rgba(243, 243, 240,.75); margin: 0 0 22px; }
+  .ar-eyebrow { display: block; font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: rgba(237, 232, 225,.75); margin: 0 0 22px; }
   .ar-title { display: block; font-size: clamp(44px, 6vw, 96px); font-weight: 800; letter-spacing: -.045em; line-height: .95; margin: 0 0 28px; }
-  .ar-sub { font-size: clamp(15px, 1.35vw, 19px); line-height: 1.6; color: rgba(243, 243, 240,.82); max-width: 52ch; margin: 0 0 36px; }
-  .ar-btn { display: inline-block; align-self: flex-start; font-size: 14px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #F3F3F0; border: 2px solid #F3F3F0; padding: 15px 34px; text-decoration: none; transition: background .25s, color .25s; }
-  .ar-btn:hover { background: #F3F3F0; color: #000; }
-  .ar-btn--solid { background: #F3F3F0; color: #000; }
-  .ar-btn--solid:hover { background: transparent; color: #F3F3F0; }
+  .ar-sub { font-size: clamp(15px, 1.35vw, 19px); line-height: 1.6; color: rgba(237, 232, 225,.82); max-width: 52ch; margin: 0 0 36px; }
+  .ar-btn { display: inline-block; align-self: flex-start; font-size: 14px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #EDE8E1; border: 2px solid #EDE8E1; padding: 15px 34px; text-decoration: none; transition: background .25s, color .25s; }
+  .ar-btn:hover { background: #EDE8E1; color: #0F0C0A; }
+  .ar-btn--solid { background: #EDE8E1; color: #0F0C0A; }
+  .ar-btn--solid:hover { background: transparent; color: #EDE8E1; }
 
   .ar-section { padding: clamp(72px, 9vw, 128px) clamp(20px, 5vw, 88px); }
-  .ar-section--line { border-top: 1px solid rgba(243, 243, 240,.1); }
+  .ar-section--line { border-top: 1px solid rgba(237, 232, 225,.1); }
   .ar-head { margin: 0 0 clamp(32px, 4vw, 56px); }
-  .ar-kicker { display: block; font-size: 11px; letter-spacing: .28em; color: rgba(243, 243, 240,.5); margin-bottom: 16px; font-weight: 500; }
+  .ar-kicker { display: block; font-size: 11px; letter-spacing: .28em; color: rgba(237, 232, 225,.5); margin-bottom: 16px; font-weight: 500; }
   .ar-h2 { font-size: clamp(30px, 4vw, 52px); font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: 0; }
-  .ar-lead { font-size: 16px; line-height: 1.7; color: rgba(243, 243, 240,.65); margin: 20px 0 0; max-width: 60ch; }
+  .ar-lead { font-size: 16px; line-height: 1.7; color: rgba(237, 232, 225,.65); margin: 20px 0 0; max-width: 60ch; }
 
-  .ar-formats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(243, 243, 240,.14); }
-  .ar-formats li { padding: 28px 24px 32px 0; border-bottom: 1px solid rgba(243, 243, 240,.14); }
-  .ar-formats li:not(:nth-child(4n+1)) { padding-left: 24px; border-left: 1px solid rgba(243, 243, 240,.14); }
+  .ar-formats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(237, 232, 225,.14); }
+  .ar-formats li { padding: 28px 24px 32px 0; border-bottom: 1px solid rgba(237, 232, 225,.14); }
+  .ar-formats li:not(:nth-child(4n+1)) { padding-left: 24px; border-left: 1px solid rgba(237, 232, 225,.14); }
   .ar-formats h3 { font-size: clamp(18px, 1.6vw, 22px); font-weight: 700; letter-spacing: -.01em; line-height: 1.2; margin: 0 0 10px; }
-  .ar-formats p { font-size: 16px; line-height: 1.6; color: rgba(243, 243, 240,.6); margin: 0; }
+  .ar-formats p { font-size: 16px; line-height: 1.6; color: rgba(237, 232, 225,.6); margin: 0; }
 
   .ar-ways { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(16px, 2vw, 28px); }
-  .ar-way { border: 1px solid rgba(243, 243, 240,.16); padding: clamp(28px, 3.5vw, 44px); display: flex; flex-direction: column; }
-  .ar-way-tag { display: block; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: rgba(243, 243, 240,.5); margin-bottom: 14px; font-weight: 600; }
+  .ar-way { border: 1px solid rgba(237, 232, 225,.16); padding: clamp(28px, 3.5vw, 44px); display: flex; flex-direction: column; }
+  .ar-way-tag { display: block; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: rgba(237, 232, 225,.5); margin-bottom: 14px; font-weight: 600; }
   .ar-way h3 { font-size: clamp(22px, 2.2vw, 32px); font-weight: 800; letter-spacing: -.02em; line-height: 1.05; margin: 0 0 18px; }
-  .ar-way p { font-size: 16px; line-height: 1.65; color: rgba(243, 243, 240,.65); margin: 0 0 24px; flex: 1; }
-  .ar-link { color: #F3F3F0; font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; align-self: flex-start; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
+  .ar-way p { font-size: 16px; line-height: 1.65; color: rgba(237, 232, 225,.65); margin: 0 0 24px; flex: 1; }
+  .ar-link { color: #EDE8E1; font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; align-self: flex-start; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
 
   .ar-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(20px, 2.5vw, 40px); }
-  .ar-step-num { display: block; font-size: clamp(40px, 5vw, 72px); font-weight: 800; letter-spacing: -.05em; line-height: .9; color: rgba(243, 243, 240,.2); margin-bottom: 18px; }
+  .ar-step-num { display: block; font-size: clamp(40px, 5vw, 72px); font-weight: 800; letter-spacing: -.05em; line-height: .9; color: rgba(237, 232, 225,.2); margin-bottom: 18px; }
   .ar-steps h3 { font-size: 19px; font-weight: 700; margin: 0 0 10px; }
-  .ar-steps p { font-size: 16px; line-height: 1.6; color: rgba(243, 243, 240,.6); margin: 0; }
+  .ar-steps p { font-size: 16px; line-height: 1.6; color: rgba(237, 232, 225,.6); margin: 0; }
 
-  .ar-proof { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; border-top: 1px solid rgba(243, 243, 240,.1); }
+  .ar-proof { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; border-top: 1px solid rgba(237, 232, 225,.1); }
   .ar-proof img { width: 100%; height: 100%; min-height: 420px; object-fit: cover; display: block; }
   .ar-proof-text { padding: clamp(48px, 6vw, 96px) clamp(20px, 5vw, 88px); display: flex; flex-direction: column; justify-content: center; }
-  .ar-proof-text p { font-size: 16px; line-height: 1.7; color: rgba(243, 243, 240,.65); margin: 20px 0 28px; max-width: 46ch; }
-  .ar-proof-text p a, .ar-direct a { color: #F3F3F0; text-decoration: underline; text-underline-offset: 3px; }
+  .ar-proof-text p { font-size: 16px; line-height: 1.7; color: rgba(237, 232, 225,.65); margin: 20px 0 28px; max-width: 46ch; }
+  .ar-proof-text p a, .ar-direct a { color: #EDE8E1; text-decoration: underline; text-underline-offset: 3px; }
 
   /* FORMULARIO ── mismo lenguaje que /contacto: líneas inferiores, sin caja */
-  .ar-form-section { display: grid; grid-template-columns: 1fr minmax(360px, 560px); gap: clamp(48px, 6vw, 96px); align-items: start; border-top: 1px solid rgba(243, 243, 240,.1); scroll-margin-top: 40px; }
+  .ar-form-section { display: grid; grid-template-columns: 1fr minmax(360px, 560px); gap: clamp(48px, 6vw, 96px); align-items: start; border-top: 1px solid rgba(237, 232, 225,.1); scroll-margin-top: 40px; }
   .ar-checklist { list-style: none; margin: 18px 0 0; padding: 0; }
-  .ar-checklist li { position: relative; padding: 0 0 0 22px; margin: 0 0 10px; font-size: 16px; line-height: 1.55; color: rgba(243, 243, 240,.8); }
-  .ar-checklist li::before { content: "✦"; position: absolute; left: 0; top: 1px; font-size: 11px; color: rgba(243, 243, 240,.45); }
-  .ar-direct { margin: 32px 0 0; font-size: 14px; line-height: 1.6; color: rgba(243, 243, 240,.5); }
+  .ar-checklist li { position: relative; padding: 0 0 0 22px; margin: 0 0 10px; font-size: 16px; line-height: 1.55; color: rgba(237, 232, 225,.8); }
+  .ar-checklist li::before { content: "✦"; position: absolute; left: 0; top: 1px; font-size: 11px; color: rgba(237, 232, 225,.45); }
+  .ar-direct { margin: 32px 0 0; font-size: 14px; line-height: 1.6; color: rgba(237, 232, 225,.5); }
 
   .ar-form { display: flex; flex-direction: column; gap: 28px; }
   .ar-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
   .ar-field { display: flex; flex-direction: column; gap: 8px; }
-  .ar-field label { font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: rgba(243, 243, 240,.55); }
-  .ar-opt { font-weight: 400; color: rgba(243, 243, 240,.3); letter-spacing: .1em; text-transform: lowercase; margin-left: 6px; }
-  .ar-field input, .ar-field textarea, .ar-field select { background: transparent; border: none; border-bottom: 1.5px solid rgba(243, 243, 240,.2); border-radius: 0; padding: 12px 0; color: #F3F3F0; font-family: inherit; font-size: 17px; outline: none; width: 100%; resize: none; transition: border-color .25s ease; }
+  .ar-field label { font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: rgba(237, 232, 225,.55); }
+  .ar-opt { font-weight: 400; color: rgba(237, 232, 225,.3); letter-spacing: .1em; text-transform: lowercase; margin-left: 6px; }
+  .ar-field input, .ar-field textarea, .ar-field select { background: transparent; border: none; border-bottom: 1.5px solid rgba(237, 232, 225,.2); border-radius: 0; padding: 12px 0; color: #EDE8E1; font-family: inherit; font-size: 17px; outline: none; width: 100%; resize: none; transition: border-color .25s ease; }
   .ar-field select { appearance: none; -webkit-appearance: none; padding-right: 24px; cursor: pointer; background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23F3F3F0' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 4px center; }
-  .ar-field select option { background: #0a0a0a; color: #F3F3F0; }
-  .ar-field input::placeholder, .ar-field textarea::placeholder { color: rgba(243, 243, 240,.25); }
-  .ar-field input:focus, .ar-field textarea:focus, .ar-field select:focus { border-bottom-color: #F3F3F0; }
+  .ar-field select option { background: #0D0A08; color: #EDE8E1; }
+  .ar-field input::placeholder, .ar-field textarea::placeholder { color: rgba(237, 232, 225,.25); }
+  .ar-field input:focus, .ar-field textarea:focus, .ar-field select:focus { border-bottom-color: #EDE8E1; }
   .ar-field textarea { line-height: 1.5; min-height: 84px; padding-top: 14px; }
   .ar-hp { position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; opacity: 0; }
-  .ar-submit { align-self: flex-start; margin-top: 8px; background: transparent; color: #F3F3F0; border: 2px solid #F3F3F0; padding: 14px 28px; font-family: inherit; font-size: 15px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; display: inline-flex; align-items: center; gap: 12px; transition: background .25s ease, color .25s ease; }
-  .ar-submit:hover { background: #F3F3F0; color: #000; }
+  .ar-submit { align-self: flex-start; margin-top: 8px; background: transparent; color: #EDE8E1; border: 2px solid #EDE8E1; padding: 14px 28px; font-family: inherit; font-size: 15px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; display: inline-flex; align-items: center; gap: 12px; transition: background .25s ease, color .25s ease; }
+  .ar-submit:hover { background: #EDE8E1; color: #0F0C0A; }
   .ar-submit:disabled { opacity: .6; cursor: wait; }
   .ar-error { color: #e89090; font-size: 13px; margin: 4px 0 0; min-height: 16px; opacity: 0; transition: opacity .2s ease; }
   .ar-error.show { opacity: 1; }
   .ar-success { text-align: center; padding: 60px 0; }
   .ar-success-mark { font-size: 48px; margin-bottom: 20px; }
   .ar-success h3 { font-size: 42px; font-weight: 800; letter-spacing: -1.5px; margin: 0 0 16px; }
-  .ar-success p { color: rgba(243, 243, 240,.6); font-size: 16px; line-height: 1.6; margin: 0 auto; max-width: 36ch; }
+  .ar-success p { color: rgba(237, 232, 225,.6); font-size: 16px; line-height: 1.6; margin: 0 auto; max-width: 36ch; }
 
-  .ar-faq { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(243, 243, 240,.12); }
-  .ar-faq li { border-bottom: 1px solid rgba(243, 243, 240,.12); }
+  .ar-faq { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(237, 232, 225,.12); }
+  .ar-faq li { border-bottom: 1px solid rgba(237, 232, 225,.12); }
   .ar-faq summary { cursor: pointer; list-style: none; padding: 22px 36px 22px 0; font-size: clamp(16px, 1.5vw, 20px); font-weight: 600; line-height: 1.35; position: relative; }
   .ar-faq summary::-webkit-details-marker { display: none; }
-  .ar-faq summary::after { content: ""; position: absolute; right: 6px; top: 50%; width: 14px; height: 2px; background: rgba(243, 243, 240,.7); transform: translateY(-50%); }
-  .ar-faq summary::before { content: ""; position: absolute; right: 12px; top: 50%; width: 2px; height: 14px; background: rgba(243, 243, 240,.7); transform: translateY(-50%); transition: opacity .2s; }
+  .ar-faq summary::after { content: ""; position: absolute; right: 6px; top: 50%; width: 14px; height: 2px; background: rgba(237, 232, 225,.7); transform: translateY(-50%); }
+  .ar-faq summary::before { content: ""; position: absolute; right: 12px; top: 50%; width: 2px; height: 14px; background: rgba(237, 232, 225,.7); transform: translateY(-50%); transition: opacity .2s; }
   .ar-faq details[open] summary::before { opacity: 0; }
-  .ar-faq p { font-size: 16px; line-height: 1.7; color: rgba(243, 243, 240,.65); margin: 0 0 24px; max-width: 62ch; }
+  .ar-faq p { font-size: 16px; line-height: 1.7; color: rgba(237, 232, 225,.65); margin: 0 0 24px; max-width: 62ch; }
 
-  .ar-cta { text-align: center; padding: clamp(88px, 11vw, 150px) 20px; border-top: 1px solid rgba(243, 243, 240,.1); }
+  .ar-cta { text-align: center; padding: clamp(88px, 11vw, 150px) 20px; border-top: 1px solid rgba(237, 232, 225,.1); }
   .ar-cta h2 { font-size: clamp(34px, 6vw, 80px); font-weight: 800; letter-spacing: -.04em; line-height: .98; margin: 0 0 24px; }
-  .ar-cta p { font-size: 17px; line-height: 1.5; color: rgba(243, 243, 240,.6); margin: 0 auto 40px; max-width: 44ch; }
+  .ar-cta p { font-size: 17px; line-height: 1.5; color: rgba(237, 232, 225,.6); margin: 0 auto 40px; max-width: 44ch; }
   .ar-cta .ar-btn { align-self: auto; }
 
   @media (max-width: 1024px) {
     .ar-ways { grid-template-columns: 1fr; }
     .ar-formats { grid-template-columns: 1fr 1fr; }
     .ar-formats li, .ar-formats li:not(:nth-child(4n+1)) { padding: 24px 20px 28px 0; border-left: none; }
-    .ar-formats li:nth-child(even) { padding-left: 20px; border-left: 1px solid rgba(243, 243, 240,.14); }
+    .ar-formats li:nth-child(even) { padding-left: 20px; border-left: 1px solid rgba(237, 232, 225,.14); }
     .ar-steps { grid-template-columns: repeat(2, 1fr); row-gap: 40px; }
     .ar-form-section { grid-template-columns: 1fr; }
   }
@@ -502,7 +502,7 @@ const faq = [
     .ar-hero { grid-template-columns: 1fr; min-height: 0; }
     .ar-hero-media { order: -1; height: 58svh; min-height: 340px; }
     .ar-hero-media img { object-position: center 30%; }
-    .ar-hero-media::after { background: linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, #000 100%); }
+    .ar-hero-media::after { background: linear-gradient(180deg, rgba(15, 12, 10,.45) 0%, rgba(15, 12, 10,0) 30%, rgba(15, 12, 10,0) 70%, #0F0C0A 100%); }
     .ar-hero-content { padding: 8px 24px 64px; }
     .ar-proof { grid-template-columns: 1fr; }
     /* El recorte apaisado se queda con el escenario iluminado, no con las cabezas en negro */
