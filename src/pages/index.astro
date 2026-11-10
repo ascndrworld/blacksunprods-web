@@ -505,6 +505,10 @@ img, video {
 @media (min-width: 769px) {
   .stats-item:first-child { padding-left: clamp(24px, 5vw, 88px); }
 }
+/* En escritorio cada etiqueta va en una sola línea */
+@media (min-width: 1100px) {
+  .stats-label { white-space: nowrap; max-width: none; }
+}
 /* Hover: la celda se ilumina, la cifra sube un poco y aparece una línea de acento */
 .stats-item { position: relative; }
 /* El fondo va en un pseudo: .stats-item ya tiene la transición del scroll-reveal */
