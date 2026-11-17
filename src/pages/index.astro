@@ -75,7 +75,7 @@ const ARTISTS = [
     loop
     playsinline
     webkit-playsinline="true"
-    preload="metadata"
+    preload="auto"
     disablepictureinpicture
     disableremoteplayback
     aria-hidden="true"
@@ -89,6 +89,12 @@ const ARTISTS = [
     (function() {
       var v = document.getElementById('homeVideoBg');
       if (!v) return;
+      // Elegimos aquí la versión (vertical en móvil) en vez de fiarlo a <source media>:
+      // Safari en iPhone no siempre lo resuelve y el vídeo se quedaba sin cargar.
+      var movil = window.matchMedia('(max-width: 768px)').matches;
+      v.poster = movil ? '/video/hero-hf5-poster-movil.webp' : '/video/hero-hf5-poster.webp';
+      v.src = movil ? '/video/hero-hf5-movil.mp4' : '/video/hero-hf5.mp4';
+      v.load();
       v.muted = true;
       v.defaultMuted = true;
       v.playsInline = true;
