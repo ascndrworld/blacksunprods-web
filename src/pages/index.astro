@@ -79,7 +79,7 @@ const ARTISTS = [
     disablepictureinpicture
     disableremoteplayback
     aria-hidden="true"
-    poster="/video/hero-hf5-poster.webp"></video>
+    poster="/video/hero-hf5-poster.webp?v=2"></video>
   <!-- Aftermovie Halloween Fest V (12 s, desde 18,12 s: el 18,0 es un fotograma en negativo).
        La fuente (vertical en móvil / apaisada) la pone el script de abajo. -->
   <div class="home-video-overlay" aria-hidden="true"></div>
@@ -97,8 +97,8 @@ const ARTISTS = [
       // 2º la versión: vertical en móvil. Se elige aquí y no con <source media>,
       // que Safari en iPhone no siempre resolvía.
       var movil = window.matchMedia('(max-width: 768px)').matches;
-      v.poster = movil ? '/video/hero-hf5-poster-movil.webp' : '/video/hero-hf5-poster.webp';
-      v.src = movil ? '/video/hero-hf5-movil.mp4' : '/video/hero-hf5.mp4';
+      v.poster = movil ? '/video/hero-hf5-poster-movil.webp?v=2' : '/video/hero-hf5-poster.webp?v=2';
+      v.src = movil ? '/video/hero-hf5-movil.mp4?v=2' : '/video/hero-hf5.mp4?v=2';
       function tryPlay() {
         if (!v.paused) return;
         try {
