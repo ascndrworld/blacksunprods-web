@@ -22,7 +22,19 @@ const year = new Date().getFullYear();
 
 // Testimonios ocultos hasta tener reales de ayuntamientos y promotores
 // (el bloque sigue abajo; pon true para mostrarlo). Ver PENDIENTES.md.
-const SHOW_TESTIMONIALS = false;
+const SHOW_TESTIMONIALS = true;
+const TESTIMONIALS = [
+  {
+    name: "Lorenzo Hidalgo",
+    role: "Dueño de Cónclave · +26 años en el sector",
+    quote: "Llevo muchos años trabajando en la noche y pensaba que montar la Navidad en la caseta sería un lío. Con Black Sun Prods hablo con una persona y ellos se encargan del resto: artistas, técnica, seguridad y entradas. Mi marca vuelve a ser el punto de encuentro del pueblo.",
+  },
+  {
+    name: "Luis Ramírez",
+    role: "Cofundador de Halloween Fest · 5 ediciones",
+    quote: "En las dos primeras ediciones se nos veía como un evento poco profesional. Desde que trabajamos con Black Sun Prods, Halloween Fest crea comunidad y llega a más gente en cada edición: ya juntamos más de 600 personas por noche.",
+  },
+];
 // Tira de Navidad 2026 en la base del vídeo: desaparece sola en el primer build tras Nochevieja.
 const SHOW_XMAS_STRIP = new Date() < new Date("2027-01-01T08:00:00+01:00");
 // Artistas que han tocado en nuestras producciones (orden: cabezas de cartel primero)
@@ -387,36 +399,25 @@ const ARTISTS = [
   </section>
 
   <!-- ════ TESTIMONIOS ════
-       PENDIENTE: son huecos de recordatorio. Sustituir por testimonios reales de
-       ayuntamientos y promotores antes de publicar (ver PENDIENTES.md). -->
+       Textos aprobados por Frank el 17/11/2026 (adaptados de los que tenía la web
+       en septiembre). Pendientes de confirmar: Esther Sánchez (staff de Halloween
+       Fest y Navidad en la Caseta) y Tachii (artista). -->
   {SHOW_TESTIMONIALS && (
   <section class="tst" id="testimonios">
     <div class="tst-head" data-reveal>
       <span class="svc-eyebrow">lo que dicen</span>
       <h2 class="svc-title">Testimonios</h2>
     </div>
-    <div class="tst-grid">
-      <figure class="tst-item tst-item--pending">
-        <blockquote class="tst-quote">Pendiente: testimonio de un ayuntamiento o concejalía con la que hayamos producido un evento.</blockquote>
-        <figcaption class="tst-author">
-          <span class="tst-name">Ayuntamiento</span>
-          <span class="tst-role">Concejalía de Fiestas / Cultura · por conseguir</span>
-        </figcaption>
-      </figure>
-      <figure class="tst-item tst-item--pending">
-        <blockquote class="tst-quote">Pendiente: testimonio de un promotor, sala o recinto con el que hayamos trabajado.</blockquote>
-        <figcaption class="tst-author">
-          <span class="tst-name">Promotor / sala</span>
-          <span class="tst-role">Por conseguir</span>
-        </figcaption>
-      </figure>
-      <figure class="tst-item tst-item--pending">
-        <blockquote class="tst-quote">Pendiente: testimonio de un segundo ayuntamiento, marca o partner.</blockquote>
-        <figcaption class="tst-author">
-          <span class="tst-name">Ayuntamiento / partner</span>
-          <span class="tst-role">Por conseguir</span>
-        </figcaption>
-      </figure>
+    <div class="tst-grid" style={`--tst-cols: ${TESTIMONIALS.length}`}>
+      {TESTIMONIALS.map((t) => (
+        <figure class="tst-item" data-reveal>
+          <blockquote class="tst-quote">{t.quote}</blockquote>
+          <figcaption class="tst-author">
+            <span class="tst-name">{t.name}</span>
+            <span class="tst-role">{t.role}</span>
+          </figcaption>
+        </figure>
+      ))}
     </div>
     <div class="tst-dots" role="tablist" aria-label="Navegación de testimonios"></div>
   </section>
@@ -1138,7 +1139,7 @@ a.artists-link:focus-visible { outline: 2px solid var(--rojo); outline-offset: 6
 .tst-head { margin: 0 0 clamp(40px, 5vw, 64px); text-align: left; }
 .tst-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(var(--tst-cols, 3), minmax(0, 1fr));
 }
 .tst-item {
   margin: 0;
