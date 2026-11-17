@@ -1,0 +1,50 @@
+---
+/*
+ * Foco de sala: un halo rojo muy suave que sigue al ratón, como un cañón de luz
+ * buscando al artista. Es la firma visual de «Luz de sala».
+ * - Solo con ratón (hover + puntero fino); en táctil no existe.
+ * - Respeta prefers-reduced-motion (no se crea).
+ * - Capa fija con pointer-events:none y mix-blend-mode:screen: aclara el negro
+ *   hacia el rojo sin tapar nada ni robar clics.
+ * - Se atenúa sobre fotos y vídeos para no ensuciarlos.
+ */
+---
+<div class="cursor-light" id="cursorLight" aria-hidden="true"></div>
+<script is:inline>
+  (function () {
+    var el = document.getElementById("cursorLight");
+    if (!el) return;
+    var mq = window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
+    if (!mq.matches) { el.remove(); return; }
+    var x = innerWidth / 2, y = innerHeight / 3, tx = x, ty = y, raf = 0, shown = false;
+    function loop() {
+      // inercia suave: el foco «persigue» al ratón, no va pegado
+      x += (tx - x) * 0.12; y += (ty - y) * 0.12;
+      el.style.transform = "translate3d(" + (x - 350) + "px," + (y - 350) + "px,0)";
+      if (Math.abs(tx - x) > 0.3 || Math.abs(ty - y) > 0.3) raf = requestAnimationFrame(loop); else raf = 0;
+    }
+    window.addEventListener("pointermove", function (e) {
+      if (e.pointerType !== "mouse") return;
+      tx = e.clientX; ty = e.clientY;
+      if (!shown) { shown = true; x = tx; y = ty; el.classList.add("is-on"); }
+      var t = e.target;
+      el.classList.toggle("is-dim", !!(t && t.closest && t.closest("img, video, picture, iframe, .hs-work-item")));
+      if (!raf) raf = requestAnimationFrame(loop);
+    }, { passive: true });
+    document.documentElement.addEventListener("mouseleave", function () { shown = false; el.classList.remove("is-on"); });
+  })();
+</script>
+<style>
+  .cursor-light {
+    position: fixed; left: 0; top: 0; z-index: 800;
+    width: 700px; height: 700px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(184, 50, 42, 0.16) 0%, rgba(150, 34, 24, 0.07) 35%, transparent 68%);
+    mix-blend-mode: screen;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .6s ease;
+    will-change: transform;
+  }
+  .cursor-light.is-on { opacity: 1; }
+  .cursor-light.is-on.is-dim { opacity: 0.35; }
+</style>

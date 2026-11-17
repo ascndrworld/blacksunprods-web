@@ -1,0 +1,193 @@
+---
+/*
+ * /agenda — Próximos eventos de Black Sun Prods.
+ *
+ * Cada evento sale también como Event de Schema.org (Google lo puede enseñar
+ * con fecha y lugar en los resultados y en «eventos cerca de mí»).
+ * Para añadir uno: copia un objeto de EVENTS. Los eventos ya pasados se ocultan
+ * solos en el build (comparando `end` con la fecha de compilación).
+ */
+import Layout from "../layouts/Layout.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { SITE, absUrl } from "../config/site.mjs";
+
+const IMG = "/images/agenda";
+const VENUE = { name: "Caseta Municipal de Los Villares", place: "Los Villares", region: "Jaén" };
+const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Caseta Municipal Los Villares Jaén`)}`;
+
+// Tramos comunes a las dos noches (definitivos, 14/11/2026). Todas con 1 consumición.
+const TIERS = [
+  { name: "Promocional", note: "Solo las 50 primeras · solo online", price: 10 },
+  { name: "Anticipada", note: "Limitadas · hasta el dom. 6 dic.", price: 12 },
+  { name: "General", note: "Online y física · desde el lun. 7 dic.", price: 14 },
+  { name: "Taquilla", note: "El mismo día", price: 18 },
+];
+
+// ── MARCA: enlaces de compra. Vacío = se muestra el texto de puntos de venta sin botón. ──
+const EVENTS = [
+  {
+    id: "nochebuena-2026",
+    name: "Nochebuena en la Caseta 2026",
+    day: "Jueves 24 de diciembre",
+    short: "24.12",
+    // `end` solo sirve para ocultar el evento cuando ya ha pasado (no se publica).
+    start: "2026-12-24T23:30:00+01:00",
+    end: "2026-12-25T06:00:00+01:00",
+    opens: "23:30",
+    // Oculto por petición de Frank (17/11): poner "Tachii" cuando se pueda anunciar.
+    artist: "",
+    img: `${IMG}/nochebuena-2026-caseta-los-villares.webp`,
+    alt: "Cartel de Nochebuena en la Caseta 2026: árbol nevado sobre papel rojo, jueves 24 de diciembre en la Caseta Municipal de Los Villares",
+    tickets: "",
+  },
+  {
+    id: "nochevieja-2026",
+    name: "Nochevieja en la Caseta 2026",
+    day: "Jueves 31 de diciembre",
+    short: "31.12",
+    // Abre a las 00:30, ya el 1 de enero de 2027.
+    start: "2027-01-01T00:30:00+01:00",
+    end: "2027-01-01T07:00:00+01:00",
+    opens: "00:30",
+    // Oculto por petición de Frank (17/11): poner "DJ Danny" cuando se pueda anunciar.
+    artist: "",
+    img: `${IMG}/nochevieja-2026-caseta-los-villares.webp`,
+    alt: "Cartel de Nochevieja en la Caseta 2026: campana dorada nevada sobre papel azul, jueves 31 de diciembre en la Caseta Municipal de Los Villares",
+    tickets: "",
+  },
+].filter((e) => new Date(e.end) > new Date());
+
+const canonical = absUrl("/agenda");
+const ogImage = absUrl(`${IMG}/og-agenda-navidad-2026.jpg`);
+
+const schema = EVENTS.map((e) => ({
+  "@context": "https://schema.org",
+  "@type": "MusicEvent",
+  "name": e.name,
+  "startDate": e.start,
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "location": {
+    "@type": "Place",
+    "name": VENUE.name,
+    "address": { "@type": "PostalAddress", "addressLocality": VENUE.place, "addressRegion": VENUE.region, "addressCountry": "ES" },
+  },
+  "image": [absUrl(e.img)],
+  "description": `${e.name}${e.artist ? ` con ${e.artist}` : ""}. Apertura a las ${e.opens} en la ${VENUE.name} (${VENUE.region}). Organiza ${SITE.name} × Cónclave.`,
+  "performer": e.artist ? { "@type": "Person", "name": e.artist } : undefined,
+  "organizer": { "@type": "Organization", "name": SITE.name, "url": SITE.url },
+  "offers": TIERS.map((t) => ({
+    "@type": "Offer",
+    "name": t.name,
+    "price": t.price,
+    "priceCurrency": "EUR",
+    "url": e.tickets || `${canonical}#${e.id}`,
+  })),
+}));
+---
+
+<Layout
+  title="Agenda: Nochebuena y Nochevieja 2026 en Los Villares"
+  description="Próximos eventos de Black Sun Prods: Nochebuena (jueves 24) y Nochevieja (jueves 31) en la Caseta Municipal de Los Villares, Jaén. Entradas desde 10 €."
+  canonical={canonical}
+  ogImage={ogImage}
+  ogImageAlt="Carteles de Nochebuena y Nochevieja en la Caseta 2026, Los Villares"
+>
+<Fragment slot="head">
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+</Fragment>
+
+<main class="ag">
+  <header class="ag-head">
+    <span class="ag-eyebrow">Agenda · {SITE.name} × Cónclave</span>
+    <h1 class="ag-title">Próximas noches<span class="ag-punto">.</span></h1>
+    <p class="ag-lead">Lo que viene en la Caseta Municipal de {VENUE.place}. Entradas limitadas, todas con una consumición incluida.</p>
+  </header>
+
+  {EVENTS.length === 0 && (
+    <p class="ag-empty">Ahora mismo no hay fechas anunciadas. Síguenos en <a href={SITE.instagram} target="_blank" rel="noopener">Instagram</a> para enterarte el primero.</p>
+  )}
+
+  <ul class="ag-list">
+    {EVENTS.map((e) => (
+      <li class="ag-event" id={e.id} data-reveal>
+        <div class="ag-poster"><img src={e.img} alt={e.alt} width="900" height="1200" loading="lazy" /></div>
+        <div class="ag-info">
+          <span class="ag-date">{e.short}<small>2026</small></span>
+          <h2 class="ag-name">{e.name.replace(" 2026", "")}</h2>
+          <dl class="ag-facts">
+            <div><dt>Cuándo</dt><dd>{e.day} · apertura {e.opens}</dd></div>
+            <div><dt>Dónde</dt><dd>{VENUE.name} <a href={mapsUrl} target="_blank" rel="noopener">Cómo llegar →</a></dd></div>
+            {e.artist && <div><dt>Artista</dt><dd>{e.artist}</dd></div>}
+          </dl>
+          <ul class="ag-tiers">
+            {TIERS.map((t) => (
+              <li><span class="ag-tier-name">{t.name}<small>{t.note}</small></span><span class="ag-tier-price">{t.price} €</span></li>
+            ))}
+          </ul>
+          {e.tickets
+            ? <a class="ag-btn" href={e.tickets} target="_blank" rel="noopener">Comprar entradas</a>
+            : <p class="ag-sale">Puntos de venta oficiales: <strong>Fourvenues</strong> (online) y <strong>Mafrix</strong> (física).</p>}
+        </div>
+      </li>
+    ))}
+  </ul>
+
+  <section class="ag-cta">
+    <h2>¿Quieres una noche así en tu municipio o tu sala?</h2>
+    <a class="ag-link" href="/contacto">Hablemos de tu evento</a>
+  </section>
+</main>
+
+<SiteFooter />
+
+<style>
+  .ag { background: radial-gradient(60% 40% at 50% 0%, rgba(150, 34, 24, 0.16), transparent 70%), #0F0C0A; color: #EDE8E1; font-family: "BSP Helvetica", sans-serif; }
+  .ag-head { padding: clamp(130px, 16vw, 200px) clamp(24px, 5vw, 88px) clamp(40px, 5vw, 72px); }
+  .ag-eyebrow { display: block; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(237, 232, 225, 0.5); margin-bottom: 18px; font-weight: 500; }
+  /* padding-top: hueco para la tilde de «PRÓXIMAS» (con line-height < 1 se sale por arriba) */
+  .ag-title { font-size: clamp(48px, 9vw, 128px); font-weight: 800; letter-spacing: -0.045em; line-height: 0.92; text-transform: uppercase; margin: 0 0 22px; padding-top: 0.16em; }
+  .ag-punto { color: var(--rojo); }
+  .ag-lead { font-size: 17px; line-height: 1.6; color: rgba(237, 232, 225, 0.6); max-width: 52ch; margin: 0; }
+  .ag-empty { padding: 0 clamp(24px, 5vw, 88px) 80px; color: rgba(237, 232, 225, 0.7); }
+  .ag-empty a { color: #EDE8E1; }
+
+  .ag-list { list-style: none; margin: 0; padding: 0; }
+  .ag-event {
+    display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 5vw, 88px);
+    padding: clamp(40px, 6vw, 88px) clamp(24px, 5vw, 88px);
+    border-top: 1px solid rgba(237, 232, 225, 0.1);
+    scroll-margin-top: 80px;
+  }
+  .ag-poster img { display: block; width: 100%; height: auto; box-shadow: 0 30px 80px -30px rgba(150, 34, 24, 0.55); }
+  .ag-info { min-width: 0; display: flex; flex-direction: column; gap: 24px; }
+  .ag-date { font-size: clamp(64px, 10vw, 150px); font-weight: 800; letter-spacing: -0.06em; line-height: 0.85; color: transparent; -webkit-text-stroke: 1.5px rgba(237, 232, 225, 0.8); display: flex; align-items: flex-start; gap: 12px; }
+  .ag-date small { font-size: 12px; letter-spacing: 0.24em; -webkit-text-stroke: 0; color: var(--rojo); font-weight: 600; margin-top: 0.6em; }
+  .ag-name { font-size: clamp(30px, 4vw, 54px); font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin: 0; }
+  .ag-facts { margin: 0; display: grid; gap: 0; border-top: 1px solid rgba(237, 232, 225, 0.14); }
+  .ag-facts div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 16px; padding: 14px 0; border-bottom: 1px solid rgba(237, 232, 225, 0.14); }
+  .ag-facts dt { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237, 232, 225, 0.5); padding-top: 3px; }
+  .ag-facts dd { margin: 0; font-size: 16px; }
+  .ag-facts a { color: rgba(237, 232, 225, 0.6); font-size: 13px; margin-left: 8px; text-underline-offset: 3px; text-decoration-color: var(--rojo); white-space: nowrap; }
+  .ag-tiers { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .ag-tiers li { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 18px; border: 1px solid rgba(237, 232, 225, 0.12); }
+  .ag-tiers li:first-child { border-color: rgba(184, 50, 42, 0.6); background: rgba(184, 50, 42, 0.08); }
+  .ag-tier-name { font-weight: 700; display: flex; flex-direction: column; gap: 2px; }
+  .ag-tier-name small { font-weight: 400; font-size: 13px; color: rgba(237, 232, 225, 0.55); }
+  .ag-tier-price { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ag-btn { align-self: flex-start; font-size: 14px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #0F0C0A; background: #EDE8E1; text-decoration: none; padding: 16px 36px; border: 2px solid #EDE8E1; transition: background .25s, color .25s, border-color .25s; }
+  .ag-btn:hover { background: var(--rojo); border-color: var(--rojo); color: #EDE8E1; }
+  .ag-sale { margin: 0; font-size: 15px; color: rgba(237, 232, 225, 0.7); }
+  .ag-sale strong { color: #EDE8E1; }
+
+  .ag-cta { text-align: center; padding: clamp(80px, 10vw, 140px) 24px; border-top: 1px solid rgba(184, 50, 42, 0.35); background: radial-gradient(45% 60% at 50% 50%, rgba(170, 38, 26, 0.22), transparent 75%); }
+  .ag-cta h2 { font-size: clamp(26px, 4vw, 48px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin: 0 auto 28px; max-width: 18ch; text-wrap: balance; }
+  .ag-link { font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: #EDE8E1; text-decoration: none; border-bottom: 1px solid var(--rojo); padding-bottom: 4px; }
+
+  @media (max-width: 820px) {
+    .ag-event { grid-template-columns: 1fr; padding-inline: 24px; }
+    .ag-poster { max-width: 460px; }
+    .ag-facts div { grid-template-columns: 1fr; gap: 2px; }
+  }
+</style>
+</Layout>

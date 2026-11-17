@@ -31,6 +31,8 @@
       --dim:      #332D28;
       --field-bg: #1E1A17;
       --draw-bg:  #1A1714;
+      /* Luz de sala: rojo brasa como iluminación, nunca como bloque de color */
+      --rojo:      #B8322A;
     }
 
     html, body {
@@ -1790,7 +1792,8 @@
 .home-video-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(15, 12, 10,0.25);
+  /* luz de sala: el rojo sube desde abajo sobre el vídeo */
+  background: linear-gradient(to top, rgba(120, 24, 16, 0.45) 0%, rgba(15, 12, 10, 0.25) 45%, rgba(15, 12, 10, 0.25) 100%);
   z-index: 1;
   pointer-events: none;
 }
@@ -2365,4 +2368,35 @@
   }
   .home-hero-title { text-align: left !important; }
   .home-hero-sub { text-align: left; }
+}
+
+/* ════ LUZ DE SALA · páginas interiores ════
+   El rojo como iluminación, nunca como bloque: el mismo lenguaje de la home.
+   Va aquí (global) para no repetirlo en cada página; los !important solo pisan
+   el background-image / border de los estilos con scope de cada página. */
+
+/* 1 · Portadas con foto: el rojo sube desde abajo, como un foco desde el escenario */
+.ay-hero-overlay::after, .st-hero-overlay::after, .bc-hero-overlay::after,
+.cx-hero-overlay::after, .hf-header-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(120, 24, 16, 0.42) 0%, rgba(120, 24, 16, 0.12) 30%, transparent 55%);
+  pointer-events: none;
+}
+
+/* 2 · Cabeceras sin foto (proyectos, contacto): resplandor desde arriba */
+.pj-head, .ct-page {
+  background-image: radial-gradient(60% 50% at 30% 0%, rgba(150, 34, 24, 0.16), transparent 70%) !important;
+}
+
+/* 3 · Separadores de sección: la línea se enciende en rojo en el centro */
+.ay-section--line, .st-section--line, .ar-section--line {
+  border-image: linear-gradient(90deg, rgba(237, 232, 225, 0.1), rgba(184, 50, 42, 0.45) 50%, rgba(237, 232, 225, 0.1)) 1;
+}
+
+/* 4 · Cierres: foco rojo detrás del titular */
+.ay-cta, .st-cta, .ar-cta, .bc-cta, .cx-cta, .hf-cta, .tp-cta {
+  background-image: radial-gradient(45% 60% at 50% 45%, rgba(170, 38, 26, 0.26), rgba(120, 24, 16, 0.07) 55%, transparent 80%) !important;
+  border-top-color: rgba(184, 50, 42, 0.35) !important;
 }

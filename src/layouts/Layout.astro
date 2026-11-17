@@ -3,6 +3,8 @@ import Header from "../components/Header.astro";
 import Analytics from "../components/Analytics.astro";
 import CookieConsent from "../components/CookieConsent.astro";
 import ContactTracking from "../components/ContactTracking.astro";
+import WhatsAppFloat from "../components/WhatsAppFloat.astro";
+import CursorLight from "../components/CursorLight.astro";
 import { SITE, absUrl, hasPhone } from "../config/site.mjs";
 const GTM_ID = import.meta.env.PUBLIC_GTM_ID;
 // Seguro por defecto: la web NO se indexa salvo que PUBLIC_INDEXABLE=true
@@ -135,6 +137,8 @@ const {
   <slot />
   <CookieConsent />
   <ContactTracking />
+  <WhatsAppFloat />
+  <CursorLight />
 
   <!-- Scroll-reveal global: el contenido marcado con [data-reveal] aparece
        subiendo al entrar en pantalla (estilo dialedweb.com). Un único
