@@ -29,6 +29,8 @@
       if (!shown) { shown = true; x = tx; y = ty; el.classList.add("is-on"); }
       var t = e.target;
       el.classList.toggle("is-dim", !!(t && t.closest && t.closest("img, video, picture, iframe, .hs-work-item")));
+      // La tira de Navidad es estática: el foco desaparece encima de ella
+      el.classList.toggle("is-off", !!(t && t.closest && t.closest(".xmas-strip")));
       if (!raf) raf = requestAnimationFrame(loop);
     }, { passive: true });
     document.documentElement.addEventListener("mouseleave", function () { shown = false; el.classList.remove("is-on"); });
@@ -47,4 +49,5 @@
   }
   .cursor-light.is-on { opacity: 1; }
   .cursor-light.is-on.is-dim { opacity: 0.35; }
+  .cursor-light.is-on.is-off { opacity: 0; }
 </style>

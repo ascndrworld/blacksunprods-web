@@ -1026,8 +1026,8 @@ img, video {
 .xmas-strip {
   position: absolute; left: 0; right: 0; bottom: 0; z-index: 6;
   padding: 14px clamp(24px, 5vw, 88px);
-  background: linear-gradient(90deg, rgba(15, 12, 10, 0.82), rgba(40, 12, 9, 0.72) 50%, rgba(15, 12, 10, 0.82));
-  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  /* fondo opaco: que no se vea el vídeo moverse a través de la tira */
+  background: linear-gradient(90deg, #0F0C0A, #1F0E0B 50%, #0F0C0A);
   border-top: 1px solid transparent;
   border-image: linear-gradient(90deg, rgba(184, 50, 42, 0.15), rgba(184, 50, 42, 0.9) 50%, rgba(184, 50, 42, 0.15)) 1;
   font-family: "BSP Helvetica", sans-serif;
@@ -1039,11 +1039,11 @@ img, video {
 .xmas-strip-tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--rojo); box-shadow: 0 0 10px rgba(184, 50, 42, 0.9); }
 .xmas-strip-text { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
 .xmas-strip-place { font-weight: 400; color: rgba(237, 232, 225, 0.65); }
+/* Tira estática: sin efectos al pasar el ratón (pedido por Frank, 17/11) */
 .xmas-strip-btn {
   flex: none; padding: 8px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
-  border: 1px solid rgba(237, 232, 225, 0.4); transition: background .25s, border-color .25s, color .25s;
+  border: 1px solid rgba(237, 232, 225, 0.4);
 }
-.xmas-strip:hover .xmas-strip-btn { background: var(--rojo); border-color: var(--rojo); }
 .xmas-strip-link:focus-visible { outline: 2px solid var(--rojo); outline-offset: 4px; }
 @media (max-width: 768px) {
   .xmas-strip { padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); }
