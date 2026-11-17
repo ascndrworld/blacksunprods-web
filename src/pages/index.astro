@@ -1046,7 +1046,9 @@ img, video {
 }
 .xmas-strip-link:focus-visible { outline: 2px solid var(--rojo); outline-offset: 4px; }
 @media (max-width: 768px) {
-  .xmas-strip { padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); }
+  /* Sin env(safe-area-inset-bottom): la tira no está pegada al borde de la pantalla y en
+     iPhone ese valor cambia al esconderse la barra de Safari, estirando la tira al hacer scroll. */
+  .xmas-strip { padding: 12px 16px; }
   .xmas-strip-link { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "tag btn" "text btn"; gap: 4px 12px; justify-content: stretch; }
   .xmas-strip-tag { grid-area: tag; font-size: 10px; letter-spacing: 0.2em; }
   .xmas-strip-text { grid-area: text; font-size: 15px; }
