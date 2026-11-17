@@ -79,27 +79,26 @@ const ARTISTS = [
     disablepictureinpicture
     disableremoteplayback
     aria-hidden="true"
-    poster="/video/hero-hf5-poster.webp">
-    <!-- Aftermovie Halloween Fest V (12 s): vertical en móvil, apaisado en el resto -->
-    <source media="(max-width: 768px)" src="/video/hero-hf5-movil.mp4" type="video/mp4" />
-    <source src="/video/hero-hf5.mp4" type="video/mp4" />
-  </video>
+    poster="/video/hero-hf5-poster.webp"></video>
+  <!-- Aftermovie Halloween Fest V (12 s, desde 18,12 s: el 18,0 es un fotograma en negativo).
+       La fuente (vertical en móvil / apaisada) la pone el script de abajo. -->
   <div class="home-video-overlay" aria-hidden="true"></div>
   <script is:inline>
     (function() {
       var v = document.getElementById('homeVideoBg');
       if (!v) return;
-      // Elegimos aquí la versión (vertical en móvil) en vez de fiarlo a <source media>:
-      // Safari en iPhone no siempre lo resuelve y el vídeo se quedaba sin cargar.
-      var movil = window.matchMedia('(max-width: 768px)').matches;
-      v.poster = movil ? '/video/hero-hf5-poster-movil.webp' : '/video/hero-hf5-poster.webp';
-      v.src = movil ? '/video/hero-hf5-movil.mp4' : '/video/hero-hf5.mp4';
-      v.load();
+      // 1º silenciado e inline: iPhone solo reproduce solo un vídeo que ya es mudo
+      // cuando se le asigna la fuente (si no, espera a que el usuario pulse).
       v.muted = true;
       v.defaultMuted = true;
       v.playsInline = true;
       v.setAttribute('muted', '');
       v.setAttribute('playsinline', '');
+      // 2º la versión: vertical en móvil. Se elige aquí y no con <source media>,
+      // que Safari en iPhone no siempre resolvía.
+      var movil = window.matchMedia('(max-width: 768px)').matches;
+      v.poster = movil ? '/video/hero-hf5-poster-movil.webp' : '/video/hero-hf5-poster.webp';
+      v.src = movil ? '/video/hero-hf5-movil.mp4' : '/video/hero-hf5.mp4';
       function tryPlay() {
         if (!v.paused) return;
         try {
@@ -107,6 +106,7 @@ const ARTISTS = [
           if (p && p.catch) p.catch(function() { /* bloqueado: reintentamos en el siguiente gesto */ });
         } catch (e) {}
       }
+      tryPlay();
       if (v.readyState >= 2) tryPlay();
       v.addEventListener('loadedmetadata', tryPlay);
       v.addEventListener('loadeddata', tryPlay);
