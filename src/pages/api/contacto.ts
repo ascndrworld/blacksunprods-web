@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { SITE as BRAND, absUrl, hasWhatsapp, hasPhone, phoneLabel } from "../../config/site.mjs";
 import { clientTypeLabel, type Lead } from "../../lib/dossier";
+import { createNotionLead } from "../../lib/notionLead";
 
 // Endpoint bajo demanda (serverless en Vercel); el resto del sitio sigue estático.
 export const prerender = false;
@@ -473,6 +474,8 @@ export const POST: APIRoute = async ({ request }) => {
   //    paralelo al aviso de Telegram; createLead() no lanza nunca, así que la
   //    promesa es segura mientras está en vuelo.
   const leadRecord = createLead(lead);
+  // 3b) Alta en Notion (centro de mando): Fase «Por contactar», próximo contacto hoy.
+  const notionRecord = createNotionLead(lead);
 
   // 4) Aviso instantáneo a Telegram (no bloquea: si falla, el email ya salió)
   const tgText = artist ? [
@@ -523,6 +526,8 @@ export const POST: APIRoute = async ({ request }) => {
   // expone al cliente: queda disponible en el servidor para usos posteriores.
   const leadId = await leadRecord;
   if (leadId) console.log(`Lead registrado en Airtable: ${leadId}`);
+  const notionUrl = await notionRecord;
+  if (notionUrl) console.log(`Lead registrado en Notion: ${notionUrl}`);
 
   return json(200, { ok: true });
 };
