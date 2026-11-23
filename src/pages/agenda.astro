@@ -38,7 +38,7 @@ const EVENTS = [
     artist: "",
     img: `${IMG}/nochebuena-2026-caseta-los-villares.webp`,
     alt: "Cartel de Nochebuena en la Caseta 2026: árbol nevado sobre papel rojo, jueves 24 de diciembre en la Caseta Municipal de Los Villares",
-    tickets: "",
+    tickets: "/navidad?noche=24&src=agenda#entradas",
   },
   {
     id: "nochevieja-2026",
@@ -53,7 +53,7 @@ const EVENTS = [
     artist: "",
     img: `${IMG}/nochevieja-2026-caseta-los-villares.webp`,
     alt: "Cartel de Nochevieja en la Caseta 2026: campana dorada nevada sobre papel azul, jueves 31 de diciembre en la Caseta Municipal de Los Villares",
-    tickets: "",
+    tickets: "/navidad?noche=31&src=agenda#entradas",
   },
 ].filter((e) => new Date(e.end) > new Date());
 
@@ -81,7 +81,7 @@ const schema = EVENTS.map((e) => ({
     "name": t.name,
     "price": t.price,
     "priceCurrency": "EUR",
-    "url": e.tickets || `${canonical}#${e.id}`,
+    "url": e.tickets ? absUrl(`/navidad?noche=${e.short.slice(0, 2)}`) : `${canonical}#${e.id}`,
   })),
 }));
 ---
@@ -134,7 +134,7 @@ const schema = EVENTS.map((e) => ({
             ))}
           </ul>
           {e.tickets
-            ? <a class="ag-btn" href={e.tickets} target="_blank" rel="noopener">Comprar entradas</a>
+            ? <a class="ag-btn" href={e.tickets}>Entradas</a>
             : <p class="ag-sale">Puntos de venta oficiales: <strong>Fourvenues</strong> (online) y <strong>Mafrix</strong> (física).</p>}
         </div>
       </li>

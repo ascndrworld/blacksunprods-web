@@ -142,18 +142,18 @@ const ARTISTS = [
   </div>
 
   {SHOW_XMAS_STRIP && (
-    <!-- AVISO NAVIDAD 2026: tira en la base del vídeo, enlaza a /agenda (toda la tira es clicable) -->
-    <!-- 18/11: hasta el lanzamiento de entradas (mar 24/11 20:00) la tira NO enlaza: cuenta atrás en lugar del botón.
-         A la hora, el script la convierte en el enlace a /agenda con «Ver fechas y entradas». -->
+    <!-- AVISO NAVIDAD 2026: tira en la base del vídeo, enlaza a /navidad (toda la tira es clicable) -->
+    <!-- 23/11: enlaza siempre a la landing de venta /navidad. Hasta el lanzamiento (mar 24/11 20:00)
+         muestra la cuenta atrás; a la hora el script la cambia por «Comprar entradas». -->
     <div class="xmas-strip" data-lanzamiento={XMAS_LAUNCH}>
-      <div class="xmas-strip-link" role="group" aria-label="Navidad en la Caseta: 24 y 31 de diciembre en Los Villares. Entradas a la venta el martes 24 de noviembre a las 20:00.">
+      <a class="xmas-strip-link" href="/navidad?src=home" aria-label="Navidad en la Caseta: 24 y 31 de diciembre en Los Villares. Entradas a la venta el martes 24 de noviembre a las 20:00.">
         <span class="xmas-strip-tag">Navidad en la Caseta</span>
         <span class="xmas-strip-text">24 y 31 de diciembre <span class="xmas-strip-place">· Los Villares</span></span>
         <span class="xmas-strip-btn xmas-strip-count" aria-live="off">
           <span class="xmas-count-lbl">Entradas<span class="xmas-strip-btn-extra"> a la venta</span> en</span>
           <span class="xmas-count-num">--d --:--:--</span>
         </span>
-      </div>
+      </a>
     </div>
     <script is:inline>
       (function () {
@@ -162,22 +162,16 @@ const ARTISTS = [
         var meta = new Date(strip.getAttribute('data-lanzamiento')).getTime();
         var num = strip.querySelector('.xmas-count-num');
         function abrir() {
-          // reutiliza los elementos existentes para conservar los atributos de estilo de Astro (data-astro-cid-*)
-          var box = strip.querySelector('.xmas-strip-link');
-          var a = document.createElement('a');
-          for (var k = 0; k < box.attributes.length; k++) a.setAttribute(box.attributes[k].name, box.attributes[k].value);
-          a.removeAttribute('role');
-          a.href = '/agenda';
-          a.setAttribute('aria-label', 'Navidad en la Caseta: 24 y 31 de diciembre en Los Villares. Ver fechas y entradas.');
-          while (box.firstChild) a.appendChild(box.firstChild);
+          // 23/11: la tira ya enlaza a /navidad desde antes; a la hora solo cambia la cuenta atrás por el botón.
+          var a = strip.querySelector('.xmas-strip-link');
+          a.setAttribute('aria-label', 'Navidad en la Caseta: 24 y 31 de diciembre en Los Villares. Comprar entradas.');
           var btn = a.querySelector('.xmas-strip-count');
           var extra = btn.querySelector('.xmas-strip-btn-extra');
           btn.className = 'xmas-strip-btn';
           btn.setAttribute('aria-hidden', 'true');
-          btn.textContent = 'Ver fechas';
-          extra.textContent = ' y entradas';
+          btn.textContent = 'Comprar';
+          extra.textContent = ' entradas';
           btn.appendChild(extra);
-          box.replaceWith(a);
         }
         function dos(n) { return (n < 10 ? '0' : '') + n; }
         function tic() {

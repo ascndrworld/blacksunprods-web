@@ -1,0 +1,439 @@
+---
+/*
+ * /navidad — Landing de venta de Nochebuena y Nochevieja en la Caseta 2026
+ * (Black Sun Prods × Cónclave). Un solo enlace para bio, historias y anuncios.
+ *
+ * La compra la hace Fourvenues dentro de la página (iframe del microsite de
+ * Cónclave). Su script solo admite UN widget por página, así que se carga el
+ * de la noche elegida (?noche=24 | ?noche=31, por defecto la 24) y al cambiar
+ * de noche se recarga la página.
+ *
+ * Antes de SALE_OPEN la zona de compra enseña la cuenta atrás; a esa hora el
+ * propio navegador cambia a la compra, sin volver a publicar.
+ * Para ver la compra antes de la hora: /navidad?venta=1
+ *
+ * Medición: /api/nv (almacén nav24 / nav31), mismo sistema que Halloween Fest.
+ */
+import Layout from "../layouts/Layout.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { SITE, absUrl } from "../config/site.mjs";
+
+// ── MARCA: apertura de la venta online ──
+const SALE_OPEN = "2026-11-24T20:00:00+01:00";
+
+// Tramos comunes a las dos noches (definitivos). Todas con 1 consumición.
+const TIERS = [
+  { name: "Promocional", note: "Solo las 50 primeras · solo online", price: 10 },
+  { name: "Anticipada", note: "Limitadas · hasta el dom. 6 dic.", price: 12 },
+  { name: "General", note: "Online y física · desde el lun. 7 dic.", price: 14 },
+  { name: "Taquilla", note: "El mismo día", price: 18 },
+];
+
+const IMG = "/images/agenda";
+const VENUE = { name: "Caseta Municipal de Los Villares", place: "Los Villares", region: "Jaén" };
+const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Caseta Municipal Los Villares Jaén")}`;
+const AUTH_PDF = "/docs/autorizacion-menores-navidad-2026.pdf";
+
+// ── MARCA: códigos de Fourvenues (microsite de Cónclave) ──
+// Line-up: NO se muestra hasta que se publique en redes (artist vacío).
+const NIGHTS = [
+  {
+    n: "24",
+    name: "Nochebuena en la Caseta",
+    day: "Jueves 24 de diciembre",
+    short: "24.12",
+    start: "2026-12-24T23:30:00+01:00",
+    opens: "23:30",
+    fv: "KC2Y",
+    img: `${IMG}/nochebuena-2026-caseta-los-villares.webp`,
+    alt: "Cartel de Nochebuena en la Caseta 2026: árbol nevado sobre papel rojo",
+    tone: "#B8322A",
+  },
+  {
+    n: "31",
+    name: "Nochevieja en la Caseta",
+    day: "Jueves 31 de diciembre",
+    short: "31.12",
+    start: "2027-01-01T00:30:00+01:00",
+    opens: "00:30",
+    fv: "OTC1",
+    img: `${IMG}/nochevieja-2026-caseta-los-villares.webp`,
+    alt: "Cartel de Nochevieja en la Caseta 2026: campana dorada nevada sobre papel azul",
+    tone: "#D9B45A",
+  },
+];
+
+const canonical = absUrl("/navidad");
+const ogImage = absUrl(`${IMG}/og-agenda-navidad-2026.jpg`);
+
+const faq = [
+  { q: "¿Dónde compro las entradas oficiales?", a: "Aquí mismo: elige la noche y compra dentro de esta página. La venta online es de Fourvenues, el pago es seguro y la entrada te llega al momento al correo. También hay entradas físicas en Mafrix." },
+  { q: "¿Las entradas incluyen consumición?", a: "Sí. Todas las entradas, de cualquier tramo, incluyen una consumición." },
+  { q: "¿Cuándo abre la puerta?", a: "Nochebuena, el jueves 24 de diciembre a las 23:30. Nochevieja, el jueves 31 de diciembre a las 00:30, ya pasadas las campanadas." },
+  { q: "¿Pueden entrar menores de edad?", a: "La edad mínima es 16 años. Si tienes 16 o 17, tienes que entregar en la entrada la autorización firmada por tu madre, padre o tutor, con la fotocopia de su DNI, y enseñar tu documento original. La autorización se descarga en esta página. Los menores de 16 años no pueden entrar." },
+  { q: "¿Hay que imprimir la entrada?", a: "No. Basta con enseñarla en el móvil en la puerta." },
+  { q: "¿Dónde es?", a: `En la ${VENUE.name} (${VENUE.region}).` },
+];
+
+const schema = [
+  ...NIGHTS.map((e) => ({
+    "@context": "https://schema.org",
+    "@type": "MusicEvent",
+    "name": `${e.name} 2026`,
+    "startDate": e.start,
+    "eventStatus": "https://schema.org/EventScheduled",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "location": {
+      "@type": "Place",
+      "name": VENUE.name,
+      "address": { "@type": "PostalAddress", "addressLocality": VENUE.place, "addressRegion": VENUE.region, "addressCountry": "ES" },
+    },
+    "image": [absUrl(e.img)],
+    "organizer": { "@type": "Organization", "name": SITE.name, "url": SITE.url },
+    "offers": TIERS.map((t) => ({ "@type": "Offer", "name": t.name, "price": t.price, "priceCurrency": "EUR", "url": `${canonical}?noche=${e.n}`, "validFrom": SALE_OPEN })),
+  })),
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faq.map((i) => ({ "@type": "Question", "name": i.q, "acceptedAnswer": { "@type": "Answer", "text": i.a } })),
+  },
+];
+---
+
+<Layout
+  title="Nochebuena y Nochevieja 2026 en Los Villares · Entradas"
+  description="Entradas oficiales de Nochebuena (jueves 24) y Nochevieja (jueves 31) en la Caseta Municipal de Los Villares, Jaén. Desde 10 €, todas con consumición."
+  canonical={canonical}
+  ogImage={ogImage}
+  ogImageAlt="Carteles de Nochebuena y Nochevieja en la Caseta 2026, Los Villares"
+>
+<Fragment slot="head">
+  <link rel="preconnect" href="https://www.fourvenues.com"/>
+  <link rel="preconnect" href="https://web.fourvenues.com"/>
+  <link rel="preconnect" href="https://api.fourvenues.com" crossorigin/>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+</Fragment>
+
+<main class="nv" data-sale-open={SALE_OPEN}>
+
+  <header class="nv-head">
+    <span class="nv-eyebrow">{SITE.name} × Cónclave</span>
+    <h1 class="nv-title">Navidad en la Caseta<span class="nv-punto">.</span></h1>
+    <p class="nv-lead">Dos noches en la {VENUE.name}. Entradas desde 10 €, todas con consumición.</p>
+  </header>
+
+  <ul class="nv-nights">
+    {NIGHTS.map((e) => (
+      <li class="nv-night" style={`--tono:${e.tone}`}>
+        <a class="nv-poster" href={`?noche=${e.n}#entradas`} data-night={e.n}>
+          <img src={e.img} alt={e.alt} width="900" height="1200" fetchpriority={e.n === "24" ? "high" : "auto"} />
+        </a>
+        <div class="nv-night-info">
+          <span class="nv-date">{e.short}</span>
+          <h2>{e.name}</h2>
+          <p>{e.day} · apertura {e.opens}</p>
+          <a class="nv-btn" href={`?noche=${e.n}#entradas`} data-night={e.n}>
+            <span data-when="before">Ver entradas</span><span data-when="after" hidden>Comprar entradas</span>
+          </a>
+        </div>
+      </li>
+    ))}
+  </ul>
+
+  <section class="nv-tickets" id="entradas" aria-labelledby="entradas-t">
+    <p class="nv-eyebrow nv-center">Entradas oficiales</p>
+    <h2 id="entradas-t" class="nv-h2">Elige tu noche</h2>
+
+    <div class="nv-tabs" role="tablist" aria-label="Noche">
+      {NIGHTS.map((e) => (
+        <a role="tab" class="nv-tab" href={`?noche=${e.n}#entradas`} data-night={e.n} aria-selected={e.n === "24" ? "true" : "false"} style={`--tono:${e.tone}`}>
+          <b>{e.short}</b><span>{e.name.replace(" en la Caseta", "")}</span>
+        </a>
+      ))}
+    </div>
+
+    <div class="nv-ok" hidden data-ok>
+      <strong>¡Compra hecha! Nos vemos en la Caseta.</strong>
+      <span>Tu entrada te llega al correo que has puesto (mira también en spam o promociones). En la puerta, enséñala en el móvil.</span>
+      <span>Si tienes 16 o 17 años, trae la <a href={AUTH_PDF} target="_blank" rel="noopener">autorización firmada</a> y tu DNI original.</span>
+    </div>
+    <div class="nv-ok nv-cancel" hidden data-cancel>
+      <strong>El pago no se ha completado.</strong>
+      <span>No se te ha cobrado nada. Puedes intentarlo otra vez aquí abajo o comprar la entrada física en Mafrix.</span>
+    </div>
+
+    <!-- Antes de la apertura: cuenta atrás -->
+    <div class="nv-soon" data-when="before">
+      <p class="nv-soon-k">La venta online abre el <strong>martes 24 de noviembre a las 20:00</strong></p>
+      <div class="nv-count" aria-live="off">
+        <span class="nv-count-u"><b data-u="d">--</b><small>días</small></span>
+        <span class="nv-count-u"><b data-u="h">--</b><small>horas</small></span>
+        <span class="nv-count-u"><b data-u="m">--</b><small>min</small></span>
+        <span class="nv-count-u"><b data-u="s">--</b><small>seg</small></span>
+      </div>
+      <p class="nv-soon-tip">Las 50 primeras van a 10 €. Vuelve a esta página a esa hora: la compra aparece aquí sola.</p>
+    </div>
+
+    <!-- Desde la apertura: compra de Fourvenues -->
+    <div data-when="after" hidden>
+      <div class="nv-embed" id="nv-embed"></div>
+      <p class="nv-alt">¿No se carga? {NIGHTS.map((e, i) => (
+        <>{i > 0 && " · "}<a class="nv-direct" data-night={e.n} href={`https://www.fourvenues.com/conclave/${e.fv}`} target="_blank" rel="noopener">Compra en Fourvenues</a></>
+      ))}</p>
+    </div>
+
+    {/* 23/11 Frank: con la compra abierta, los tramos solo dentro de Fourvenues (dos listas confunden). */}
+    <ul class="nv-tiers" data-when="before">
+      {TIERS.map((t, i) => (
+        <li class={i === 0 ? "is-first" : ""}><span class="nv-tier-name">{t.name}<small>{t.note}</small></span><span class="nv-tier-price">{t.price} €</span></li>
+      ))}
+    </ul>
+    <p class="nv-note">Todas las entradas incluyen <strong>una consumición</strong>. Venta física en <strong>Mafrix</strong>.</p>
+  </section>
+
+  <section class="nv-info">
+    <dl>
+      <div><dt>Dónde</dt><dd>{VENUE.name} <a href={mapsUrl} target="_blank" rel="noopener">Cómo llegar →</a></dd></div>
+      <div><dt>Edad</dt><dd>A partir de 16 años. 16 y 17, con autorización firmada. <a href={AUTH_PDF} target="_blank" rel="noopener">Descargar autorización (PDF) →</a></dd></div>
+      <div><dt>Puntos de venta</dt><dd>Online aquí (Fourvenues) · Física en Mafrix · Taquilla el mismo día a 18 €</dd></div>
+    </dl>
+  </section>
+
+  <section class="nv-faq" aria-labelledby="faq-t">
+    <p class="nv-eyebrow nv-center">FAQ</p>
+    <h2 id="faq-t" class="nv-h2">Preguntas frecuentes</h2>
+    <ul>
+      {faq.map((item) => (
+        <li><details><summary>{item.q}</summary><p>{item.a}</p></details></li>
+      ))}
+    </ul>
+  </section>
+
+</main>
+
+<SiteFooter />
+
+<script is:inline define:vars={{ FV: Object.fromEntries(NIGHTS.map((e) => [e.n, e.fv])), NAMES: Object.fromEntries(NIGHTS.map((e) => [e.n, e.name])) }}>
+  (function () {
+    var p = new URLSearchParams(location.search);
+    // Vuelta de Fourvenues (página de gracias / de cancelación configuradas en
+    // su panel): ?compra=ok | ?compra=cancelada. Si no trae la noche, se usa
+    // la última que se eligió en esta visita.
+    var ret = p.get("compra");
+    var lastNight = ""; try { lastNight = sessionStorage.getItem("nv_last") || ""; } catch (e) {}
+    var night = p.get("noche") === "31" || (!p.get("noche") && ret && lastNight === "31") ? "31" : "24";
+    try { sessionStorage.setItem("nv_last", night); } catch (e) {}
+    var root = document.querySelector(".nv");
+    var openAt = new Date(root.getAttribute("data-sale-open")).getTime();
+    var force = p.get("venta") === "1";
+
+    // Pestañas y botones: conservan ?venta=1 y el origen al cambiar de noche.
+    document.querySelectorAll("[data-night]").forEach(function (a) {
+      if (a.classList.contains("nv-direct")) { a.hidden = a.getAttribute("data-night") !== night; return; }
+      var q = new URLSearchParams(location.search);
+      q.set("noche", a.getAttribute("data-night"));
+      q.delete("compra");
+      a.href = "?" + q.toString() + "#entradas";
+      if (a.classList.contains("nv-tab")) a.setAttribute("aria-selected", a.getAttribute("data-night") === night ? "true" : "false");
+    });
+
+    // ── Medición (mismo sistema que Halloween Fest, por noche) ──
+    var KEY = "nv_src", src = "";
+    try { src = sessionStorage.getItem(KEY) || ""; } catch (e) {}
+    if (!src) {
+      var tag = (p.get("utm_source") || p.get("src") || "").toLowerCase();
+      if (!tag) {
+        var ref = "";
+        try { ref = document.referrer ? new URL(document.referrer).hostname : ""; } catch (e) {}
+        if (ref && ref.indexOf("blacksunprods.com") === -1) {
+          tag = /instagram/.test(ref) ? "instagram" : /facebook|fb\./.test(ref) ? "facebook" : /google\./.test(ref) ? "google"
+            : /whatsapp|wa\.me/.test(ref) ? "whatsapp" : /tiktok/.test(ref) ? "tiktok" : "otros";
+        } else if (ref) { tag = "web"; }
+      }
+      src = tag || "directo";
+      try { sessionStorage.setItem(KEY, src); } catch (e) {}
+    }
+    function once(name) {
+      try { if (sessionStorage.getItem("nv_" + night + "_" + name)) return false; sessionStorage.setItem("nv_" + night + "_" + name, "1"); } catch (e) {}
+      return true;
+    }
+    function send(obj) {
+      obj.src = src; obj.n = night;
+      var body = JSON.stringify(obj);
+      try { if (!(navigator.sendBeacon && navigator.sendBeacon("/api/nv", body))) fetch("/api/nv", { method: "POST", body: body, keepalive: true }); } catch (e) {}
+    }
+    function fb() { if (typeof window.fbq === "function") window.fbq.apply(null, arguments); }
+    function ga() { if (typeof window.gtag === "function") window.gtag.apply(null, arguments); }
+    var item = NAMES[night] + " 2026";
+
+    if (once("view")) {
+      send({ e: "view" });
+      fb("track", "ViewContent", { content_name: item, content_category: "Entradas" });
+      ga("event", "view_item", { items: [{ item_name: item }] });
+    }
+
+    // ── Antes / después de la apertura ──
+    var loaded = false;
+    function loadWidget() {
+      if (loaded) return; loaded = true;
+      var box = document.getElementById("nv-embed");
+      var holder = document.createElement("div");
+      holder.id = "fourvenues-iframe";
+      box.appendChild(holder);
+      var s = document.createElement("script");
+      s.src = "https://www.fourvenues.com/assets/iframe/conclave/events/" + FV[night];
+      box.appendChild(s);
+    }
+    function show(after) {
+      document.querySelectorAll('[data-when="before"]').forEach(function (el) { el.hidden = after; });
+      document.querySelectorAll('[data-when="after"]').forEach(function (el) { el.hidden = !after; });
+      if (after) loadWidget();
+    }
+    function pad(n) { return (n < 10 ? "0" : "") + n; }
+    var timer;
+    function tick() {
+      var t = Math.floor((openAt - Date.now()) / 1000);
+      if (force || t <= 0) { clearInterval(timer); show(true); return; }
+      var v = { d: Math.floor(t / 86400), h: Math.floor(t % 86400 / 3600), m: Math.floor(t % 3600 / 60), s: t % 60 };
+      document.querySelectorAll(".nv-count b[data-u]").forEach(function (el) { var u = el.getAttribute("data-u"); el.textContent = u === "d" ? v.d : pad(v[u]); });
+    }
+    show(false); tick(); timer = setInterval(tick, 1000);
+
+    // Entrar en el iframe = empezar la compra (el foco pasa al iframe).
+    window.addEventListener("blur", function () {
+      setTimeout(function () {
+        var a = document.activeElement;
+        if (!a || a.tagName !== "IFRAME" || !a.closest(".nv-embed") || !once("checkout")) return;
+        send({ e: "checkout" });
+        fb("track", "InitiateCheckout", { content_name: item, currency: "EUR" });
+        ga("event", "begin_checkout", { currency: "EUR", items: [{ item_name: item }] });
+      }, 0);
+    });
+
+    function purchased() {
+      var el = document.querySelector("[data-ok]"); if (el) el.hidden = false;
+      if (!once("purchase")) return;
+      send({ e: "purchase" });
+      fb("track", "Purchase", { content_name: item, currency: "EUR", value: 0 });
+      ga("event", "purchase", { transaction_id: "nv" + night + "-" + Date.now(), currency: "EUR", value: 0, items: [{ item_name: item }] });
+    }
+    var seen = {}, vid = Math.random().toString(36).slice(2, 10);
+    window.addEventListener("message", function (m) {
+      var host = ""; try { host = new URL(m.origin).hostname; } catch (e) {}
+      if (!/(^|\.)fourvenues\.com$/.test(host)) return;
+      var d = m.data;
+      if (typeof d === "string") { try { d = JSON.parse(d); } catch (e) { return; } }
+      if (!d || typeof d.key !== "string" || d.key === "addHeight" || d.key === "forwardScroll") return;
+      var info = d.key === "navigate" ? (d.segments || []).join("/") : d.key === "track" ? JSON.stringify(d.eventObject || {}) : JSON.stringify(d.value === undefined ? "" : d.value);
+      info = String(info).slice(0, 300);
+      if (!seen[d.key + info]) { seen[d.key + info] = 1; send({ e: "fv", v: vid, k: d.key, i: info }); }
+      var ev = d.key === "track" && d.eventObject ? String(d.eventObject.event || d.eventObject.eventName || d.eventObject.name || d.eventObject.action || "") : "";
+      if (/^purchase$/i.test(ev) || (d.key === "track" && /"(event|eventName|name|action)":"purchase"/i.test(info)) || (d.key === "navigate" && /success|exito|gracias|thank|completed/i.test(info))) purchased();
+    });
+
+    // Página de gracias / cancelación: aviso arriba de la zona de compra y URL limpia.
+    if (ret === "ok" || ret === "cancelada") {
+      if (ret === "ok") { purchased(); force = true; }
+      else {
+        var c = document.querySelector("[data-cancel]"); if (c) c.hidden = false;
+        send({ e: "fv", v: vid, k: "cancel", i: "" });
+      }
+      p.delete("compra");
+      var qs = p.toString();
+      try { history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + "#entradas"); } catch (e) {}
+      var t = document.getElementById("entradas"); if (t) t.scrollIntoView();
+    }
+  })();
+</script>
+
+<style>
+  .nv { background: radial-gradient(60% 40% at 50% 0%, rgba(150, 34, 24, 0.18), transparent 70%), #0F0C0A; color: #EDE8E1; font-family: "BSP Helvetica", sans-serif; }
+  .nv-head { padding: clamp(130px, 16vw, 200px) clamp(24px, 5vw, 88px) clamp(32px, 4vw, 56px); }
+  .nv-eyebrow { display: block; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(237, 232, 225, 0.5); margin: 0 0 18px; font-weight: 500; }
+  .nv-center { text-align: center; }
+  .nv-title { font-size: clamp(44px, 8.4vw, 120px); font-weight: 800; letter-spacing: -0.045em; line-height: 0.92; text-transform: uppercase; margin: 0 0 22px; padding-top: 0.16em; }
+  .nv-punto { color: var(--rojo); }
+  .nv-lead { font-size: 17px; line-height: 1.6; color: rgba(237, 232, 225, 0.65); max-width: 52ch; margin: 0; }
+
+  /* ── Las dos noches ── */
+  .nv-nights { list-style: none; margin: 0; padding: 0 clamp(24px, 5vw, 88px) clamp(56px, 7vw, 96px); display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 64px); }
+  .nv-night { display: flex; flex-direction: column; gap: 22px; }
+  .nv-poster { display: block; }
+  .nv-poster img { display: block; width: 100%; height: auto; box-shadow: 0 30px 80px -30px color-mix(in srgb, var(--tono) 70%, transparent); transition: transform .4s; }
+  .nv-poster:hover img { transform: translateY(-4px); }
+  .nv-night-info { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+  .nv-date { font-size: clamp(48px, 6vw, 96px); font-weight: 800; letter-spacing: -0.06em; line-height: 0.85; color: transparent; -webkit-text-stroke: 1.5px rgba(237, 232, 225, 0.8); }
+  .nv-night h2 { font-size: clamp(24px, 2.8vw, 40px); font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin: 6px 0 0; }
+  .nv-night p { margin: 0 0 12px; color: rgba(237, 232, 225, 0.65); font-size: 16px; }
+
+  .nv-btn { display: inline-block; font-size: 14px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #0F0C0A; background: #EDE8E1; text-decoration: none; padding: 16px 32px; border: 2px solid #EDE8E1; transition: background .25s, color .25s, border-color .25s; }
+  .nv-btn:hover { background: var(--rojo); border-color: var(--rojo); color: #EDE8E1; }
+
+  /* ── Entradas ── */
+  .nv-tickets { max-width: 900px; margin: 0 auto; padding: clamp(56px, 7vw, 96px) 16px; border-top: 1px solid rgba(237, 232, 225, 0.1); scroll-margin-top: 60px; }
+  .nv-h2 { font-size: clamp(32px, 5vw, 64px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; margin: 0 0 28px; text-align: center; }
+  .nv-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 32px; }
+  .nv-tab { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px 12px; text-decoration: none; color: rgba(237, 232, 225, 0.6); border: 1px solid rgba(237, 232, 225, 0.15); transition: border-color .2s, color .2s, background .2s; }
+  .nv-tab b { font-size: clamp(24px, 3vw, 34px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+  .nv-tab span { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; }
+  .nv-tab:hover { color: #EDE8E1; border-color: rgba(237, 232, 225, 0.4); }
+  .nv-tab[aria-selected="true"] { color: #EDE8E1; border-color: var(--tono); background: color-mix(in srgb, var(--tono) 14%, transparent); }
+
+  .nv-soon { text-align: center; padding: 8px 0 32px; }
+  .nv-soon-k { font-size: 17px; margin: 0 0 22px; color: rgba(237, 232, 225, 0.75); }
+  .nv-soon-k strong { color: #EDE8E1; }
+  .nv-count { display: flex; justify-content: center; gap: clamp(16px, 4vw, 40px); }
+  .nv-count-u { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .nv-count-u b { font-size: clamp(40px, 7vw, 80px); font-weight: 800; letter-spacing: -0.04em; line-height: 0.9; font-variant-numeric: tabular-nums; }
+  .nv-count-u small { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237, 232, 225, 0.5); }
+  .nv-soon-tip { font-size: 14px; color: rgba(237, 232, 225, 0.55); margin: 24px auto 0; max-width: 46ch; }
+
+  .nv-embed { min-height: 480px; }
+  .nv-embed :global(iframe) { display: block; width: 100%; border: 0; }
+  .nv-alt { font-size: 14px; color: rgba(237, 232, 225, 0.6); text-align: center; margin: 16px 0 32px; }
+  .nv-alt a { color: #EDE8E1; text-underline-offset: 3px; }
+  .nv-ok { display: flex; flex-direction: column; gap: 8px; text-align: center; font-size: 15px; line-height: 1.55; color: rgba(237, 232, 225, .8); padding: 20px 22px; margin: 0 auto 28px; max-width: 56ch; border: 1px solid rgba(217, 180, 90, .6); background: rgba(217, 180, 90, .1); }
+  .nv-ok[hidden] { display: none; }
+  .nv-ok strong { font-size: 19px; color: #EDE8E1; }
+  .nv-ok a { color: #EDE8E1; text-underline-offset: 3px; }
+  .nv-cancel { border-color: rgba(184, 50, 42, .6); background: rgba(184, 50, 42, .1); }
+
+  .nv [hidden] { display: none !important; }
+  .nv-tiers { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .nv-tiers li { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 18px; border: 1px solid rgba(237, 232, 225, 0.12); }
+  .nv-tiers li.is-first { border-color: rgba(184, 50, 42, 0.6); background: rgba(184, 50, 42, 0.08); }
+  .nv-tier-name { font-weight: 700; display: flex; flex-direction: column; gap: 2px; }
+  .nv-tier-name small { font-weight: 400; font-size: 13px; color: rgba(237, 232, 225, 0.55); }
+  .nv-tier-price { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .nv-note { font-size: 15px; color: rgba(237, 232, 225, 0.7); text-align: center; margin: 18px 0 0; }
+  .nv-note strong { color: #EDE8E1; }
+
+  /* ── Datos prácticos ── */
+  .nv-info { max-width: 900px; margin: 0 auto; padding: 0 16px clamp(56px, 7vw, 96px); }
+  .nv-info dl { margin: 0; border-top: 1px solid rgba(237, 232, 225, 0.14); }
+  .nv-info dl div { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(237, 232, 225, 0.14); }
+  .nv-info dt { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237, 232, 225, 0.5); padding-top: 3px; }
+  .nv-info dd { margin: 0; font-size: 16px; line-height: 1.5; }
+  .nv-info a { color: rgba(237, 232, 225, 0.65); font-size: 13px; margin-left: 6px; text-underline-offset: 3px; text-decoration-color: var(--rojo); }
+
+  /* ── FAQ ── */
+  .nv-faq { max-width: 760px; margin: 0 auto; padding: 0 16px clamp(64px, 8vw, 110px); }
+  .nv-faq ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(237, 232, 225, .12); }
+  .nv-faq li { border-bottom: 1px solid rgba(237, 232, 225, .12); }
+  .nv-faq summary { cursor: pointer; list-style: none; padding: 20px 36px 20px 0; font-size: clamp(16px, 1.5vw, 19px); font-weight: 600; line-height: 1.35; position: relative; }
+  .nv-faq summary::-webkit-details-marker { display: none; }
+  .nv-faq summary::after { content: ""; position: absolute; right: 6px; top: 50%; width: 14px; height: 2px; background: rgba(237, 232, 225, .7); transform: translateY(-50%); }
+  .nv-faq summary::before { content: ""; position: absolute; right: 12px; top: 50%; width: 2px; height: 14px; background: rgba(237, 232, 225, .7); transform: translateY(-50%); transition: opacity .2s; }
+  .nv-faq details[open] summary::before { opacity: 0; }
+  .nv-faq details p { font-size: 16px; line-height: 1.7; color: rgba(237, 232, 225, .65); margin: 0 0 22px; max-width: 62ch; }
+
+  @media (max-width: 760px) {
+    .nv-nights { grid-template-columns: 1fr 1fr; gap: 16px; padding-inline: 16px; }
+    .nv-head { padding-inline: 16px; }
+    .nv-date { -webkit-text-stroke-width: 1px; }
+    .nv-night p { font-size: 13px; }
+    .nv-btn { padding: 12px 14px; font-size: 11px; letter-spacing: .08em; }
+    .nv-info dl div { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+</Layout>
