@@ -20,11 +20,11 @@ import { SITE, absUrl } from "../config/site.mjs";
 
 // ── MARCA: apertura de la venta online ──
 const SALE_OPEN = "2026-11-24T20:00:00+01:00";
-// ── Acceso prioritario (23/11): de PRIO_OPEN a SALE_OPEN la compra se abre solo
-// con la contraseña que sale en las historias de @blacksunprods a las 19:30.
+// ── Acceso prioritario (23/11, una hora antes: 19:00): de PRIO_OPEN a SALE_OPEN la compra se abre solo
+// con la contraseña que sale en las historias de @blacksunprods a las 19:00.
 // La contraseña no va escrita: solo su huella (djb2 de la palabra en mayúsculas,
 // sin tildes ni espacios). Para cambiarla, calcular la huella nueva.
-const PRIO_OPEN = "2026-11-24T19:30:00+01:00";
+const PRIO_OPEN = "2026-11-24T19:00:00+01:00";
 const PRIO_HASH = 3057170833; // «CAMPANADA»
 
 // Tramos comunes a las dos noches (definitivos). Todas con 1 consumición.
