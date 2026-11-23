@@ -182,12 +182,7 @@ const schema = [
       ))}</p>
     </div>
 
-    {/* 23/11 Frank: con la compra abierta, los tramos solo dentro de Fourvenues (dos listas confunden). */}
-    <ul class="nv-tiers" data-when="before">
-      {TIERS.map((t, i) => (
-        <li class={i === 0 ? "is-first" : ""}><span class="nv-tier-name">{t.name}<small>{t.note}</small></span><span class="nv-tier-price">{t.price} €</span></li>
-      ))}
-    </ul>
+    {/* 23/11 Frank: fuera la lista de tramos de la página (los precios se ven dentro de Fourvenues). */}
     <p class="nv-note">Todas las entradas incluyen <strong>una consumición</strong>. Venta física en <strong>Mafrix</strong>.</p>
   </section>
 
@@ -399,12 +394,6 @@ const schema = [
   .nv-cancel { border-color: rgba(184, 50, 42, .6); background: rgba(184, 50, 42, .1); }
 
   .nv [hidden] { display: none !important; }
-  .nv-tiers { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-  .nv-tiers li { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 18px; border: 1px solid rgba(237, 232, 225, 0.12); }
-  .nv-tiers li.is-first { border-color: rgba(184, 50, 42, 0.6); background: rgba(184, 50, 42, 0.08); }
-  .nv-tier-name { font-weight: 700; display: flex; flex-direction: column; gap: 2px; }
-  .nv-tier-name small { font-weight: 400; font-size: 13px; color: rgba(237, 232, 225, 0.55); }
-  .nv-tier-price { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .nv-note { font-size: 15px; color: rgba(237, 232, 225, 0.7); text-align: center; margin: 18px 0 0; }
   .nv-note strong { color: #EDE8E1; }
 
