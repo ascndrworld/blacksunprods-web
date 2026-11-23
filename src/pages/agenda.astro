@@ -128,11 +128,7 @@ const schema = EVENTS.map((e) => ({
             <div><dt>Dónde</dt><dd>{VENUE.name} <a href={mapsUrl} target="_blank" rel="noopener">Cómo llegar →</a></dd></div>
             {e.artist && <div><dt>Artista</dt><dd>{e.artist}</dd></div>}
           </dl>
-          <ul class="ag-tiers">
-            {TIERS.map((t) => (
-              <li><span class="ag-tier-name">{t.name}<small>{t.note}</small></span><span class="ag-tier-price">{t.price} €</span></li>
-            ))}
-          </ul>
+          {/* 23/11 Frank: sin lista de tramos (los precios, dentro de Fourvenues en /navidad) */}
           {e.tickets
             ? <a class="ag-btn" href={e.tickets}>Entradas</a>
             : <p class="ag-sale">Puntos de venta oficiales: <strong>Fourvenues</strong> (online) y <strong>Mafrix</strong> (física).</p>}
