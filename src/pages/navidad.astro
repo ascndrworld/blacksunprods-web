@@ -20,12 +20,10 @@ import { SITE, absUrl } from "../config/site.mjs";
 
 // ── MARCA: apertura de la venta online ──
 const SALE_OPEN = "2026-11-24T20:00:00+01:00";
-// ── Acceso prioritario (23/11, una hora antes: 19:00): de PRIO_OPEN a SALE_OPEN la compra se abre solo
-// con la contraseña que sale en las historias de @blacksunprods a las 19:00.
-// La contraseña no va escrita: solo su huella (djb2 de la palabra en mayúsculas,
-// sin tildes ni espacios). Para cambiarla, calcular la huella nueva.
+// ── Acceso prioritario (24/11): SIN contraseña. Solo el enlace que publica
+// @blacksunprods a las 19:00 (/navidad?acceso=prioritario) abre la compra una
+// hora antes; el resto ve la cuenta atrás hasta SALE_OPEN (20:00).
 const PRIO_OPEN = "2026-11-24T19:00:00+01:00";
-const PRIO_HASH = 3057170833; // «CAMPANADA»
 
 // Tramos comunes a las dos noches (definitivos). Todas con 1 consumición.
 const TIERS = [
@@ -120,7 +118,7 @@ const schema = [
   <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 </Fragment>
 
-<main class="nv" data-sale-open={SALE_OPEN} data-prio-open={PRIO_OPEN} data-prio={PRIO_HASH}>
+<main class="nv" data-sale-open={SALE_OPEN} data-prio-open={PRIO_OPEN}>
 
   <header class="nv-head">
     <span class="nv-eyebrow">{SITE.name} × Cónclave</span>
@@ -169,19 +167,12 @@ const schema = [
     </div>
 
     <!-- 19:30–20:00: acceso prioritario con contraseña (historias de @blacksunprods) -->
-    <form class="nv-prio" data-when="prio" hidden autocomplete="off">
-      <p class="nv-prio-k">🔒 Acceso prioritario</p>
-      <p class="nv-prio-t">Los seguidores de <a href="https://www.instagram.com/blacksunprods/" target="_blank" rel="noopener">@blacksunprods</a> compran ya. Escribe la contraseña de sus historias:</p>
-      <div class="nv-prio-row">
-        <input name="clave" type="text" inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="Escríbela aquí" aria-label="Contraseña" />
-        <button type="submit">Entrar</button>
-      </div>
-      <p class="nv-prio-err" hidden>Esa no es. Mírala en las historias de @blacksunprods.</p>
-    </form>
+    <p class="nv-prio" data-when="prio" hidden>🔓 <b>Acceso prioritario</b> · seguidores de @blacksunprods · hasta las 20:00 solo con este enlace</p>
 
     <!-- Antes de la apertura: cuenta atrás -->
     <div class="nv-soon" data-when="before">
-      <p class="nv-soon-k">La venta online abre el <strong>martes 24 de noviembre a las 20:00</strong></p>
+      <p class="nv-soon-k" data-k-general>La venta online abre el <strong>martes 24 de noviembre a las 20:00</strong></p>
+      <p class="nv-soon-k" data-k-prio hidden>🔓 Tu <strong>acceso prioritario</strong> abre a las <strong>19:00</strong>. No cierres esta página.</p>
       <div class="nv-count" aria-live="off">
         <span class="nv-count-u"><b data-u="d">--</b><small>días</small></span>
         <span class="nv-count-u"><b data-u="h">--</b><small>horas</small></span>
@@ -239,11 +230,12 @@ const schema = [
     var openAt = new Date(root.getAttribute("data-sale-open")).getTime();
     var force = p.get("venta") === "1";
     var prioAt = new Date(root.getAttribute("data-prio-open")).getTime();
-    var prioHash = Number(root.getAttribute("data-prio"));
     // Para probar a otra hora: ?ahora=2026-11-24T19:35:00%2B01:00
     var skew = 0; try { if (p.get("ahora")) skew = new Date(p.get("ahora")).getTime() - Date.now(); } catch (e) {}
     function now() { return Date.now() + (isNaN(skew) ? 0 : skew); }
-    var unlocked = false; try { unlocked = sessionStorage.getItem("nv_prio") === "1"; } catch (e) {}
+    // Enlace prioritario: ?acceso=prioritario (se recuerda en la visita al cambiar de noche).
+    var prio = p.get("acceso") === "prioritario";
+    try { if (prio) sessionStorage.setItem("nv_prio", "1"); else prio = sessionStorage.getItem("nv_prio") === "1"; } catch (e) {}
 
     // Pestañas y botones: conservan ?venta=1 y el origen al cambiar de noche.
     document.querySelectorAll("[data-night]").forEach(function (a) {
@@ -302,8 +294,8 @@ const schema = [
       s.src = "https://www.fourvenues.com/assets/iframe/conclave/events/" + FV[night];
       box.appendChild(s);
     }
-    function show(after, prio) {
-      document.querySelectorAll('[data-when="prio"]').forEach(function (el) { el.hidden = after || !prio; });
+    function show(after) {
+      document.querySelectorAll('[data-when="prio"]').forEach(function (el) { el.hidden = !(after && prio && now() < openAt); });
       document.querySelectorAll('[data-when="before"]').forEach(function (el) { el.hidden = after; });
       document.querySelectorAll('[data-when="after"]').forEach(function (el) { el.hidden = !after; });
       if (after) loadWidget();
@@ -311,31 +303,18 @@ const schema = [
     function pad(n) { return (n < 10 ? "0" : "") + n; }
     var timer;
     function tick() {
-      var t = Math.floor((openAt - now()) / 1000);
-      if (force || t <= 0 || (unlocked && now() >= prioAt)) { clearInterval(timer); show(true); return; }
-      show(false, now() >= prioAt);
+      var meta = prio ? prioAt : openAt;
+      var t = Math.floor((meta - now()) / 1000);
+      if (force || t <= 0) { clearInterval(timer); show(true); return; }
       var v = { d: Math.floor(t / 86400), h: Math.floor(t % 86400 / 3600), m: Math.floor(t % 3600 / 60), s: t % 60 };
       document.querySelectorAll(".nv-count b[data-u]").forEach(function (el) { var u = el.getAttribute("data-u"); el.textContent = u === "d" ? v.d : pad(v[u]); });
     }
-    show(false); tick(); timer = setInterval(tick, 1000);
-
-    // Contraseña del acceso prioritario: mayúsculas, sin tildes ni espacios.
-    function huella(str) {
-      var w = String(str).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "").toUpperCase(), h = 5381;
-      for (var i = 0; i < w.length; i++) h = ((h * 33) ^ w.charCodeAt(i)) >>> 0;
-      return h;
+    if (prio) {
+      var kg = document.querySelector("[data-k-general]"), kp = document.querySelector("[data-k-prio]");
+      if (kg && kp) { kg.hidden = true; kp.hidden = false; }
+      if (!src || src === "directo") src = "prioritario";
     }
-    var pf = document.querySelector(".nv-prio");
-    if (pf) pf.addEventListener("submit", function (ev) {
-      ev.preventDefault();
-      var ok = huella(pf.clave.value) === prioHash;
-      pf.querySelector(".nv-prio-err").hidden = ok;
-      if (!ok) return;
-      unlocked = true;
-      try { sessionStorage.setItem("nv_prio", "1"); } catch (e) {}
-      send({ e: "fv", v: "prio", k: "prioritario", i: "" });
-      tick();
-    });
+    show(false); tick(); timer = setInterval(tick, 1000);
 
     // Entrar en el iframe = empezar la compra (el foco pasa al iframe).
     window.addEventListener("blur", function () {
@@ -417,16 +396,8 @@ const schema = [
   .nv-tab:hover { color: #EDE8E1; border-color: rgba(237, 232, 225, 0.4); }
   .nv-tab[aria-selected="true"] { color: #EDE8E1; border-color: var(--tono); background: color-mix(in srgb, var(--tono) 14%, transparent); }
 
-  .nv-prio { max-width: 520px; margin: 0 auto 36px; padding: 26px 24px; text-align: center; border: 1px solid rgba(255, 214, 10, .65); background: rgba(255, 214, 10, .07); }
-  .nv-prio-k { margin: 0 0 8px; font-size: 13px; letter-spacing: .26em; text-transform: uppercase; color: #FFD60A; font-weight: 700; }
-  .nv-prio-t { margin: 0 0 18px; font-size: 16px; line-height: 1.5; color: rgba(237, 232, 225, .8); }
-  .nv-prio-t a { color: #EDE8E1; text-underline-offset: 3px; }
-  .nv-prio-row { display: flex; gap: 8px; }
-  .nv-prio input { flex: 1; min-width: 0; font: inherit; font-size: 18px; letter-spacing: .12em; text-transform: uppercase; padding: 14px 16px; background: #0F0C0A; color: #EDE8E1; border: 1px solid rgba(237, 232, 225, .3); border-radius: 0; }
-  .nv-prio input::placeholder { text-transform: none; letter-spacing: .02em; color: rgba(237, 232, 225, .4); }
-  .nv-prio input:focus { outline: none; border-color: #FFD60A; }
-  .nv-prio button { font: inherit; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; padding: 0 22px; background: #FFD60A; color: #0F0C0A; border: 0; cursor: pointer; }
-  .nv-prio-err { margin: 12px 0 0; font-size: 14px; color: #FF8A7A; }
+  .nv-prio { max-width: 620px; margin: 0 auto 24px; padding: 14px 18px; text-align: center; font-size: 14px; line-height: 1.5; color: rgba(237, 232, 225, .85); border: 1px solid rgba(255, 214, 10, .65); background: rgba(255, 214, 10, .07); }
+  .nv-prio b { color: #FFD60A; letter-spacing: .04em; }
   .nv-soon { text-align: center; padding: 8px 0 32px; }
   .nv-soon-k { font-size: 17px; margin: 0 0 22px; color: rgba(237, 232, 225, 0.75); }
   .nv-soon-k strong { color: #EDE8E1; }
